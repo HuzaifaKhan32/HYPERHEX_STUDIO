@@ -39,3 +39,44 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# AI / agent tooling (local)
+.claude/
+.agents/
+.cursor/
+
+# design references & stitch exports
+stitch_*/
+home-screen.json
+contact-screen.json
+home-animated-logo.json
+skills-lock.json
+/*.html
+
+# markdown outside public (keep root project docs)
+*.md
+!README.md
+!CLAUDE.md
+!AGENTS.md
+!public/
+!public/**
+
+# images & screenshots outside public
+*.png
+*.jpg
+*.jpeg
+*.webp
+*.gif
+!public/
+!public/**
+
+# archives in public
+/public/images/*.zip
+
+# OS
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# tooling caches
+.turbo

@@ -1,26 +1,91 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@theme {
+  /* HyperHex Brand Colors (from CLAUDE.md) */
+  --color-void: #000000;        /* true black, logo background */
+  --color-ink: #0a0a0a;         /* page backgrounds */
+  --color-paper: #ffffff;       /* primary text */
+  --color-mist: #9a9fa5;        /* secondary/muted text */
+  --color-accent: #15b6e8;      /* cyan from logo facet */
+  --color-accent-dim: #0c86ac;  /* accent hover/pressed state */
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  /* Kinetic Cyan - Light Theme Colors */
+  --color-surface: #f4fafd;
+  --color-surface-dim: #d4dbdd;
+  --color-surface-bright: #f4fafd;
+  --color-surface-container-lowest: #ffffff;
+  --color-surface-container-low: #eef5f7;
+  --color-surface-container: #e8eff1;
+  --color-surface-container-high: #e3e9eb;
+  --color-surface-container-highest: #dde4e6;
+  --color-surface-variant: #dde4e6;
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --color-on-surface: #161d1e;
+  --color-on-surface-variant: #3b494c;
+  --color-on-background: #161d1e;
+
+  --color-background: #FFFFFF;
+
+  --color-primary: #006875;
+  --color-primary-container: #00e3fd;
+  --color-on-primary: #ffffff;
+  --color-on-primary-container: #00616d;
+  --color-primary-fixed: #9cefff;
+  --color-primary-fixed-dim: #00daf3;
+
+  --color-secondary: #006875;
+  --color-secondary-container: #00e3fd;
+  --color-on-secondary: #ffffff;
+
+  --color-tertiary: #765a00;
+  --color-tertiary-container: #fcc72f;
+  --color-on-tertiary: #ffffff;
+
+  --color-outline: #6b7a7d;
+  --color-outline-variant: #bac9cc;
+
+  --color-inverse-surface: #2b3233;
+  --color-inverse-on-surface: #ebf2f4;
+  --color-inverse-primary: #00daf3;
+
+  --color-surface-tint: #006875;
+
+  /* Spacing */
+  --spacing-unit: 8px;
+  --spacing-gutter: 24px;
+  --spacing-margin-desktop: 64px;
+  --spacing-margin-mobile: 20px;
+  --container-max-width: 1280px;
+
+  /* Border Radius - Sharp by default (Brutalist aesthetic) */
+  --radius: 0.25rem;
+  --radius-sm: 0rem;
+  --radius-md: 0rem;
+  --radius-lg: 0.5rem;
+  --radius-xl: 0.75rem;
+  --radius-full: 9999px;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-background);
+  color: var(--color-on-surface);
+}
+
+.service-card-panel {
+  transform: translateY(-101%);
+  opacity: 0;
+  pointer-events: none;
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.35s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .service-card-panel {
+    transform: none;
+  }
+
+  .service-card:hover .service-card-panel,
+  .service-card:focus-visible .service-card-panel {
+    opacity: 1;
+    pointer-events: auto;
+  }
 }
