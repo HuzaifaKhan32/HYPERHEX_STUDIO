@@ -89,7 +89,7 @@ export default function Footer() {
               className="relative h-full w-full"
             >
               <Image
-                src="/images/hero-image.jpg"
+                src="/images/image-3.jpg"
                 alt="HyperHex Studio Visual"
                 width={320}
                 height={179}
