@@ -8,32 +8,32 @@ const GLOW_RADIUS = 140;
 const CYAN = '21, 182, 232';
 
 type DotGridBackgroundProps = {
-  mouseX: number;
-  mouseY: number;
+  containerRef?: React.RefObject<HTMLElement | null>;
 };
 
-export default function DotGridBackground({ mouseX, mouseY }: DotGridBackgroundProps) {
-  const containerRef = useRef<HTMLDivElement>(null);
+export default function DotGridBackground({ containerRef }: DotGridBackgroundProps) {
+  const wrapperRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const mouseRef = useRef({ x: mouseX, y: mouseY });
+  const mouseRef = useRef({ x: -1000, y: -1000 });
 
   useEffect(() => {
-    mouseRef.current = { x: mouseX, y: mouseY };
-  }, [mouseX, mouseY]);
-
-  useEffect(() => {
-    const container = containerRef.current;
+    const wrapper = wrapperRef.current;
     const canvas = canvasRef.current;
-    if (!container || !canvas) return;
+    if (!wrapper || !canvas) return;
 
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
+    const eventTarget = () => containerRef?.current ?? wrapper;
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
     let frameId = 0;
 
     const resize = () => {
-      const { width, height } = container.getBoundingClientRect();
-      const dpr = window.devicePixelRatio || 1;
+      const { width, height } = wrapper.getBoundingClientRect();
+      if (width <= 0 || height <= 0) return;
+
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
       canvas.width = width * dpr;
       canvas.height = height * dpr;
       canvas.style.width = `${width}px`;
@@ -42,19 +42,22 @@ export default function DotGridBackground({ mouseX, mouseY }: DotGridBackgroundP
     };
 
     const draw = () => {
-      const width = container.clientWidth;
-      const height = container.clientHeight;
+      const width = wrapper.clientWidth;
+      const height = wrapper.clientHeight;
+      if (width <= 0 || height <= 0) {
+        frameId = requestAnimationFrame(draw);
+        return;
+      }
+
       const { x: mx, y: my } = mouseRef.current;
 
       ctx.clearRect(0, 0, width, height);
 
       for (let x = SPACING / 2; x < width; x += SPACING) {
         for (let y = SPACING / 2; y < height; y += SPACING) {
-          const dx = x - mx;
-          const dy = y - my;
-          const dist = Math.hypot(dx, dy);
+          const dist = Math.hypot(x - mx, y - my);
           const t = Math.max(0, 1 - dist / GLOW_RADIUS);
-          const glow = t * t;
+          const glow = reducedMotion ? 0 : t * t;
           const radius = DOT_RADIUS + glow * 2.5;
           const opacity = 0.22 + glow * 0.78;
 
@@ -89,20 +92,44 @@ export default function DotGridBackground({ mouseX, mouseY }: DotGridBackgroundP
       frameId = requestAnimationFrame(draw);
     };
 
+    const handleMouseMove = (e: MouseEvent) => {
+      const target = eventTarget();
+      const rect = target.getBoundingClientRect();
+      mouseRef.current = {
+        x: e.clientX - rect.left,
+        y: e.clientY - rect.top,
+      };
+    };
+
+    const handleMouseLeave = () => {
+      mouseRef.current = { x: -1000, y: -1000 };
+    };
+
     resize();
     draw();
 
-    const observer = new ResizeObserver(resize);
-    observer.observe(container);
+    const target = eventTarget();
+    target.addEventListener('mousemove', handleMouseMove, { passive: true });
+    target.addEventListener('mouseleave', handleMouseLeave);
+
+    const observer = new ResizeObserver(() => {
+      resize();
+    });
+    observer.observe(wrapper);
 
     return () => {
       cancelAnimationFrame(frameId);
+      target.removeEventListener('mousemove', handleMouseMove);
+      target.removeEventListener('mouseleave', handleMouseLeave);
       observer.disconnect();
     };
-  }, []);
+  }, [containerRef]);
 
   return (
-    <div ref={containerRef} className="pointer-events-none absolute inset-0 z-[1] h-full w-full">
+    <div
+      ref={wrapperRef}
+      className="pointer-events-none absolute inset-0 z-[1] h-full w-full"
+    >
       <canvas ref={canvasRef} className="h-full w-full" aria-hidden="true" />
     </div>
   );

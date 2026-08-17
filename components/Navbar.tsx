@@ -24,12 +24,12 @@ export default function Navbar() {
   ];
 
   return (
-    <header className="fixed top-0 z-50 flex w-full justify-center px-5 pt-4 md:pt-5 lg:px-16">
+    <header className="fixed top-0 z-50 flex w-full justify-center px-5 pt-4 sm:px-8 md:px-12 md:pt-5">
       <motion.div
-        animate={{
-          backgroundColor: scrolled ? 'rgba(255,255,255,0.82)' : 'rgba(255,255,255,0)',
-          boxShadow: scrolled ? '0 8px 32px rgba(10,10,10,0.08)' : '0 0 0 rgba(0,0,0,0)',
-        }}
+        // animate={{
+        //   backgroundColor: scrolled ? 'rgba(255,255,255,0.82)' : 'rgba(255,255,255,0)',
+        //   boxShadow: scrolled ? '0 8px 32px rgba(10,10,10,0.08)' : '0 0 0 rgba(0,0,0,0)',
+        // }}
         transition={{ duration: 0.35, ease: [0.4, 0, 0.2, 1] }}
         className={`flex w-full max-w-[1280px] items-center justify-between rounded-full px-2 py-1 ${
           scrolled ? 'backdrop-blur-md' : ''
@@ -66,33 +66,37 @@ export default function Navbar() {
           </motion.div>
         </motion.div>
 
-        <nav className="hidden h-14 items-center gap-2 rounded-full border border-outline-variant/30 bg-surface-container-low/80 p-1 shadow-[0_6px_16px_rgba(0,0,0,0.25),0_12px_32px_rgba(0,0,0,0.15)] backdrop-blur-2xl md:flex">
-          {links.map((link) => (
-            <Link
-              key={link.id}
-              href={link.href}
-              onClick={() => setActiveLink(link.id)}
-              className="relative flex items-center gap-2 rounded-full px-5 py-2 font-[family-name:var(--font-dm-sans)]"
-              style={{
-                color: activeLink === link.id ? 'var(--color-paper)' : 'var(--color-mist)',
-              }}
-            >
-              {activeLink === link.id ? (
-                <motion.span
-                  layoutId="nav-active-pill"
-                  className="absolute inset-0 rounded-full border-b-4 border-white/10 border-b-[#3e3e3e] bg-gradient-to-b from-[#0a0a0a] to-[#616161] shadow-[inset_0_2px_4px_rgba(0,0,0,0.4),0_1px_0_rgba(255,255,255,0.1)]"
-                  transition={{ type: 'spring', stiffness: 420, damping: 32 }}
-                />
-              ) : null}
-              <span className="relative z-10 flex items-center gap-2 py-1 text-xs font-bold tracking-tight uppercase">
-                {activeLink === link.id ? (
-                  <span className="h-2 w-2 rounded-full" style={{ backgroundColor: 'var(--color-accent)' }} />
-                ) : null}
-                {link.label}
-              </span>
-            </Link>
-          ))}
-        </nav>
+        <nav className="hidden h-13 items-center gap-2 rounded-full border border-outline-variant/30 bg-surface-container-low/80 p-1 shadow-[0_4px_10px_rgba(0,0,0,0.25)] backdrop-blur-2xl md:flex">
+  {links.map((link) => {
+    const isActive = activeLink === link.id;
+
+    return (
+      <Link
+        key={link.id}
+        href={link.href}
+        onClick={() => setActiveLink(link.id)}
+        aria-current={isActive ? 'page' : undefined}
+        className={`relative flex items-center gap-2 rounded-full px-4 py-2 font-[family-name:var(--font-dm-sans)] transition-colors duration-200 ${
+          isActive ? 'text-[var(--color-paper)]' : 'text-[var(--color-mist)]'
+        }`}
+      >
+        {isActive && (
+          <motion.span
+            layoutId="nav-active-pill"
+            className="absolute inset-0 rounded-full border-b-2 border-white/10 border-b-[#3e3e3e] bg-gradient-to-b from-[#0a0a0a] to-[#616161] shadow-[inset_0_2px_4px_rgba(0,0,0,0.4),0_1px_0_rgba(255,255,255,0.1)]"
+            transition={{ type: 'spring', stiffness: 420, damping: 32 }}
+          />
+        )}
+        <span className="relative z-10 flex items-center gap-2 py-1 text-xs font-bold tracking-tight uppercase">
+          {isActive && (
+            <span className="h-2 w-2 rounded-full bg-[var(--color-accent)]" />
+          )}
+          {link.label}
+        </span>
+      </Link>
+    );
+  })}
+</nav>
 
         <Button3D href="#contact" className="hidden sm:flex">
           Contact Us

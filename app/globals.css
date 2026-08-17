@@ -71,9 +71,16 @@ body {
   color: var(--color-on-surface);
 }
 
+/* Prevent page-level horizontal scroll from wide scroll-pin sections without
+   breaking position: sticky on intermediate ancestors. */
+html {
+  overflow-x: clip;
+  max-width: 100%;
+}
+
 .service-card-panel {
-  transform: translateY(-101%);
-  opacity: 0;
+  transform: translateY(101%);
+  opacity: 1;
   pointer-events: none;
   transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.35s ease;
 }
@@ -81,11 +88,12 @@ body {
 @media (prefers-reduced-motion: reduce) {
   .service-card-panel {
     transform: none;
+    opacity: 0;
   }
 
   .service-card:hover .service-card-panel,
   .service-card:focus-visible .service-card-panel {
     opacity: 1;
-    pointer-events: auto;
+    pointer-events: none;
   }
 }

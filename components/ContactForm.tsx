@@ -16,14 +16,14 @@ function ContactTitleWord({
 }) {
   const reduced = useReducedMotion();
   const color = useTransform(progress, range, ['#9a9fa5', '#ffffff']);
-  const y = useTransform(progress, range, [32, 0]);
+  const y = useTransform(progress, range, [24, 0]);
 
   if (reduced) {
     return <span className="inline-block" style={{ color: 'var(--color-paper)' }}>{children}</span>;
   }
 
   return (
-    <motion.span className="inline-block will-change-transform" style={{ color, y }}>
+    <motion.span className="inline-block" style={{ color, y }}>
       {children}
     </motion.span>
   );
@@ -33,13 +33,13 @@ function ContactTitle() {
   const ref = useRef<HTMLHeadingElement>(null);
   const { scrollYProgress } = useScroll({
     target: ref,
-    offset: ['start 0.95', 'start 0.1'],
+    offset: ['start 0.9', 'start 0.35'],
   });
 
   return (
     <h2
       ref={ref}
-      className="mb-16 font-[family-name:var(--font-syne)] text-6xl font-black md:text-7xl"
+      className="mb-10 font-[family-name:var(--font-syne)] text-4xl font-black sm:text-5xl md:mb-16 md:text-7xl"
       style={{ lineHeight: '0.95' }}
     >
       <span className="flex flex-wrap gap-x-[0.22em]">
@@ -63,31 +63,21 @@ export default function ContactForm() {
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
   const [message, setMessage] = useState('');
-  const [gridMouse, setGridMouse] = useState({ x: -1000, y: -1000 });
+  const panelRef = useRef<HTMLDivElement>(null);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     console.log({ email, phone, message });
   };
 
-  const handleGridMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    setGridMouse({ x: e.clientX - rect.left, y: e.clientY - rect.top });
-  };
-
-  const handleGridMouseLeave = () => {
-    setGridMouse({ x: -1000, y: -1000 });
-  };
-
   return (
     <section id="contact" className="w-full bg-surface py-12 md:py-24 px-5 lg:px-16">
       <motion.div
+        ref={panelRef}
         initial={{ opacity: 0, y: 64 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: '-80px' }}
-        transition={{ duration: 1.2, ease: [0.4, 0, 0.2, 1] }}
-        onMouseMove={handleGridMouseMove}
-        onMouseLeave={handleGridMouseLeave}
+        transition={{ duration: 0.7, ease: [0.4, 0, 0.2, 1] }}
         className="relative mx-auto w-full max-w-[1280px] overflow-hidden rounded-[2.5rem] shadow-2xl"
         style={{ backgroundColor: 'var(--color-ink)' }}
       >
@@ -98,17 +88,17 @@ export default function ContactForm() {
         <div className="absolute bottom-0 right-0 z-0 w-[700px] h-[700px] blur-[120px] rounded-full translate-x-1/3 translate-y-1/3 pointer-events-none" style={{ backgroundColor: 'rgba(21, 182, 232, 0.25)' }}></div>
 
         {/* Textured Dot Grid Background */}
-        <DotGridBackground mouseX={gridMouse.x} mouseY={gridMouse.y} />
+        <DotGridBackground containerRef={panelRef} />
 
-        <div className="relative z-10 flex flex-col md:flex-row gap-8 md:gap-16 p-6 md:p-16">
-          {/* Left Column: Form Card */}
+        <div className="relative z-10 flex flex-col gap-8 p-6 md:flex-row md:gap-16 md:p-16">
+          {/* Form Card — below content on mobile, left on desktop */}
           <motion.div
             initial={{ opacity: 0, x: -50 }}
             whileInView={{ opacity: 1, x: 0 }}
             whileHover={{ y: -6 }}
             viewport={{ once: true }}
             transition={{ duration: 1, delay: 0.15 }}
-            className="relative w-full md:w-[45%]"
+            className="relative order-2 w-full md:order-1 md:w-[45%]"
           >
             {/* White Card with Faceted Corner */}
             <div
@@ -216,13 +206,13 @@ export default function ContactForm() {
             </div>
           </motion.div>
 
-          {/* Right Column: Content */}
+          {/* Content — first on mobile, right on desktop */}
           <motion.div
             initial={{ opacity: 0, x: 50 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 1, delay: 0.15 }}
-            className="relative z-10 w-full md:w-[55%] flex flex-col justify-center md:pl-8"
+            className="relative z-10 order-1 flex w-full flex-col justify-center md:order-2 md:w-[55%] md:pl-8"
           >
             {/* Badge */}
             <motion.div

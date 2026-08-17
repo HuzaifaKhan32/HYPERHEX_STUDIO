@@ -11,7 +11,7 @@ const reveal = {
   visible: (delay = 0) => ({
     opacity: 1,
     y: 0,
-    transition: { duration: 1.1, delay, ease: EASE },
+    transition: { duration: 0.7, delay, ease: EASE },
   }),
 };
 
@@ -39,8 +39,8 @@ function FooterLink({ href, children, index }: { href: string; children: string;
     >
       <motion.a
         href={href}
-        className="inline-block text-xl font-bold drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)] lg:text-2xl"
-        style={{ color: 'var(--color-paper)' }}
+        className="inline-block text-xl font-bold drop-shadow-[0_1px_3px_rgba(10,10,10,0.08)] lg:text-2xl"
+        style={{ color: 'var(--color-ink)' }}
         whileHover={{ x: 12, color: 'var(--color-accent)' }}
         transition={{ duration: 0.45, ease: [0.4, 0, 0.2, 1] }}
       >
@@ -64,64 +64,9 @@ export default function Footer() {
 
   return (
     <footer
-      className="relative isolate flex w-full flex-col overflow-hidden rounded-t-[3rem] px-5 py-20 text-[var(--color-paper)] lg:px-16 lg:py-32"
-      style={{ backgroundColor: 'var(--color-ink)' }}
+      className="relative isolate flex w-full flex-col overflow-hidden rounded-t-[3rem] px-5 py-20 lg:px-16 lg:py-32"
+      style={{ color: 'var(--color-ink)' }}
     >
-      <div className="absolute inset-0 z-0">
-        <motion.div
-          initial={{ scale: 1.08, opacity: 0 }}
-          whileInView={{ scale: 1, opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 1.4, ease: [0.4, 0, 0.2, 1] }}
-          className="absolute inset-0"
-        >
-          <Image
-            src="/logo/hyperhex-wordmark.jpg"
-            alt="HyperHex Background"
-            fill
-            className="scale-x-[-1] object-cover opacity-70 brightness-110 contrast-110"
-            priority
-          />
-        </motion.div>
-        <div
-          className="absolute inset-0"
-          style={{ background: 'linear-gradient(to bottom, rgba(10,10,10,0.15), rgba(10,10,10,0.2), rgba(10,10,10,0.25))' }}
-        />
-      </div>
-
-      <div className="pointer-events-none absolute inset-0 z-[1] overflow-hidden">
-        <motion.div
-          animate={{ opacity: [0.2, 0.35, 0.2], scale: [1, 1.05, 1] }}
-          transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
-          className="absolute bottom-0 left-1/2 h-[700px] w-[900px] -translate-x-1/2"
-          style={{
-            background: 'radial-gradient(ellipse, #3712B0 0%, transparent 60%)',
-            filter: 'blur(140px)',
-            mixBlendMode: 'screen',
-          }}
-        />
-        <motion.div
-          animate={{ opacity: [0.25, 0.4, 0.25], x: [0, 24, 0] }}
-          transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }}
-          className="absolute bottom-[10%] left-[35%] h-[500px] w-[700px]"
-          style={{
-            background: 'radial-gradient(ellipse, #9651E7 0%, transparent 65%)',
-            filter: 'blur(120px)',
-            mixBlendMode: 'screen',
-          }}
-        />
-        <motion.div
-          animate={{ opacity: [0.2, 0.35, 0.2], x: [0, -20, 0] }}
-          transition={{ duration: 9, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
-          className="absolute bottom-[5%] left-[60%] h-[450px] w-[600px]"
-          style={{
-            background: 'radial-gradient(ellipse, #ECC3FB 0%, transparent 70%)',
-            filter: 'blur(110px)',
-            mixBlendMode: 'screen',
-          }}
-        />
-      </div>
-
       <div className="relative z-10 mx-auto flex w-full max-w-[1280px] flex-col justify-between gap-16 lg:flex-row lg:gap-24">
         <motion.div
           custom={0}
@@ -134,13 +79,13 @@ export default function Footer() {
           <motion.div
             whileHover={{ scale: 1.03, rotate: -1 }}
             transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] }}
-            className="aspect-[1.79] w-full max-w-[320px] overflow-hidden rounded-[24px] border border-white/10 bg-gray-900/80 shadow-md backdrop-blur-sm"
+            className="aspect-[1.79] w-full max-w-[320px] overflow-hidden rounded-[24px] border border-outline-variant/40 bg-surface-container shadow-[0_4px_16px_rgba(10,10,10,0.06)] backdrop-blur-sm"
           >
             <motion.div
               initial={{ scale: 1.15 }}
               whileInView={{ scale: 1 }}
               viewport={{ once: true }}
-              transition={{ duration: 1.4, ease: [0.4, 0, 0.2, 1] }}
+              transition={{ duration: 1, ease: [0.4, 0, 0.2, 1] }}
               className="relative h-full w-full"
             >
               <Image
@@ -161,9 +106,7 @@ export default function Footer() {
             className="flex flex-col gap-2"
           >
             <div className="flex items-center gap-3">
-              <motion.div
-                animate={{ scale: [1, 1.25, 1], opacity: [0.7, 1, 0.7] }}
-                transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
+              <div
                 className="h-2 w-2 rounded-full shadow-[0_0_12px_rgba(21,182,232,0.6)]"
                 style={{ backgroundColor: 'var(--color-accent)' }}
               />
@@ -173,8 +116,8 @@ export default function Footer() {
             </div>
             <motion.a
               href="mailto:info@hyperhex.studio"
-              className="text-xl font-bold drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)] lg:text-2xl"
-              style={{ color: 'var(--color-paper)' }}
+              className="text-xl font-bold drop-shadow-[0_1px_3px_rgba(10,10,10,0.08)] lg:text-2xl"
+              style={{ color: 'var(--color-ink)' }}
               whileHover={{ x: 8, color: 'var(--color-accent)' }}
               transition={{ duration: 0.45 }}
             >
@@ -183,7 +126,7 @@ export default function Footer() {
           </motion.div>
         </motion.div>
 
-        <div className="flex gap-16 pb-8 lg:gap-32 lg:pb-0">
+        <div className="flex flex-wrap gap-10 pb-8 sm:gap-16 lg:gap-32 lg:pb-0">
           <motion.div
             custom={0.1}
             initial="hidden"
@@ -230,10 +173,10 @@ export default function Footer() {
         initial={{ opacity: 0, y: 32 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        transition={{ duration: 1.1, delay: 0.35, ease: [0.4, 0, 0.2, 1] }}
-        className="relative z-10 mx-auto mt-20 mb-32 flex w-full max-w-[1280px] flex-col items-center justify-between gap-6 pt-8 font-[family-name:var(--font-dm-sans)] before:absolute before:top-0 before:left-0 before:h-px before:w-full before:bg-white/10 md:flex-row"
+        transition={{ duration: 0.7, delay: 0.35, ease: [0.4, 0, 0.2, 1] }}
+        className="relative z-10 mx-auto mt-20 mb-8 flex w-full max-w-[1280px] flex-col items-center justify-between gap-6 pt-8 font-[family-name:var(--font-dm-sans)] before:absolute before:top-0 before:left-0 before:h-px before:w-full before:bg-outline-variant/50 sm:mb-24 md:mb-32 md:flex-row"
       >
-        <p className="text-sm font-medium drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]" style={{ color: 'var(--color-mist)' }}>
+        <p className="text-sm font-medium" style={{ color: 'var(--color-mist)' }}>
           © 2025 HyperHex Studio. All Rights Reserved
         </p>
         <div className="flex gap-8 text-sm font-medium">
@@ -241,9 +184,9 @@ export default function Footer() {
             <motion.a
               key={label}
               href="#"
-              className="drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]"
+              className="text-sm font-medium"
               style={{ color: 'var(--color-mist)' }}
-              whileHover={{ y: -3, color: 'var(--color-paper)' }}
+              whileHover={{ y: -3, color: 'var(--color-ink)' }}
               transition={{ duration: 0.35 }}
             >
               {label}
@@ -252,13 +195,13 @@ export default function Footer() {
         </div>
       </motion.div>
 
-      <div className="absolute right-0 bottom-8 left-0 z-[5] flex w-full items-end justify-center overflow-hidden select-none">
+      <div className="relative z-[5] mt-16 flex w-full items-end justify-center overflow-hidden px-2 select-none sm:absolute sm:right-0 sm:bottom-8 sm:left-0 sm:mt-0">
         <motion.div
           initial={{ opacity: 0, y: 80 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-20px' }}
-          transition={{ duration: 1.3, ease: [0.4, 0, 0.2, 1] }}
-          className="pointer-events-auto relative flex cursor-pointer flex-col items-center"
+          transition={{ duration: 0.9, ease: [0.4, 0, 0.2, 1] }}
+          className="pointer-events-auto relative flex w-full max-w-full cursor-pointer flex-col items-center"
           onMouseEnter={() => setIsHoveringText(true)}
           onMouseLeave={() => setIsHoveringText(false)}
           onMouseMove={handleTextMouseMove}
@@ -272,7 +215,7 @@ export default function Footer() {
                 left: `${localMousePosition.x - 175}px`,
                 top: `${localMousePosition.y - 175}px`,
                 background:
-                  'radial-gradient(circle, rgba(255, 255, 255, 0.35) 0%, rgba(255, 255, 255, 0.25) 30%, rgba(255, 255, 255, 0.15) 50%, transparent 70%)',
+                  'radial-gradient(circle, rgba(21, 182, 232, 0.18) 0%, rgba(21, 182, 232, 0.1) 30%, rgba(21, 182, 232, 0.05) 50%, transparent 70%)',
                 filter: 'blur(20px)',
                 zIndex: 0,
               }}
@@ -280,17 +223,17 @@ export default function Footer() {
             />
           ) : null}
 
-          <div className="relative z-10 flex flex-col items-center">
+          <div className="relative z-10 flex w-full max-w-full flex-col items-center px-2">
             <h1
-              className="font-[family-name:var(--font-syne)] text-[12vw] leading-[0.8] font-black tracking-[-0.04em] uppercase drop-shadow-[0_4px_12px_rgba(0,0,0,0.9)] lg:text-[10vw]"
-              style={{ color: 'var(--color-paper)' }}
+              className="w-full text-center font-[family-name:var(--font-syne)] text-[clamp(28px,11vw,120px)] leading-[0.85] font-black tracking-[-0.04em] uppercase drop-shadow-[0_2px_8px_rgba(10,10,10,0.06)]"
+              style={{ color: 'var(--color-ink)' }}
             >
               HYPERHEX
             </h1>
-            <div className="flex w-full justify-end">
+            <div className="flex w-full justify-end pr-[5%] sm:pr-[8%]">
               <h2
-                className="font-[family-name:var(--font-syne)] text-[6vw] leading-[0.8] font-bold tracking-[-0.02em] uppercase drop-shadow-[0_4px_12px_rgba(0,0,0,0.9)] lg:text-[5vw]"
-                style={{ color: 'var(--color-paper)' }}
+                className="font-[family-name:var(--font-syne)] text-[clamp(14px,5.5vw,60px)] leading-[0.85] font-bold tracking-[-0.02em] uppercase drop-shadow-[0_2px_8px_rgba(10,10,10,0.06)]"
+                style={{ color: 'var(--color-ink)' }}
               >
                 STUDIOS
               </h2>
@@ -307,14 +250,14 @@ export default function Footer() {
               }}
             >
               <h1
-                className="font-[family-name:var(--font-syne)] text-[12vw] leading-[0.8] font-black tracking-[-0.04em] uppercase lg:text-[10vw]"
+                className="w-full text-center font-[family-name:var(--font-syne)] text-[clamp(28px,11vw,120px)] leading-[0.85] font-black tracking-[-0.04em] uppercase"
                 style={{ color: 'var(--color-accent)' }}
               >
                 HYPERHEX
               </h1>
-              <div className="flex w-full justify-end">
+              <div className="flex w-full justify-end pr-[5%] sm:pr-[8%]">
                 <h2
-                  className="font-[family-name:var(--font-syne)] text-[6vw] leading-[0.8] font-bold tracking-[-0.02em] uppercase lg:text-[5vw]"
+                  className="font-[family-name:var(--font-syne)] text-[clamp(14px,5.5vw,60px)] leading-[0.85] font-bold tracking-[-0.02em] uppercase"
                   style={{ color: 'var(--color-accent)' }}
                 >
                   STUDIOS

@@ -31,28 +31,33 @@ function ColorWord({
   );
 }
 
-export default function ServicesHeading() {
+export default function ServicesHeading({ compact = false }: { compact?: boolean }) {
   const ref = useRef<HTMLHeadingElement>(null);
   const { scrollYProgress } = useScroll({
     target: ref,
-    offset: ['start 0.95', 'start 0.05'],
+    offset: ['start 0.85', 'start 0.4'],
   });
 
   return (
     <h2
       ref={ref}
-      className="flex flex-col font-[family-name:var(--font-syne)] text-5xl leading-[0.95] font-extrabold tracking-tighter uppercase md:text-[80px] md:leading-[88px]"
+      className={[
+        'flex flex-col font-[family-name:var(--font-dm-sans)] font-black tracking-tighter uppercase',
+        compact
+          ? 'text-4xl leading-[0.95] md:text-[56px] md:leading-[1]'
+          : 'text-5xl leading-[0.95] md:text-[80px] md:leading-[88px]',
+      ].join(' ')}
     >
       <span className="flex flex-wrap gap-x-[0.22em]">
-        <ColorWord progress={scrollYProgress} range={[0, 0.38]}>
+        <ColorWord progress={scrollYProgress} range={[0, 0.45]}>
           Pushing
         </ColorWord>
-        <ColorWord progress={scrollYProgress} range={[0.28, 0.64]}>
+        <ColorWord progress={scrollYProgress} range={[0.2, 0.65]}>
           the
         </ColorWord>
       </span>
       <span>
-        <ColorWord progress={scrollYProgress} range={[0.55, 1]}>
+        <ColorWord progress={scrollYProgress} range={[0.4, 1]}>
           Boundaries
         </ColorWord>
       </span>

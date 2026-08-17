@@ -1,5 +1,6 @@
 import Navbar from '@/components/Navbar';
 import Hero from '@/components/Hero';
+import ClientMarquee from '@/components/ClientMarquee';
 import Services from '@/components/Services';
 import ContactForm from '@/components/ContactForm';
 import Footer from '@/components/Footer';
@@ -12,6 +13,7 @@ export default function Home() {
       <Navbar />
       <main className="w-full pt-24 md:pt-28">
         <Hero />
+        <ClientMarquee />
         <Services />
         <ContactForm />
       </main>

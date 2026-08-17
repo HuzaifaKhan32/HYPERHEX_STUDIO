@@ -1,7 +1,6 @@
 'use client';
 
 import { useRef, type ReactNode } from 'react';
-import { motion } from 'framer-motion';
 
 const FACET_CLIP =
   'polygon(0 0, 100% 0, 100% calc(100% - 32px), calc(100% - 32px) 100%, 0 100%)';
@@ -18,8 +17,8 @@ export type ServiceCardProps = {
   description: string;
   href: string;
   panel: 'cyan' | 'ink';
-  delay: number;
   icon: ReactNode;
+  className?: string;
 };
 
 function getDirection(ev: React.MouseEvent, el: HTMLElement) {
@@ -40,8 +39,8 @@ export default function ServiceCard({
   description,
   href,
   panel,
-  delay,
   icon,
+  className = '',
 }: ServiceCardProps) {
   const cardRef = useRef<HTMLAnchorElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
@@ -68,34 +67,40 @@ export default function ServiceCard({
     if (!overlay || !card || prefersReducedMotion()) return;
 
     const dir = getDirection(e, card) as keyof typeof TRANSLATE;
+    overlay.style.transition = 'none';
+    overlay.style.transform = 'translate(0, 0)';
+    overlay.style.opacity = '1';
+    void overlay.offsetWidth;
+    overlay.style.transition =
+      'transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease';
     overlay.style.transform = TRANSLATE[dir];
   }
 
   return (
-    <motion.a
+    <a
       ref={cardRef}
       href={href}
       onMouseEnter={handleEnter}
       onMouseLeave={handleLeave}
-      initial={{ opacity: 0, y: 32 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: '0px 0px -50px 0px' }}
-      transition={{ duration: 1.1, delay, ease: [0.4, 0, 0.2, 1] }}
-      className="service-card group relative block focus-visible:outline-none transition-[filter] duration-700 hover:filter-[drop-shadow(0_14px_32px_rgba(0,227,253,0.28))] focus-visible:filter-[drop-shadow(0_14px_32px_rgba(0,227,253,0.28))]"
+      className={`service-card group relative block h-full min-h-[300px] focus-visible:outline-none transition-[filter] duration-700 hover:filter-[drop-shadow(0_14px_32px_rgba(0,227,253,0.28))] focus-visible:filter-[drop-shadow(0_14px_32px_rgba(0,227,253,0.28))] ${className}`}
     >
-      {/* Ink outer shell + inset white fill traces the full facet shape, including the cut */}
-      <div className="relative h-80 bg-ink" style={{ clipPath: FACET_CLIP }}>
+      <div
+        className="relative h-full min-h-[300px] bg-ink"
+        style={{ clipPath: FACET_CLIP }}
+      >
         <div
-          className="absolute inset-[2px] flex flex-col justify-between overflow-hidden bg-white p-8"
+          className="absolute inset-[2px] flex h-[calc(100%-4px)] flex-col justify-between overflow-hidden bg-white p-8"
           style={{ clipPath: FACET_CLIP }}
         >
-          <div className="relative z-0 flex h-full flex-col justify-between">
-            <div className="flex h-14 w-14 items-center justify-center rounded-full bg-primary-container/20 text-ink">
+          <div className="relative z-0 flex h-full min-h-0 flex-col justify-between">
+            <div
+              className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-primary-container/20 text-ink [&_svg]:h-7 [&_svg]:w-7 [&_svg]:shrink-0"
+            >
               {icon}
             </div>
 
             <svg
-              className="pointer-events-none absolute -top-4 -right-4 h-32 w-32 text-primary-container/40 opacity-50 transition-opacity group-hover:opacity-100"
+              className="pointer-events-none absolute -top-3 -right-3 h-32 w-32 text-primary-container/40 opacity-50 transition-opacity group-hover:opacity-100"
               fill="none"
               stroke="currentColor"
               strokeWidth="1.5"
@@ -105,11 +110,15 @@ export default function ServiceCard({
               <path d="M50 5 L95 30 L95 80" strokeDasharray="2 4" />
             </svg>
 
-            <div className="flex flex-col gap-3">
-              <h3 className="font-[family-name:var(--font-syne)] text-2xl leading-tight font-extrabold text-ink">
+            <div className="flex min-h-0 flex-col gap-3">
+              <h3
+                className="font-[family-name:var(--font-dm-sans)] text-2xl leading-tight font-extrabold text-ink"
+              >
                 {title}
               </h3>
-              <p className="line-clamp-3 font-[family-name:var(--font-dm-sans)] text-base leading-6 text-ink/80">
+              <p
+                className="line-clamp-4 font-[family-name:var(--font-dm-sans)] text-base leading-6 text-ink/80"
+              >
                 {description}
               </p>
             </div>
@@ -122,7 +131,7 @@ export default function ServiceCard({
             }`}
           >
             <h4
-              className={`font-[family-name:var(--font-syne)] text-2xl font-extrabold tracking-tight uppercase ${
+              className={`font-[family-name:var(--font-dm-sans)] text-2xl font-extrabold tracking-tight uppercase ${
                 isCyanPanel ? 'text-ink' : 'text-white'
               }`}
             >
@@ -147,6 +156,6 @@ export default function ServiceCard({
           </div>
         </div>
       </div>
-    </motion.a>
+    </a>
   );
 }
