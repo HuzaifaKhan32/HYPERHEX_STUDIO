@@ -133,14 +133,14 @@ const ALL_PROJECTS = [
     title: 'Apex Vanguard V8',
     tags: ['Automotive', 'Render'],
     category: 'Animation',
-    image: 'https://lh3.googleusercontent.com/aida/AP1WRLtAAngrHOT_41r-Z4UZRmYLWiXA72uEPJZvSxE1-eXwTkKm1to8yZ-nl1LyRCpqGQWL-DAjC0WhAEOBoLN7C2txkjn1-GGjdz9cwa4UoMZaYnTOPvrPYpJIb95LNGPxWquaJ9V6h0AeQ0-KonPaTBlTSZdpNWYiJs0js2JC5bM3u2diF9GBSCRAqf7qFPAdPyGRBQMqa43t7cmB9caB5DezMyAIYQ86Z-jGZNNt78hjtRwh7RELJtxoW3Rm',
+    image: 'https://unsplash.com/s/photos/luxury-car',
   },
   {
     id: 2,
     title: 'Hexa Core Identity',
     tags: ['Abstract'],
     category: 'Web',
-    image: 'https://lh3.googleusercontent.com/aida/AP1WRLsFrVFFYsjfBU_puZjAuuT86THl-LmtgngY9ynw9WXnlm-R9CzfO6Kr3Bjf1bauowpfsoIYdCLZkF-sJlv01c04uT5fTbi2-Hh_W9poKG_NcLcPzVHgzN5wteg_cIkJ0O7FKCGD2VX76kw8lH5hPRqgR794rj9u6jShoCPSsZlHQxVc0oDtIdCgEg4IftWk9YIE853UxmyE05Xhj5CdFZ2bd_e5ekmc99ZgsxhVl1ntK0ErYBhuGGmfK3nZ',
+    image: 'https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?q=80&w=2000&auto=format&fit=crop',
   },
   {
     id: 3,

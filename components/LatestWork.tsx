@@ -133,7 +133,7 @@ const ALL_PROJECTS = [
     title: 'Apex Vanguard V8',
     tags: ['Automotive', 'Render'],
     category: 'Animation',
-    image: 'https://images.unsplash.com/photo-1581091012184-7a9b3d73c386?q=80&w=2000&auto=format&fit=crop',
+    image: 'https://unsplash.com/s/photos/luxury-car',
     size: 'large',
   },
   {
