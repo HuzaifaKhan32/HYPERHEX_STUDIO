@@ -2,6 +2,8 @@ import Navbar from '@/components/Navbar';
 import Hero from '@/components/Hero';
 import ClientMarquee from '@/components/ClientMarquee';
 import Services from '@/components/Services';
+import LatestWork from '@/components/LatestWork';
+import LatestWorkVariant from '@/components/LatestWorkVariant';
 import ContactForm from '@/components/ContactForm';
 import Footer from '@/components/Footer';
 import ScrollProgress from '@/components/ScrollProgress';
@@ -15,6 +17,8 @@ export default function Home() {
         <Hero />
         <ClientMarquee />
         <Services />
+        <LatestWork />
+        <LatestWorkVariant />
         <ContactForm />
       </main>
       <Footer />

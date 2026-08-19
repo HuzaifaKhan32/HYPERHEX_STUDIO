@@ -39,7 +39,7 @@ function FooterLink({ href, children, index }: { href: string; children: string;
     >
       <motion.a
         href={href}
-        className="inline-block text-xl font-bold drop-shadow-[0_1px_3px_rgba(10,10,10,0.08)] lg:text-2xl"
+        className="inline-block font-bold drop-shadow-[0_1px_3px_rgba(10,10,10,0.08)] text-[clamp(20px,2vw,32px)]"
         style={{ color: 'var(--color-ink)' }}
         whileHover={{ x: 12, color: 'var(--color-accent)' }}
         transition={{ duration: 0.45, ease: [0.4, 0, 0.2, 1] }}
@@ -64,10 +64,10 @@ export default function Footer() {
 
   return (
     <footer
-      className="relative isolate flex w-full flex-col overflow-hidden rounded-t-[3rem] px-5 py-20 lg:px-16 lg:py-32"
+      className="relative isolate flex w-full flex-col overflow-hidden rounded-t-[3rem] px-5 py-20 lg:px-16 lg:py-32 2xl:px-24 2xl:py-40"
       style={{ color: 'var(--color-ink)' }}
     >
-      <div className="relative z-10 mx-auto flex w-full max-w-[1280px] flex-col justify-between gap-16 lg:flex-row lg:gap-24">
+      <div className="relative z-10 mx-auto flex w-full max-w-[1280px] xl:max-w-[1400px] 2xl:max-w-none flex-col justify-between gap-16 lg:flex-row lg:gap-24 2xl:gap-32">
         <motion.div
           custom={0}
           initial="hidden"
@@ -116,7 +116,7 @@ export default function Footer() {
             </div>
             <motion.a
               href="mailto:info@hyperhex.studio"
-              className="text-xl font-bold drop-shadow-[0_1px_3px_rgba(10,10,10,0.08)] lg:text-2xl"
+              className="font-bold drop-shadow-[0_1px_3px_rgba(10,10,10,0.08)] text-[clamp(20px,2vw,32px)]"
               style={{ color: 'var(--color-ink)' }}
               whileHover={{ x: 8, color: 'var(--color-accent)' }}
               transition={{ duration: 0.45 }}
@@ -174,7 +174,7 @@ export default function Footer() {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.7, delay: 0.35, ease: [0.4, 0, 0.2, 1] }}
-        className="relative z-10 mx-auto mt-20 mb-8 flex w-full max-w-[1280px] flex-col items-center justify-between gap-6 pt-8 font-[family-name:var(--font-dm-sans)] before:absolute before:top-0 before:left-0 before:h-px before:w-full before:bg-outline-variant/50 sm:mb-24 md:mb-32 md:flex-row"
+        className="relative z-10 mx-auto mt-20 mb-8 flex w-full max-w-[1280px] xl:max-w-[1400px] 2xl:max-w-none flex-col items-center justify-between gap-6 pt-8 font-[family-name:var(--font-dm-sans)] before:absolute before:top-0 before:left-0 before:h-px before:w-full before:bg-outline-variant/50 sm:mb-24 md:mb-32 md:flex-row"
       >
         <p className="text-sm font-medium" style={{ color: 'var(--color-mist)' }}>
           © 2025 HyperHex Studio. All Rights Reserved

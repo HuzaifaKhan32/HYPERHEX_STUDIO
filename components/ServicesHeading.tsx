@@ -3,35 +3,79 @@
 import { useRef } from 'react';
 import { motion, useReducedMotion, useScroll, useTransform, type MotionValue } from 'framer-motion';
 
+const BLACK = '#000000';
+const ACCENT = 'var(--color-accent)';
 const MIST = '#9a9fa5';
-const INK = '#0a0a0a';
 
-function ColorWord({
+function RevealLine({
   children,
   progress,
   range,
+  className,
+  style,
 }: {
-  children: string;
+  children: React.ReactNode;
   progress: MotionValue<number>;
   range: [number, number];
+  className?: string;
+  style?: React.CSSProperties;
 }) {
   const reduced = useReducedMotion();
-  const color = useTransform(progress, range, [MIST, INK]);
-  const y = useTransform(progress, range, [36, 0]);
-  const opacity = useTransform(progress, range, [0.45, 1]);
+  const y = useTransform(progress, range, [28, 0]);
+  const opacity = useTransform(progress, range, [0.4, 1]);
 
   if (reduced) {
-    return <span className="inline-block text-ink">{children}</span>;
+    return (
+      <span className={className} style={style}>
+        {children}
+      </span>
+    );
   }
 
   return (
-    <motion.span className="inline-block will-change-transform" style={{ color, y, opacity }}>
+    <motion.span className={`block will-change-transform ${className ?? ''}`} style={{ y, opacity, ...style }}>
       {children}
     </motion.span>
   );
 }
 
-export default function ServicesHeading({ compact = false }: { compact?: boolean }) {
+function RevealWord({
+  children,
+  progress,
+  range,
+  className,
+  targetColor,
+}: {
+  children: string;
+  progress: MotionValue<number>;
+  range: [number, number];
+  className?: string;
+  targetColor: string;
+}) {
+  const reduced = useReducedMotion();
+  const color = useTransform(progress, range, [MIST, targetColor]);
+  const y = useTransform(progress, range, [24, 0]);
+  const opacity = useTransform(progress, range, [0.45, 1]);
+
+  if (reduced) {
+    return (
+      <span className={`block ${className ?? ''}`} style={{ color: targetColor }}>
+        {children}
+      </span>
+    );
+  }
+
+  return (
+    <motion.span className={`block will-change-transform ${className ?? ''}`} style={{ color, y, opacity }}>
+      {children}
+    </motion.span>
+  );
+}
+
+const headingBase =
+  'font-[family-name:var(--font-zalando-expanded)] font-black uppercase tracking-[-0.04em]';
+
+export default function ServicesHeading() {
   const ref = useRef<HTMLHeadingElement>(null);
   const { scrollYProgress } = useScroll({
     target: ref,
@@ -39,27 +83,53 @@ export default function ServicesHeading({ compact = false }: { compact?: boolean
   });
 
   return (
-    <h2
-      ref={ref}
-      className={[
-        'flex flex-col font-[family-name:var(--font-dm-sans)] font-black tracking-tighter uppercase',
-        compact
-          ? 'text-4xl leading-[0.95] md:text-[56px] md:leading-[1]'
-          : 'text-5xl leading-[0.95] md:text-[80px] md:leading-[88px]',
-      ].join(' ')}
-    >
-      <span className="flex flex-wrap gap-x-[0.22em]">
-        <ColorWord progress={scrollYProgress} range={[0, 0.45]}>
+    <h2 ref={ref} className={`${headingBase} w-full`}>
+      {/* Mobile — centered reverse pyramid: narrow top → wide bottom */}
+      <span className="flex flex-col items-center text-center md:hidden">
+        <RevealWord
+          progress={scrollYProgress}
+          range={[0, 0.35]}
+          targetColor={BLACK}
+          className="text-[clamp(18px,4.8vw,26px)] leading-none tracking-[0.14em]"
+        >
           Pushing
-        </ColorWord>
-        <ColorWord progress={scrollYProgress} range={[0.2, 0.65]}>
+        </RevealWord>
+        <RevealWord
+          progress={scrollYProgress}
+          range={[0.15, 0.5]}
+          targetColor={BLACK}
+          className="-mt-0.5 text-[clamp(28px,7.8vw,40px)] leading-none tracking-[0.06em]"
+        >
           the
-        </ColorWord>
-      </span>
-      <span>
-        <ColorWord progress={scrollYProgress} range={[0.4, 1]}>
+        </RevealWord>
+        <RevealLine
+          progress={scrollYProgress}
+          range={[0.35, 1]}
+          className="mt-2 text-[clamp(56px,18vw,84px)] leading-[0.92] tracking-[-0.05em]"
+          style={{ color: ACCENT }}
+        >
           Boundaries
-        </ColorWord>
+        </RevealLine>
+      </span>
+
+      {/* Desktop — two rows: "Pushing the" then "Boundaries" */}
+      <span className="hidden flex-col md:flex">
+        <RevealLine
+          progress={scrollYProgress}
+          range={[0, 0.55]}
+          className="text-[clamp(72px,6vw,120px)] leading-[0.95]"
+          style={{ color: BLACK }}
+        >
+          Pushing the
+        </RevealLine>
+        <RevealLine
+          progress={scrollYProgress}
+          range={[0.35, 1]}
+          className="text-[clamp(72px,6vw,120px)] leading-[0.95]"
+          style={{ color: ACCENT }}
+        >
+          Boundaries
+        </RevealLine>
       </span>
     </h2>
   );

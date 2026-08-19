@@ -48,15 +48,15 @@ export default function Hero() {
   const opacity = useTransform(scrollYProgress, [0, 0.85], [1, 0.55]);
 
   return (
-    <div className="relative w-full bg-background px-5 pb-4 sm:px-8 lg:px-12">
+    <div className="relative w-full bg-background px-5 pb-4 sm:px-8 lg:px-12 2xl:px-16">
       <motion.div
         ref={frameRef}
         style={reduced ? undefined : { scale, opacity }}
-        className="relative mx-auto min-h-[680px] w-full max-w-[1280px] origin-top overflow-hidden rounded-[2rem] border border-outline-variant/30 sm:min-h-[620px] md:h-[570px] md:min-h-0"
+        className="relative mx-auto min-h-[680px] w-full max-w-[1280px] xl:max-w-[1400px] 2xl:max-w-none origin-top overflow-hidden rounded-[2rem] border border-outline-variant/30 sm:min-h-[620px] md:min-h-[570px] 2xl:min-h-[85vh]"
       >
         <ImageCarousel images={carouselImages} />
 
-        <div className="absolute inset-0 z-10 flex flex-col justify-between p-5 sm:p-8 lg:p-12">
+        <div className="absolute inset-0 z-10 mx-auto flex w-full max-w-[1600px] flex-col justify-between p-5 sm:p-8 lg:p-12 2xl:px-8 2xl:py-16">
           <div className="flex w-full flex-wrap items-start justify-between gap-3">
             <motion.div
               animate={reduced ? undefined : floatAnimation}
@@ -134,10 +134,10 @@ export default function Hero() {
             >
               <div className="mb-3 flex items-center justify-between sm:mb-4">
                 <div>
-                  <p className="font-[family-name:var(--font-jetbrains)] text-[9px] font-medium tracking-widest uppercase text-on-surface-variant sm:text-[10px]">
+                  <p className="font-[family-name:var(--font-jetbrains)] text-[clamp(9px,1vw,12px)] font-medium tracking-widest uppercase text-on-surface-variant sm:text-[10px]">
                     Out Now
                   </p>
-                  <p className="font-[family-name:var(--font-syne)] text-base font-bold text-on-surface sm:text-lg">
+                  <p className="font-[family-name:var(--font-syne)] text-[clamp(16px,2vw,24px)] font-bold text-on-surface sm:text-lg">
                     Q Industrial
                   </p>
                 </div>
@@ -177,14 +177,14 @@ export default function Hero() {
                     style={{ backgroundColor: 'var(--color-accent)' }}
                   ></div>
                   <span
-                    className="font-[family-name:var(--font-jetbrains)] text-xs font-bold tracking-widest uppercase"
+                    className="font-[family-name:var(--font-jetbrains)] text-[clamp(12px,1.5vw,16px)] font-bold tracking-widest uppercase"
                     style={{ color: 'var(--color-paper)' }}
                   >
                     (ABOUT)
                   </span>
                 </div>
                 <p
-                  className="max-w-[280px] font-[family-name:var(--font-dm-sans)] text-sm"
+                  className="max-w-[280px] 2xl:max-w-[360px] font-[family-name:var(--font-dm-sans)] text-[clamp(14px,1.5vw,18px)]"
                   style={{ color: 'var(--color-paper)' }}
                 >
                   Building stunning websites that every shot drives income forwards.

@@ -92,67 +92,48 @@ export default function ServiceCard({
           className="absolute inset-[2px] flex h-[calc(100%-4px)] flex-col justify-between overflow-hidden bg-white p-8"
           style={{ clipPath: FACET_CLIP }}
         >
-          <div className="relative z-0 flex h-full min-h-0 flex-col justify-between">
+          {/* Default Unhovered State (White Background) */}
+          <div className="relative z-0 flex h-full min-h-0 flex-col justify-between items-center text-center py-6">
+            <div className="flex flex-1 flex-col items-center justify-center gap-6 w-full">
+              <h3 className="font-[family-name:var(--font-dm-sans)] text-3xl md:text-4xl leading-tight font-black text-ink uppercase tracking-tight px-4">
+                {title}
+              </h3>
+            </div>
+            <div className="flex items-center gap-2 font-[family-name:var(--font-dm-sans)] text-xs md:text-sm font-bold tracking-widest uppercase text-ink/50 animate-pulse">
+              Hover Me
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </div>
+          </div>
+
+          {/* Hovered State (Cyan or Black Background) */}
+          <div
+            ref={panelRef}
+            className={`service-card-panel absolute inset-0 z-10 flex flex-col justify-between p-8 text-left ${
+              isCyanPanel ? 'bg-primary-container text-ink' : 'bg-ink text-white'
+            }`}
+          >
             <div
-              className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-primary-container/20 text-ink [&_svg]:h-7 [&_svg]:w-7 [&_svg]:shrink-0"
+              className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-full ${
+                isCyanPanel ? 'bg-ink/10 text-ink' : 'bg-white/10 text-white'
+              } [&_svg]:h-7 [&_svg]:w-7 [&_svg]:shrink-0`}
             >
               {icon}
             </div>
 
-            <svg
-              className="pointer-events-none absolute -top-3 -right-3 h-32 w-32 text-primary-container/40 opacity-50 transition-opacity group-hover:opacity-100"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              viewBox="0 0 100 100"
-              aria-hidden="true"
-            >
-              <path d="M50 5 L95 30 L95 80" strokeDasharray="2 4" />
-            </svg>
-
             <div className="flex min-h-0 flex-col gap-3">
-              <h3
-                className="font-[family-name:var(--font-dm-sans)] text-2xl leading-tight font-extrabold text-ink"
-              >
+              <h4 className="font-[family-name:var(--font-dm-sans)] text-2xl font-extrabold tracking-tight uppercase">
                 {title}
-              </h3>
+              </h4>
               <p
-                className="line-clamp-4 font-[family-name:var(--font-dm-sans)] text-base leading-6 text-ink/80"
+                className={`font-[family-name:var(--font-dm-sans)] text-base leading-6 ${
+                  isCyanPanel ? 'text-ink/80' : 'text-white/80'
+                }`}
               >
                 {description}
               </p>
             </div>
-          </div>
-
-          <div
-            ref={panelRef}
-            className={`service-card-panel absolute inset-0 z-10 flex flex-col items-center justify-center gap-4 p-8 text-center ${
-              isCyanPanel ? 'bg-primary-container' : 'bg-ink'
-            }`}
-          >
-            <h4
-              className={`font-[family-name:var(--font-dm-sans)] text-2xl font-extrabold tracking-tight uppercase ${
-                isCyanPanel ? 'text-ink' : 'text-white'
-              }`}
-            >
-              {title}
-            </h4>
-            <span
-              className={`mt-2 flex items-center gap-2 font-[family-name:var(--font-dm-sans)] text-sm font-bold tracking-widest uppercase transition-transform duration-300 group-hover:translate-x-2 ${
-                isCyanPanel ? 'text-ink' : 'text-primary-container'
-              }`}
-            >
-              View Service
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                <path
-                  d="M5 12h14M13 6l6 6-6 6"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </span>
           </div>
         </div>
       </div>

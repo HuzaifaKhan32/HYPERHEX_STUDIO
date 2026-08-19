@@ -1,6 +1,8 @@
 @import "tailwindcss";
 
 @theme {
+  --font-zalando-expanded: "Zalando Sans Expanded Variable", "Zalando Sans Expanded", sans-serif;
+
   /* HyperHex Brand Colors (from CLAUDE.md) */
   --color-void: #000000;        /* true black, logo background */
   --color-ink: #0a0a0a;         /* page backgrounds */

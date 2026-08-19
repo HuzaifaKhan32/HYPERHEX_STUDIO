@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Syne, Hanken_Grotesk, JetBrains_Mono, DM_Sans } from "next/font/google";
+import "@fontsource-variable/zalando-sans-expanded/wght.css";
 import "./globals.css";
 
 const syne = Syne({

@@ -39,7 +39,7 @@ function ContactTitle() {
   return (
     <h2
       ref={ref}
-      className="mb-10 font-[family-name:var(--font-syne)] text-4xl font-black sm:text-5xl md:mb-16 md:text-7xl"
+      className="mb-10 font-[family-name:var(--font-syne)] font-black text-[clamp(36px,5vw,96px)] md:mb-16"
       style={{ lineHeight: '0.95' }}
     >
       <span className="flex flex-wrap gap-x-[0.22em]">
@@ -71,14 +71,14 @@ export default function ContactForm() {
   };
 
   return (
-    <section id="contact" className="w-full bg-surface py-12 md:py-24 px-5 lg:px-16">
+    <section id="contact" className="w-full bg-white pt-8 md:pt-16 2xl:pt-20 pb-12 md:pb-24 px-5 lg:px-16 2xl:px-24 2xl:pb-32">
       <motion.div
         ref={panelRef}
         initial={{ opacity: 0, y: 64 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: '-80px' }}
         transition={{ duration: 0.7, ease: [0.4, 0, 0.2, 1] }}
-        className="relative mx-auto w-full max-w-[1280px] overflow-hidden rounded-[2.5rem] shadow-2xl"
+        className="relative mx-auto w-full max-w-[1280px] xl:max-w-[1400px] 2xl:max-w-none overflow-hidden rounded-[2.5rem] shadow-2xl"
         style={{ backgroundColor: 'var(--color-ink)' }}
       >
         {/* Subtle cyan glow at bottom left */}
@@ -90,19 +90,19 @@ export default function ContactForm() {
         {/* Textured Dot Grid Background */}
         <DotGridBackground containerRef={panelRef} />
 
-        <div className="relative z-10 flex flex-col gap-8 p-6 md:flex-row md:gap-16 md:p-16">
+        <div className="relative z-10 flex flex-col gap-8 p-6 md:flex-row md:gap-16 md:p-16 2xl:gap-32 2xl:p-24 2xl:py-40">
           {/* Form Card — below content on mobile, left on desktop */}
           <motion.div
-            initial={{ opacity: 0, x: -50 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, y: 100 }}
+            whileInView={{ opacity: 1, y: 0 }}
             whileHover={{ y: -6 }}
             viewport={{ once: true }}
-            transition={{ duration: 1, delay: 0.15 }}
+            transition={{ duration: 1, ease: [0.16, 1, 0.3, 1], delay: 0.15 }}
             className="relative order-2 w-full md:order-1 md:w-[45%]"
           >
             {/* White Card with Faceted Corner */}
             <div
-              className="relative rounded-3xl bg-white p-8 shadow-2xl transition-transform duration-300 md:p-12"
+              className="relative rounded-3xl bg-white p-8 shadow-2xl transition-transform duration-300 md:p-12 2xl:p-16"
               style={{ clipPath: 'polygon(40px 0, 100% 0, 100% 100%, 0 100%, 0 40px)' }}
             >
               {/* Inner Notch Detail */}
@@ -122,14 +122,14 @@ export default function ContactForm() {
                   className="flex flex-col gap-2"
                 >
                   <label
-                    className="font-[family-name:var(--font-dm-sans)] text-sm uppercase tracking-widest text-gray-600 flex items-center gap-2 font-semibold"
+                    className="font-[family-name:var(--font-dm-sans)] text-sm 2xl:text-base uppercase tracking-widest text-gray-600 flex items-center gap-2 font-semibold"
                     htmlFor="email"
                   >
                     <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: 'var(--color-accent)' }}></span>
                     Your Email
                   </label>
                   <input
-                    className="w-full rounded-xl bg-[#f0f0f0] px-5 py-4 font-[family-name:var(--font-dm-sans)] text-gray-900 transition-all placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[rgba(21,182,232,0.5)]"
+                    className="w-full rounded-xl bg-[#f0f0f0] px-5 py-4 2xl:px-8 2xl:py-6 2xl:text-lg font-[family-name:var(--font-dm-sans)] text-gray-900 transition-all placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[rgba(21,182,232,0.5)]"
                     id="email"
                     placeholder="john@example.com"
                     type="email"
@@ -148,14 +148,14 @@ export default function ContactForm() {
                   className="flex flex-col gap-2"
                 >
                   <label
-                    className="font-[family-name:var(--font-dm-sans)] text-sm uppercase tracking-widest text-gray-600 flex items-center gap-2 font-semibold"
+                    className="font-[family-name:var(--font-dm-sans)] text-sm 2xl:text-base uppercase tracking-widest text-gray-600 flex items-center gap-2 font-semibold"
                     htmlFor="phone"
                   >
                     <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: 'var(--color-accent)' }}></span>
                     Your Phone
                   </label>
                   <input
-                    className="w-full bg-[#f0f0f0] rounded-xl px-5 py-4 font-[family-name:var(--font-dm-sans)] text-gray-900 focus:outline-none focus:ring-2 transition-all placeholder:text-gray-400"
+                    className="w-full bg-[#f0f0f0] rounded-xl px-5 py-4 2xl:px-8 2xl:py-6 2xl:text-lg font-[family-name:var(--font-dm-sans)] text-gray-900 focus:outline-none focus:ring-2 transition-all placeholder:text-gray-400"
                     id="phone"
                     placeholder="+1 (555) 000-0000"
                     type="tel"
@@ -173,14 +173,14 @@ export default function ContactForm() {
                   className="flex flex-col gap-2"
                 >
                   <label
-                    className="font-[family-name:var(--font-dm-sans)] text-sm uppercase tracking-widest text-gray-600 flex items-center gap-2 font-semibold"
+                    className="font-[family-name:var(--font-dm-sans)] text-sm 2xl:text-base uppercase tracking-widest text-gray-600 flex items-center gap-2 font-semibold"
                     htmlFor="message"
                   >
                     <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: 'var(--color-accent)' }}></span>
                     Message
                   </label>
                   <textarea
-                    className="w-full bg-[#f0f0f0] rounded-xl px-5 py-4 font-[family-name:var(--font-dm-sans)] text-gray-900 focus:outline-none focus:ring-2 transition-all resize-none placeholder:text-gray-400"
+                    className="w-full bg-[#f0f0f0] rounded-xl px-5 py-4 2xl:px-8 2xl:py-6 2xl:text-lg font-[family-name:var(--font-dm-sans)] text-gray-900 focus:outline-none focus:ring-2 transition-all resize-none placeholder:text-gray-400"
                     id="message"
                     placeholder="Tell us about your project..."
                     rows={4}
@@ -208,10 +208,10 @@ export default function ContactForm() {
 
           {/* Content — first on mobile, right on desktop */}
           <motion.div
-            initial={{ opacity: 0, x: 50 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, y: 120 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 1, delay: 0.15 }}
+            transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
             className="relative z-10 order-1 flex w-full flex-col justify-center md:order-2 md:w-[55%] md:pl-8"
           >
             {/* Badge */}
@@ -253,11 +253,11 @@ export default function ContactForm() {
                   </svg>
                 </div>
                 <div className="flex flex-col gap-1">
-                  <span className="font-[family-name:var(--font-dm-sans)] text-sm font-medium" style={{ color: 'var(--color-mist)' }}>
+                  <span className="font-[family-name:var(--font-dm-sans)] text-sm 2xl:text-base font-medium" style={{ color: 'var(--color-mist)' }}>
                     E-mail Address
                   </span>
                   <a
-                    className="font-[family-name:var(--font-dm-sans)] text-base font-bold transition-colors"
+                    className="font-[family-name:var(--font-dm-sans)] text-base 2xl:text-2xl font-bold transition-colors"
                     style={{ color: 'var(--color-paper)' }}
                     onMouseEnter={(e) => e.currentTarget.style.color = 'var(--color-accent)'}
                     onMouseLeave={(e) => e.currentTarget.style.color = 'var(--color-paper)'}
@@ -283,10 +283,10 @@ export default function ContactForm() {
                   </svg>
                 </div>
                 <div className="flex flex-col gap-1">
-                  <span className="font-[family-name:var(--font-dm-sans)] text-sm font-medium" style={{ color: 'var(--color-mist)' }}>
+                  <span className="font-[family-name:var(--font-dm-sans)] text-sm 2xl:text-base font-medium" style={{ color: 'var(--color-mist)' }}>
                     Office Address
                   </span>
-                  <span className="font-[family-name:var(--font-dm-sans)] text-base font-bold" style={{ color: 'var(--color-paper)' }}>
+                  <span className="font-[family-name:var(--font-dm-sans)] text-base 2xl:text-xl font-bold" style={{ color: 'var(--color-paper)' }}>
                     404 Hexagon Ave, Neo-Tokyo, NT 100-0001
                   </span>
                 </div>
