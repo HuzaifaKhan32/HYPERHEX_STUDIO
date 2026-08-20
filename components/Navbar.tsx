@@ -70,36 +70,36 @@ export default function Navbar() {
           </motion.div>
         </motion.div>
 
-        <nav className="hidden items-center gap-2 2xl:gap-3 rounded-full border border-outline-variant/30 bg-surface-container-low/80 p-1 2xl:p-1.5 shadow-[0_4px_10px_rgba(0,0,0,0.25)] backdrop-blur-2xl md:flex">
-          {links.map((link) => {
-            const isActive = activeLink === link.id;
+        <nav className="hidden items-center gap-2 2xl:gap-3 rounded-full border border-outline-variant/30 bg-surface-container-low/80 p-1 2xl:p-1.5 shadow-[0_14px_30px_-3px_rgba(0,0,0,0.35)] backdrop-blur-2xl md:flex">
+  {links.map((link) => {
+    const isActive = activeLink === link.id;
 
-            return (
-              <Link
-                key={link.id}
-                href={link.href}
-                onClick={() => setActiveLink(link.id)}
-                aria-current={isActive ? 'page' : undefined}
-                className={`relative flex items-center gap-2 rounded-full px-4 py-2 2xl:px-6 2xl:py-3 font-[family-name:var(--font-dm-sans)] transition-colors duration-200 ${isActive ? 'text-[var(--color-paper)]' : 'text-[var(--color-mist)]'
-                  }`}
-              >
-                {isActive && (
-                  <motion.span
-                    layoutId="nav-active-pill"
-                    className="absolute inset-0 rounded-full border-b-2 border-white/10 border-b-[#3e3e3e] bg-gradient-to-b from-[#0a0a0a] to-[#616161] shadow-[inset_0_2px_4px_rgba(0,0,0,0.4),0_1px_0_rgba(255,255,255,0.1)]"
-                    transition={{ type: 'spring', stiffness: 420, damping: 32 }}
-                  />
-                )}
-                <span className="relative z-10 flex items-center gap-2 2xl:gap-3 py-1 2xl:py-1.5 text-xs 2xl:text-sm font-bold tracking-tight uppercase">
-                  {isActive && (
-                    <span className="h-2 w-2 2xl:h-2.5 2xl:w-2.5 rounded-full bg-[var(--color-accent)]" />
-                  )}
-                  {link.label}
-                </span>
-              </Link>
-            );
-          })}
-        </nav>
+    return (
+      <Link
+        key={link.id}
+        href={link.href}
+        onClick={() => setActiveLink(link.id)}
+        aria-current={isActive ? 'page' : undefined}
+        className={`relative flex items-center gap-2 rounded-full px-4 py-2 2xl:px-6 2xl:py-3 font-[family-name:var(--font-dm-sans)] transition-colors duration-200 ${isActive ? 'text-[var(--color-paper)]' : 'text-[var(--color-mist)]'
+          }`}
+      >
+        {isActive && (
+          <motion.span
+            layoutId="nav-active-pill"
+            className="absolute inset-0 rounded-full border-b-2 border-white/10 border-b-[#3e3e3e] bg-gradient-to-b from-[#0a0a0a] to-[#616161] shadow-[inset_0_2px_4px_rgba(0,0,0,0.4),0_1px_0_rgba(255,255,255,0.1)]"
+            transition={{ type: 'spring', stiffness: 420, damping: 32 }}
+          />
+        )}
+        <span className="relative z-10 flex items-center gap-2 2xl:gap-3 py-1 2xl:py-1.5 text-xs 2xl:text-sm font-bold tracking-tight uppercase">
+          {isActive && (
+            <span className="h-2 w-2 2xl:h-2.5 2xl:w-2.5 rounded-full bg-[var(--color-accent)]" />
+          )}
+          {link.label}
+        </span>
+      </Link>
+    );
+  })}
+</nav>
 
         <Button3D href="#contact" className="hidden sm:flex">
           Contact Us

@@ -7,6 +7,7 @@ import LatestWorkVariant from '@/components/LatestWorkVariant';
 import ContactForm from '@/components/ContactForm';
 import Footer from '@/components/Footer';
 import ScrollProgress from '@/components/ScrollProgress';
+import FeaturedCaseStudies from '@/components/FeaturedCaseStudies';
 
 export default function Home() {
   return (
@@ -19,6 +20,7 @@ export default function Home() {
         <Services />
         <LatestWork />
         <LatestWorkVariant />
+        <FeaturedCaseStudies />
         <ContactForm />
       </main>
       <Footer />

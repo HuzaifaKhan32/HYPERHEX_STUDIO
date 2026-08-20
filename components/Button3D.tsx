@@ -22,11 +22,13 @@ export default function Button3D({
   showDot = true,
   arrowDirection = 'up-right',
 }: Button3DProps) {
-  const buttonClasses = `inline-flex items-center gap-2 2xl:gap-3 py-1.5 pr-2 pl-4 2xl:py-2.5 2xl:pr-3 2xl:pl-6 rounded-full font-[family-name:var(--font-dm-sans)] text-xs 2xl:text-sm font-bold uppercase tracking-wide transition-all shadow-[inset_0_2px_4px_rgba(0,0,0,0.15),0_1px_0_rgba(255,255,255,0.15),0_4px_10px_rgba(0,0,0,0.25)] border-b-2 border-r-[1px] border-black/10 border border-white/10 ${className}`;
+  const buttonClasses = `inline-flex items-center gap-2 2xl:gap-3 py-1.5 pr-2 pl-4 2xl:py-2.5 2xl:pr-3 2xl:pl-6 rounded-full font-[family-name:var(--font-dm-sans)] text-xs 2xl:text-sm font-bold uppercase tracking-wide transition-all border-b-2 border-r-[1px] border-black/10 border border-white/10 ${className}`;
 
-  const buttonStyle = {
+  const buttonStyle: React.CSSProperties = {
     backgroundColor: 'var(--color-accent)',
     color: 'var(--color-paper)',
+    boxShadow:
+  'inset 0 2px 4px rgba(0,0,0,0.15), 0 1px 0 rgba(255,255,255,0.15), 0 14px 30px -6px rgba(24, 173, 218, 0.75)',
   };
 
   const buttonContent = (
