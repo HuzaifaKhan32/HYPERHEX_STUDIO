@@ -141,4 +141,39 @@ export const services: ServiceItem[] = [
       </svg>
     ),
   },
+  {
+    title: 'Drone Animation',
+    description:
+      'Dynamic aerial cinematography and FPV drone simulations designed for high-impact visual narratives.',
+    panel: 'cyan',
+    href: '#contact',
+    icon: (
+      <svg className={iconClass} viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M12 12m-2 0a2 2 0 1 0 4 0a2 2 0 1 0-4 0" stroke="currentColor" strokeWidth="1.75" />
+        <path d="M12 14l-4 4M12 10l4-4M10 12l-4-4M14 12l4 4" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" />
+        <circle cx="5" cy="5" r="2" stroke="currentColor" strokeWidth="1.75" />
+        <circle cx="19" cy="19" r="2" stroke="currentColor" strokeWidth="1.75" />
+        <circle cx="19" cy="5" r="2" stroke="currentColor" strokeWidth="1.75" />
+        <circle cx="5" cy="19" r="2" stroke="currentColor" strokeWidth="1.75" />
+      </svg>
+    ),
+  },
 ];
+
+export const droneAnimationService: ServiceItem = {
+  title: 'Drone Animation',
+  description:
+    'Dynamic aerial cinematography and FPV drone simulations designed for high-impact visual narratives.',
+  panel: 'cyan',
+  href: '#contact',
+  icon: (
+    <svg className={iconClass} viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path d="M12 12m-2 0a2 2 0 1 0 4 0a2 2 0 1 0-4 0" stroke="currentColor" strokeWidth="1.75" />
+      <path d="M12 14l-4 4M12 10l4-4M10 12l-4-4M14 12l4 4" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" />
+      <circle cx="5" cy="5" r="2" stroke="currentColor" strokeWidth="1.75" />
+      <circle cx="19" cy="19" r="2" stroke="currentColor" strokeWidth="1.75" />
+      <circle cx="19" cy="5" r="2" stroke="currentColor" strokeWidth="1.75" />
+      <circle cx="5" cy="19" r="2" stroke="currentColor" strokeWidth="1.75" />
+    </svg>
+  ),
+};

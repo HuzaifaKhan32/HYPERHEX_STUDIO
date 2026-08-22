@@ -170,7 +170,7 @@ function FeaturedHeading() {
         <RevealLine
           progress={scrollYProgress}
           range={[0.35, 1]}
-          className="text-[clamp(56px,4.5vw,84px)] leading-[0.95]"
+          className="text-[clamp(46px,3.5vw,74px)] leading-[0.95]"
           style={{ color: ACCENT }}
         >
           Case Studies
@@ -237,7 +237,7 @@ export default function FeaturedCaseStudies() {
   return (
     <section 
       className="relative w-full bg-white py-16 md:py-24 overflow-hidden font-[family-name:var(--font-dm-sans)] text-ink" 
-      id="featured-slider"
+      id="case-studies"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
     >

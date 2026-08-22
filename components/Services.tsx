@@ -1,13 +1,10 @@
 'use client';
 
 import { useReducedMotion } from 'framer-motion';
-import { DESKTOP_GRID_MQ, useMediaQuery } from '@/lib/useMediaQuery';
 import ServicesCarousel from './ServicesCarousel';
-import ServicesGrid from './ServicesGrid';
 import ServicesHeading from './ServicesHeading';
 
 export default function Services() {
-  const isDesktopGrid = useMediaQuery(DESKTOP_GRID_MQ);
   const reducedMotion = useReducedMotion() ?? false;
 
   return (
@@ -25,11 +22,7 @@ export default function Services() {
         </div>
 
         <div className="relative z-0 mt-12 md:mt-16 lg:mt-20">
-          {isDesktopGrid ? (
-            <ServicesGrid reducedMotion={reducedMotion} />
-          ) : (
-            <ServicesCarousel reducedMotion={reducedMotion} />
-          )}
+          <ServicesCarousel reducedMotion={reducedMotion} />
         </div>
       </div>
     </section>

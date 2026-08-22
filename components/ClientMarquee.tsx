@@ -9,13 +9,13 @@ const BASE_SPEED = -55;
 const RETURN_RATE = 1.6;
 
 const PILL_BASE =
-  'inline-flex shrink-0 items-center justify-center rounded-full h-[90px] min-w-[108px] px-5';
+  'inline-flex shrink-0 items-center justify-center rounded-full h-[120px] min-w-[160px] px-8 mx-2 sm:mx-3';
 
 function MarqueePill({ item }: { item: MarqueeItem }) {
   if (item.type === 'label') {
     return (
       <span
-        className={`${PILL_BASE} bg-ink px-12 font-[family-name:var(--font-jetbrains)] text-sm font-medium tracking-[0.12em] text-paper uppercase`}
+        className={`${PILL_BASE} bg-ink px-14 font-[family-name:var(--font-jetbrains)] text-base font-medium tracking-[0.12em] text-paper uppercase`}
       >
         {item.name}
       </span>
@@ -24,16 +24,20 @@ function MarqueePill({ item }: { item: MarqueeItem }) {
 
   const logoVariant = logoVariantForBg(item.pillBg);
 
+  // We can vary the padding dynamically to give pills different widths
+  // based on the length of the client name to add organic variety.
+  const dynamicPx = item.name.length > 10 ? 'px-14' : item.name.length > 6 ? 'px-10' : 'px-8';
+
   return (
     <span
-      className={PILL_BASE}
+      className={`${PILL_BASE} ${dynamicPx}`}
       style={{ backgroundColor: PILL_BG_COLORS[item.pillBg] }}
       aria-label={item.name}
     >
       <ClientLogo
         id={item.id}
         variant={logoVariant}
-        className="h-12 w-auto max-h-[52px] max-w-[128px] object-contain"
+        className="h-16 md:h-20 w-auto max-h-[85px] max-w-[220px] object-contain"
       />
     </span>
   );

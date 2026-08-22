@@ -1,6 +1,6 @@
 import type { ClientLogoId } from '@/components/client-logos';
 
-export type PillBg = 'red' | 'cream' | 'cyan' | 'white' | 'black';
+export type PillBg = 'cream' | 'black';
 
 export type MarqueeClientItem = {
   type: 'client';
@@ -17,39 +17,31 @@ export type MarqueeLabelItem = {
 export type MarqueeItem = MarqueeClientItem | MarqueeLabelItem;
 
 export const PILL_BG_COLORS: Record<PillBg, string> = {
-  red: '#DC2626',
   cream: '#F4F1EA',
-  cyan: '#00e3fd',
-  white: '#ffffff',
   black: '#0a0a0a',
 };
 
-/** 1% red, 5% cream, remainder cyan / white / black */
+/** All client logos have cream background */
 export function assignPillBg(globalIndex: number): PillBg {
-  const bucket = globalIndex % 100;
-  if (bucket === 0) return 'red';
-  if (bucket >= 1 && bucket <= 5) return 'cream';
-  const rest: PillBg[] = ['cyan', 'white', 'black'];
-  return rest[(bucket - 6) % 3];
+  return 'cream';
 }
 
 export function logoVariantForBg(bg: PillBg): 'light' | 'dark' {
-  return bg === 'black' || bg === 'red' ? 'dark' : 'light';
+  return bg === 'black' ? 'dark' : 'light';
 }
 
 const CLIENTS: { id: ClientLogoId; name: string }[] = [
-  { id: 'nike', name: 'Nike' },
-  { id: 'bmw', name: 'BMW' },
-  { id: 'spotify', name: 'Spotify' },
-  { id: 'adobe', name: 'Adobe' },
-  { id: 'tesla', name: 'Tesla' },
-  { id: 'meta', name: 'Meta' },
-  { id: 'apple', name: 'Apple' },
-  { id: 'google', name: 'Google' },
-  { id: 'samsung', name: 'Samsung' },
-  { id: 'sony', name: 'Sony' },
-  { id: 'uber', name: 'Uber' },
-  { id: 'airbnb', name: 'Airbnb' },
+  { id: 'ahsan_associates', name: 'Ahsan Associates' },
+  { id: 'ahsan_town', name: 'Ahsan Town' },
+  { id: 'ashaab', name: 'Ashaab' },
+  { id: 'ce_and_builders', name: 'CE and Builders' },
+  { id: 'commtel', name: 'Commtel' },
+  { id: 'ivf_academy', name: 'IVF Academy USA' },
+  { id: 'khalifa', name: 'Khalifa' },
+  { id: 'lakhani', name: 'Lakhani Properties' },
+  { id: 'nayyer', name: 'Nayyer' },
+  { id: 'stadium_view', name: 'Stadium View Residencia' },
+  { id: 'dha_city', name: 'DHA City' },
 ];
 
 export function buildMarqueeSequence(): MarqueeItem[] {
