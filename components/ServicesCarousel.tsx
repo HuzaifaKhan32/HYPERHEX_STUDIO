@@ -8,7 +8,7 @@ import { services } from '@/lib/services-data';
 import ServiceCard from './ServiceCard';
 
 // Decreased autoplay interval for faster sliding
-const AUTOPLAY_INTERVAL = 2500; 
+const AUTOPLAY_INTERVAL = 5000; 
 const SLIDE_SIZE = '68%';
 const SLIDE_GAP = '0.75rem';
 

@@ -27,17 +27,19 @@ export default function Navbar() {
     <motion.header
       initial={{ y: -100, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1], delay: 0.15 }}
-      className={`fixed top-0 left-0 right-0 z-50 flex w-full justify-center transition-all duration-350 ${
+      transition={{ duration: 0.7, ease: 'easeOut', delay: 0.1 }}
+      className={`fixed left-0 right-0 z-50 flex w-full justify-center transition-all duration-350 ${
         scrolled
-          ? 'bg-white/95 shadow-[0_4px_30px_rgba(0,0,0,0.08)] border-b border-outline-variant/20 h-20 md:h-24 py-0 px-5 sm:px-8 md:px-12 2xl:px-16 items-center backdrop-blur-md'
-          : 'pt-4 sm:pt-5 2xl:pt-8 px-5 sm:px-8 md:px-12 2xl:px-16 items-start bg-transparent'
+          ? 'top-2 md:top-3 px-4 sm:px-8 md:px-12 2xl:px-16'
+          : 'top-2 sm:top-3 px-5 sm:px-8 md:px-12 2xl:px-16'
       }`}
     >
       <motion.div
         transition={{ duration: 0.35, ease: [0.4, 0, 0.2, 1] }}
-        className={`flex w-full max-w-[1280px] xl:max-w-[1400px] 2xl:max-w-none items-center justify-between rounded-full px-2 py-1 ${
-          scrolled ? 'h-full rounded-none' : ''
+        className={`flex w-full max-w-[1280px] xl:max-w-[1400px] 2xl:max-w-none items-center justify-between px-2 py-2 md:py-3 transition-all duration-350 ${
+          scrolled 
+            ? 'bg-white rounded-xl border-2 border-accent shadow-[0_6px_0_0_rgba(21,182,232,1)] backdrop-blur-md' 
+            : 'bg-transparent rounded-xl'
         }`}
       >
         <motion.div
