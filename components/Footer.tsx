@@ -248,11 +248,8 @@ export default function Footer() {
               <div className="flex flex-col gap-3 text-[clamp(14px,1.1vw,16px)]">
                 <p className="text-zinc-400 whitespace-nowrap">Regional Development Hub</p>
                 <p className="text-zinc-400 whitespace-nowrap">Worldwide Project Delivery</p>
-                <a href="tel:+923471245257" className="font-bold text-white transition-colors hover:text-[#15b6e8] whitespace-nowrap">
-                  +92 3471245257
-                </a>
-                <a href="tel:+923323141556" className="font-bold text-white transition-colors hover:text-[#15b6e8] whitespace-nowrap">
-                  +92 3323141556
+                <a href="tel:+923128881435" className="font-bold text-white transition-colors hover:text-[#15b6e8] whitespace-nowrap">
+                  +92 3128881435  
                 </a>
               </div>
             </div>
