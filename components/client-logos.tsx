@@ -1,53 +1,72 @@
 import Image from 'next/image';
 
+// Exact paths matching your public/ folder filenames
 const CLIENT_LOGO_PATHS = {
-  ahsan_associates: '/Clients logo/AHSAN ASSOCIATES.png',
-  ahsan_town: '/Clients logo/AHSAN_TOWN-removebg-preview.png',
-  ashaab: '/Clients logo/Ashaab_Logo_Final-03-removebg-preview.png',
-  ce_and_builders: '/Clients logo/CE AND BUILDERS.png',
-  commtel: '/Clients logo/COMMTEL-removebg-preview.png',
-  ivf_academy: '/Clients logo/IVF ACADEMY USA.png',
-  khalifa: '/Clients logo/KHALIFA-removebg-preview.png',
-  lakhani: '/Clients logo/LAKHANI PROPERTIES.png',
-  nayyer: '/Clients logo/Nayyer-Logo-FF-01-(1)-01-22.png',
-  stadium_view: '/Clients logo/Stadium View Residencia_Upper Case Logo-02.png',
-  dha_city: '/Clients logo/dha city.png',
+  ahsan_associates: '/clients-logo/ahsan-associates.png',
+  ahsan_town: '/clients-logo/ahsan-town.png',
+  ashaab: '/clients-logo/Ashaab_Logo_Final-03-removebg-preview.png',
+  ce_and_builders: '/clients-logo/CE AND BUILDERS.png',
+  commtel: '/clients-logo/COMMTEL-removebg-preview.png',
+  dha_city: '/clients-logo/dha city.png',
+  ivf_academy: '/clients-logo/IVF ACADEMY USA.png',
+  khalifa: '/clients-logo/KHALIFA-removebg-preview.png',
+  lakhani: '/clients-logo/LAKHANI PROPERTIES.png',
+  nayyer: '/clients-logo/Nayyer-Logo-FF-01-(1)-01-22.png',
+  stadium_view: '/clients-logo/Stadium View Residencia_Upper Case Logo-02.png',
 } as const;
 
 export type ClientLogoId = keyof typeof CLIENT_LOGO_PATHS;
 
+// Optical weight scales visually calibrated from your asset preview:
+const SCALES: Record<ClientLogoId, number> = {
+  // 🔴 Very Small / High Padding (Need Major Boost)
+  stadium_view: 2.1,
+  ashaab: 1.85,
+  khalifa: 1.8,
+  
+  // 🟡 Medium / Boxed Badges (Need Moderate Boost)
+  lakhani: 1.35,
+  ahsan_town: 1.25,
+  
+  // 🟢 Horizontal Wide Logos (Slight Boost)
+  commtel: 1.15,
+  dha_city: 1.15,
+  ivf_academy: 1.1,
+  nayyer: 1.1,
+
+  // 🔵 Bold / Tall Logos (Baseline Standard Scale)
+  ahsan_associates: 1.0,
+  ce_and_builders: 1.0,
+};
+
 export function ClientLogo({
   id,
-  variant,
-  className,
+  variant = 'light',
+  className = '',
 }: {
   id: ClientLogoId;
-  variant: 'light' | 'dark';
+  variant?: 'light' | 'dark';
   className?: string;
 }) {
   const src = CLIENT_LOGO_PATHS[id];
-  
-  // Note: Since these are colored PNGs, 'variant' might not apply perfectly, 
-  // but we can adjust CSS filters if needed (e.g., invert for dark themes).
-  // For now, we'll just render the image.
-  const scales: Partial<Record<ClientLogoId, string>> = {
-    khalifa: 'scale(1.8)',
-    ashaab: 'scale(1.6)',
-    stadium_view: 'scale(1.6)',
-  };
+  const scale = SCALES[id] ?? 1;
+
+  // Applies brightness/invert filter for dark mode variants if needed
+  const variantStyles = variant === 'dark' ? 'brightness-0 invert' : '';
 
   return (
-    <Image 
-      src={src} 
-      alt={`${id.replace(/_/g, ' ')} logo`} 
-      width={200} 
-      height={100} 
-      className={`${className || ''} pointer-events-none select-none`}
-      draggable={false}
-      style={{ 
-        objectFit: 'contain',
-        transform: scales[id]
-      }}
-    />
+    <div className="flex items-center justify-center overflow-hidden p-2">
+      <Image 
+        src={src} 
+        alt={`${id.replace(/_/g, ' ')} logo`} 
+        width={200} 
+        height={100} 
+        className={`max-h-12 w-auto object-contain pointer-events-none select-none transition-transform duration-300 ${variantStyles} ${className}`}
+        draggable={false}
+        style={{ 
+          transform: `scale(${scale})`
+        }}
+      />
+    </div>
   );
 }

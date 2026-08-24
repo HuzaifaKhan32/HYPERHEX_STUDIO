@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import Image from 'next/image';
 import { useState } from 'react';
 import { Globe, Share2, MessageSquare, ExternalLink } from 'lucide-react';
+import Button3D from './Button3D';
 
 const EASE = [0.4, 0, 0.2, 1] as const;
 
@@ -161,7 +162,7 @@ export default function Footer() {
         />
 
         {/* Footer Main Content Stack */}
-        <div className="relative z-10 mx-auto flex w-full max-w-[1400px] flex-col justify-between gap-16 lg:flex-row xl:gap-20">
+        <div className="relative z-10 mx-auto flex w-full max-w-[1400px] flex-col justify-between gap-16 lg:flex-row xl:gap-24">
           {/* Brand Visual Card */}
           <motion.div
             custom={0}
@@ -210,7 +211,7 @@ export default function Footer() {
           </motion.div>
 
           {/* Navigation Links Columns */}
-          <div className="grid flex-1 grid-cols-1 gap-10 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
+          <div className="grid flex-1 grid-cols-1 gap-16 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-3">
             {/* Company Section */}
             <div className="flex flex-col gap-5">
               <span className="font-mono text-xs font-bold tracking-[0.2em] uppercase text-zinc-400">
@@ -258,7 +259,7 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Social Media Links Row Style */}
+{/* Social Media Links Row Style */}
 <div className="relative z-10 mx-auto mt-16 w-full max-w-[1400px] flex flex-col items-center">
   <span className="mb-6 block text-center font-mono text-xs font-bold tracking-[0.2em] uppercase text-zinc-400">
     Social Media
@@ -268,16 +269,16 @@ export default function Footer() {
       <motion.a
         key={social.label}
         href={social.href}
-        whileTap={{ y: 3 }}
-        className="group relative flex items-center justify-between gap-6 rounded-2xl bg-white pl-6 pr-2.5 py-2.5 shadow-[0_6px_0_0_#E2E4E8,0_-3px_0_0_#FFFFFF,inset_0_2px_0_0_#FFFFFF,0_10px_20px_rgba(0,0,0,0.25)] transition-all duration-300 ease-out hover:shadow-[0_6px_0_0_#15b6e8,0_-3px_0_0_#FFFFFF,inset_0_2px_0_0_#FFFFFF,0_12px_24px_rgba(21,182,232,0.35)]"
+        whileTap={{ y: 4 }}
+        className="group relative flex items-center justify-between gap-8 rounded-3xl bg-[#F4F4F5] pl-8 pr-3 py-3 border-t-2 border-white shadow-[0_7px_0_0_#E0E0E4,0_12px_20px_rgba(0,0,0,0.08),inset_0_1px_1px_rgba(255,255,255,1)] transition-all duration-200 ease-out hover:shadow-[0_8px_0_0_#15b6e8,0_12px_24px_rgba(21,182,232,0.3),inset_0_1px_1px_rgba(255,255,255,1)]"
       >
         {/* Label */}
-        <span className="font-semibold text-sm text-[#111111] transition-colors group-hover:text-[#15b6e8]">
+        <span className="font-semibold text-base tracking-tight text-[#18181B] transition-colors group-hover:text-[#15b6e8]">
           {social.label}
         </span>
 
-        {/* 3D Circular Black Puck */}
-        <div className="flex h-10 w-10 shrink-0 aspect-square items-center justify-center rounded-full bg-[#141415] text-white shadow-[0_3px_0_0_#000000,0_6px_12px_rgba(0,0,0,0.4)] transition-all duration-300 group-hover:scale-105 group-hover:text-[#15b6e8] [&>svg]:h-4 [&>svg]:w-4 [&>svg]:fill-current">
+        {/* 3D Black Circular Puck */}
+        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#272727] text-white border-t border-white/20 shadow-[0_3px_0_0_#0A0A0C,0_6px_12px_rgba(0,0,0,0.35)] transition-all duration-200 group-hover:scale-105 group-hover:text-[#15b6e8] [&>svg]:h-4 [&>svg]:w-4 [&>svg]:fill-current">
           {social.icon}
         </div>
       </motion.a>
@@ -373,22 +374,31 @@ export default function Footer() {
         </div>
 
         {/* Bottom Bar: Copyright & Terms Policy */}
-        <div className="relative z-10 mx-auto mt-12 flex w-full max-w-[1400px] flex-col items-center justify-between gap-4 border-t border-white/10 pt-6 sm:flex-row">
+        <div className="relative z-10 mx-auto mt-12 flex w-full max-w-[1400px] flex-col items-center justify-between gap-6 border-t border-white/10 pt-6 md:flex-row">
           <p className="text-sm font-medium text-zinc-400">
             © 2026 HyperHex Studio. All Rights Reserved
           </p>
-          <div className="flex gap-8 text-sm font-medium">
-            {['Terms of Use', 'Privacy Policy'].map((label) => (
-              <motion.a
-                key={label}
-                href="#"
-                className="text-sm font-medium text-zinc-400"
-                whileHover={{ y: -2, color: '#15b6e8' }}
-                transition={{ duration: 0.25 }}
-              >
-                {label}
-              </motion.a>
-            ))}
+          <div className="flex flex-col items-center gap-6 sm:flex-row md:gap-8">
+            <div className="flex gap-8 text-sm font-medium">
+              {['Terms of Use', 'Privacy Policy'].map((label) => (
+                <motion.a
+                  key={label}
+                  href="#"
+                  className="text-sm font-medium text-zinc-400"
+                  whileHover={{ y: -2, color: '#15b6e8' }}
+                  transition={{ duration: 0.25 }}
+                >
+                  {label}
+                </motion.a>
+              ))}
+            </div>
+            
+            <Button3D
+              arrowDirection="up"
+              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            >
+              Back to Top
+            </Button3D>
           </div>
         </div>
       </footer>
