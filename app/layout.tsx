@@ -34,7 +34,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={`${syne.variable} ${hankenGrotesk.variable} ${jetbrainsMono.variable} ${dmSans.variable}`}>
+    <html lang="en" suppressHydrationWarning className={`light ${syne.variable} ${hankenGrotesk.variable} ${jetbrainsMono.variable} ${dmSans.variable}`}>
       <body className="antialiased" style={{ fontFamily: 'var(--font-dm-sans)' }}>{children}</body>
     </html>
   );

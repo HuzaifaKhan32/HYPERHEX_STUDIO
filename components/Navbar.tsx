@@ -62,9 +62,9 @@ export default function Navbar() {
               opacity: isLogoHovered ? 1 : 0,
             }}
             transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] }}
-            className="hidden overflow-hidden sm:block"
+            className="hidden overflow-hidden sm:inline-flex shrink-0"
           >
-            <div className="whitespace-nowrap rounded-full px-4 py-2 2xl:px-6 2xl:py-3" style={{ backgroundColor: 'var(--color-void)' }}>
+            <div className="inline-flex shrink-0 whitespace-nowrap rounded-full px-4 py-2 2xl:px-6 2xl:py-3" style={{ backgroundColor: 'var(--color-void)' }}>
               <span className="font-[family-name:var(--font-syne)] text-sm 2xl:text-base font-bold tracking-tight uppercase" style={{ color: 'var(--color-accent)' }}>
                 HYPERHex Studio
               </span>
@@ -72,7 +72,7 @@ export default function Navbar() {
           </motion.div>
         </motion.div>
 
-        <nav className="hidden items-center gap-2 2xl:gap-3 rounded-full border border-outline-variant/30 bg-surface-container-low/80 p-1 2xl:p-1.5 shadow-[0_14px_30px_-3px_rgba(0,0,0,0.35)] backdrop-blur-2xl md:flex">
+        <nav className="hidden items-center gap-2 2xl:gap-3 rounded-full border border-outline-variant/30 bg-surface-container-low/80 p-1 2xl:p-1.5 shadow-2xl shadow-black/35 backdrop-blur-2xl md:flex">
   {links.map((link) => {
   const isActive = activeLink === link.id;
 
