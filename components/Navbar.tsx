@@ -103,7 +103,7 @@ export default function Navbar() {
       {isActive && (
         <motion.span
           layoutId="nav-active-pill"
-          className="absolute inset-0 rounded-full border-t border-b-2 border-t-white/10 border-b-[#3e3e3e] bg-gradient-to-b from-[#0a0a0a] to-[#616161] shadow-[inset_0_2px_4px_rgba(0,0,0,0.4),0_1px_0_rgba(255,255,255,0.1)]"
+          className="absolute inset-0 rounded-full border-t border-b-2 border-t-white/10 border-b-[#3e3e3e] bg-gradient-to-b from-[#0a0a0a] to-[#616161] shadow-[inset_0_2px_4px_rgba(0,0,0,0.4),_0_1px_0_rgba(255,255,255,0.1)]"
           transition={{ type: 'spring', stiffness: 420, damping: 32 }}
         />
       )}

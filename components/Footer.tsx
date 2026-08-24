@@ -187,7 +187,7 @@ export default function Footer() {
               </div>
             </motion.div>
 
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col items-center gap-2">
               <div className="flex items-center gap-3">
                 <div
                   className="h-2 w-2 rounded-full shadow-[0_0_12px_rgba(21,182,232,0.6)]"
@@ -201,7 +201,7 @@ export default function Footer() {
                 href="mailto:info@hyperhex.studio"
                 className="font-bold text-[clamp(18px,1.5vw,24px)]"
                 style={{ color: '#F4F4F5' }}
-                whileHover={{ x: 6, color: '#15b6e8' }}
+                whileHover={{ y: -2, color: '#15b6e8' }}
                 transition={{ duration: 0.3 }}
               >
                 info@hyperhex.studio
@@ -211,20 +211,6 @@ export default function Footer() {
 
           {/* Navigation Links Columns */}
           <div className="grid flex-1 grid-cols-1 gap-10 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
-            {/* Navigation */}
-            <div className="flex flex-col gap-5">
-              <span className="font-mono text-xs font-bold tracking-[0.2em] uppercase text-zinc-400">
-                Navigation
-              </span>
-              <ul className="flex flex-col gap-3">
-                {navLinks.map((link, index) => (
-                  <FooterLink key={link.label} href={link.href} index={index}>
-                    {link.label}
-                  </FooterLink>
-                ))}
-              </ul>
-            </div>
-
             {/* Company Section */}
             <div className="flex flex-col gap-5">
               <span className="font-mono text-xs font-bold tracking-[0.2em] uppercase text-zinc-400">
@@ -273,23 +259,25 @@ export default function Footer() {
         </div>
 
         {/* Social Media Links Row Style */}
-<div className="relative z-10 mx-auto mt-16 w-full max-w-[1400px]">
-  <span className="mb-6 block font-mono text-xs font-bold tracking-[0.2em] uppercase text-zinc-400">
+<div className="relative z-10 mx-auto mt-16 w-full max-w-[1400px] flex flex-col items-center">
+  <span className="mb-6 block text-center font-mono text-xs font-bold tracking-[0.2em] uppercase text-zinc-400">
     Social Media
   </span>
-  <div className="flex flex-wrap items-center gap-4">
+  <div className="flex flex-wrap items-center justify-center gap-6">
     {socialLinks.map((social) => (
       <motion.a
         key={social.label}
         href={social.href}
-        whileHover={{ scale: 1.03, y: -2 }}
-        whileTap={{ scale: 0.97 }}
-        className="group flex items-center justify-between gap-5 rounded-[22px] bg-[#EFEFEF] px-6 py-3.5 shadow-[0_10px_25px_-5px_rgba(0,0,0,0.3),_inset_0_2px_2px_rgba(255,255,255,1),_inset_0_-2px_4px_rgba(0,0,0,0.1)] transition-all hover:bg-white"
+        whileTap={{ y: 3 }}
+        className="group relative flex items-center justify-between gap-6 rounded-2xl bg-white pl-6 pr-2.5 py-2.5 shadow-[0_6px_0_0_#E2E4E8,0_-3px_0_0_#FFFFFF,inset_0_2px_0_0_#FFFFFF,0_10px_20px_rgba(0,0,0,0.25)] transition-all duration-300 ease-out hover:shadow-[0_6px_0_0_#15b6e8,0_-3px_0_0_#FFFFFF,inset_0_2px_0_0_#FFFFFF,0_12px_24px_rgba(21,182,232,0.35)]"
       >
-        <span className="font-semibold text-sm text-[#111111]">
+        {/* Label */}
+        <span className="font-semibold text-sm text-[#111111] transition-colors group-hover:text-[#15b6e8]">
           {social.label}
         </span>
-        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#18181B] shadow-[0_8px_16px_-2px_rgba(0,0,0,0.65),_0_3px_6px_rgba(0,0,0,0.4)] transition-transform group-hover:scale-105">
+
+        {/* 3D Circular Black Puck */}
+        <div className="flex h-10 w-10 shrink-0 aspect-square items-center justify-center rounded-full bg-[#141415] text-white shadow-[0_3px_0_0_#000000,0_6px_12px_rgba(0,0,0,0.4)] transition-all duration-300 group-hover:scale-105 group-hover:text-[#15b6e8] [&>svg]:h-4 [&>svg]:w-4 [&>svg]:fill-current">
           {social.icon}
         </div>
       </motion.a>
