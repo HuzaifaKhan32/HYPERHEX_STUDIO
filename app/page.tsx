@@ -16,9 +16,9 @@ export default function Home() {
       <main className="w-full pt-24 md:pt-28">
         <Hero />
         <ClientMarquee />
+        <FeaturedCaseStudies />
         <Services />
         <LatestWorkVariant />
-        <FeaturedCaseStudies />
         <ContactForm />
       </main>
       <Footer />

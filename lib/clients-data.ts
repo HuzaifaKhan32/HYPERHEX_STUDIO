@@ -18,6 +18,7 @@ export type MarqueeItem = MarqueeClientItem | MarqueeLabelItem;
 
 export const PILL_BG_COLORS: Record<PillBg, string> = {
   cream: '#F4F1EA',
+
   black: '#0a0a0a',
 };
 

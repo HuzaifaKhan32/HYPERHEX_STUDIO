@@ -52,7 +52,9 @@ export default function Navbar() {
               src="/logo/hyperhex-logo-H.png"
               alt="HyperHex Logo"
               fill
-              className="object-cover rounded-full"
+              sizes="64px"
+              quality={90}
+              className="object-contain rounded-full"
             />
           </div>
           <motion.div

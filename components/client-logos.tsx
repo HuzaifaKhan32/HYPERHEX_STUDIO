@@ -61,10 +61,12 @@ export function ClientLogo({
         alt={`${id.replace(/_/g, ' ')} logo`} 
         width={200} 
         height={100} 
-        className={`max-h-12 w-auto object-contain pointer-events-none select-none transition-transform duration-300 ${variantStyles} ${className}`}
+        quality={90}
+        className={`max-h-12 w-auto object-contain pointer-events-none select-none ${variantStyles} ${className}`}
         draggable={false}
         style={{ 
-          transform: `scale(${scale})`
+          transform: `scale(${scale})`,
+          imageRendering: 'auto',
         }}
       />
     </div>

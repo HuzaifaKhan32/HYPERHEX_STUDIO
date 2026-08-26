@@ -63,7 +63,7 @@ const socialLinks = [
   },
   {
     label: 'YouTube',
-    href: '#',
+    href: 'https://www.youtube.com/@HyperhexStudios',
     icon: (
       <svg className="h-3.5 w-3.5 fill-white" viewBox="0 0 24 24">
         <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
@@ -181,9 +181,10 @@ export default function Footer() {
                 <Image
                   src="/images/image-3.jpg"
                   alt="HyperHex Studio Visual"
-                  width={280}
-                  height={156}
-                  className="h-full w-full object-cover"
+                  fill
+                  sizes="280px"
+                  quality={90}
+                  className="object-cover"
                 />
               </div>
             </motion.div>
@@ -275,7 +276,7 @@ export default function Footer() {
         </span>
 
         {/* 3D Black Circular Puck */}
-        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#272727] text-white border-t border-white/20 shadow-[0_3px_0_0_#0A0A0C,0_6px_12px_rgba(0,0,0,0.35)] transition-all duration-200 group-hover:scale-105 group-hover:text-[#15b6e8] [&>svg]:h-4 [&>svg]:w-4 [&>svg]:fill-current">
+        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#272727] text-white border-t border-white/20 shadow-[0_3px_0_0_#0A0A0C,0_6px_12px_rgba(0,0,0,0.35)] transition-all duration-200 group-hover:scale-105 group-hover:text-[#15b6e8] [&>svg]:h-4 [&>svg]:w-4 [&>svg]:fill-current">
           {social.icon}
         </div>
       </motion.a>
