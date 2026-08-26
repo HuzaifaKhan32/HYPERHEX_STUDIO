@@ -59,14 +59,14 @@ function RevealWord({
 
   if (reduced) {
     return (
-      <span className={`block ${className ?? ''}`} style={{ color: targetColor }}>
+      <span className={`inline-block ${className ?? ''}`} style={{ color: targetColor }}>
         {children}
       </span>
     );
   }
 
   return (
-    <motion.span className={`block will-change-transform ${className ?? ''}`} style={{ color, y, opacity }}>
+    <motion.span className={`inline-block will-change-transform ${className ?? ''}`} style={{ color, y, opacity }}>
       {children}
     </motion.span>
   );
@@ -83,14 +83,14 @@ export default function ServicesHeading() {
   });
 
   return (
-    <h2 ref={ref} className={`${headingBase} w-full`}>
-      {/* Mobile — centered reverse pyramid: narrow top → wide bottom */}
+    <h2 ref={ref} className={`${headingBase} w-full overflow-hidden`}>
+      {/* Mobile — tight reverse-pyramid hierarchy */}
       <span className="flex flex-col items-center text-center md:hidden">
         <RevealWord
           progress={scrollYProgress}
           range={[0, 0.35]}
           targetColor={BLACK}
-          className="text-[clamp(18px,4.8vw,26px)] leading-none tracking-[0.14em]"
+          className="text-[clamp(26px,7vw,30px)] tracking-[0.18em]"
         >
           Pushing
         </RevealWord>
@@ -98,21 +98,21 @@ export default function ServicesHeading() {
           progress={scrollYProgress}
           range={[0.15, 0.5]}
           targetColor={BLACK}
-          className="-mt-0.5 text-[clamp(28px,7.8vw,40px)] leading-none tracking-[0.06em]"
+          className="mt-1 text-[clamp(20px,6vw,28px)] tracking-[0.08em]"
         >
           the
         </RevealWord>
         <RevealLine
           progress={scrollYProgress}
           range={[0.35, 1]}
-          className="mt-2 text-[clamp(56px,18vw,84px)] leading-[0.92] tracking-[-0.05em]"
+          className="mt-1 text-[clamp(36px,11vw,52px)] leading-[0.9] tracking-[-0.03em]"
           style={{ color: ACCENT }}
         >
           Boundaries
         </RevealLine>
       </span>
 
-      {/* Desktop — two rows: "Pushing the" then "Boundaries" */}
+      {/* Desktop — unmodified */}
       <span className="hidden flex-col md:flex">
         <RevealLine
           progress={scrollYProgress}

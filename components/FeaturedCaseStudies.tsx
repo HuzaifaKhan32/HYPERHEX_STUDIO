@@ -180,13 +180,13 @@ function FeaturedHeading() {
   });
 
   return (
-    <h2 ref={ref} className={`${headingBase} w-full mb-12 md:mb-16`}>
-      {/* Mobile */}
+    <h2 ref={ref} className={`${headingBase} w-full mb-12 md:mb-16 overflow-hidden`}>
+      {/* Mobile — aligned scaled sizing */}
       <span className="flex flex-col text-left md:hidden">
         <RevealLine
           progress={scrollYProgress}
           range={[0, 0.55]}
-          className="text-[clamp(56px,18vw,84px)] leading-[0.92] tracking-[-0.05em]"
+          className="text-[clamp(36px,11vw,52px)] leading-[0.92] tracking-[-0.03em]"
           style={{ color: BLACK }}
         >
           Featured
@@ -195,13 +195,13 @@ function FeaturedHeading() {
           progress={scrollYProgress}
           range={[0.35, 1]}
           targetColor={ACCENT}
-          className="mt-2 text-[clamp(48px,10vw,72px)] leading-none tracking-[0.06em]"
+          className="mt-1 text-[clamp(24px,7vw,34px)] leading-tight tracking-[0.02em]"
         >
           Case Studies
         </RevealWord>
       </span>
 
-      {/* Desktop */}
+      {/* Desktop — unmodified */}
       <span className="hidden flex-col md:flex">
         <RevealLine
           progress={scrollYProgress}

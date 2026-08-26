@@ -43,6 +43,7 @@ const CLIENTS: { id: ClientLogoId; name: string }[] = [
   { id: 'nayyer', name: 'Nayyer' },
   { id: 'stadium_view', name: 'Stadium View Residencia' },
   { id: 'dha_city', name: 'DHA City' },
+  { id: 'nexgen', name: 'NEXGEN Heights' },
 ];
 
 export function buildMarqueeSequence(): MarqueeItem[] {

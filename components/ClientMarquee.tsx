@@ -9,13 +9,13 @@ const BASE_SPEED = -55;
 const RETURN_RATE = 1.6;
 
 const PILL_BASE =
-  'inline-flex shrink-0 items-center justify-center rounded-full h-[120px] min-w-[160px] px-8 mx-2 sm:mx-3';
+  'inline-flex shrink-0 items-center justify-center rounded-full h-[72px] min-w-[110px] px-5 mx-1.5 sm:h-[120px] sm:min-w-[160px] sm:px-8 sm:mx-3';
 
 function MarqueePill({ item }: { item: MarqueeItem }) {
   if (item.type === 'label') {
     return (
       <span
-        className={`${PILL_BASE} bg-ink px-14 font-[family-name:var(--font-jetbrains)] text-base font-medium tracking-[0.12em] text-paper uppercase`}
+        className={`${PILL_BASE} bg-ink font-[family-name:var(--font-jetbrains)] text-[10px] sm:text-base font-medium tracking-[0.12em] text-paper uppercase px-8 sm:px-14`}
       >
         {item.name}
       </span>
@@ -24,9 +24,12 @@ function MarqueePill({ item }: { item: MarqueeItem }) {
 
   const logoVariant = logoVariantForBg(item.pillBg);
 
-  // We can vary the padding dynamically to give pills different widths
-  // based on the length of the client name to add organic variety.
-  const dynamicPx = item.name.length > 10 ? 'px-14' : item.name.length > 6 ? 'px-10' : 'px-8';
+  const dynamicPx =
+    item.name.length > 10
+      ? 'px-10 sm:px-14'
+      : item.name.length > 6
+      ? 'px-7 sm:px-10'
+      : 'px-5 sm:px-8';
 
   return (
     <span
@@ -37,7 +40,7 @@ function MarqueePill({ item }: { item: MarqueeItem }) {
       <ClientLogo
         id={item.id}
         variant={logoVariant}
-        className="h-16 md:h-20 w-auto max-h-[85px] max-w-[220px] object-contain"
+        className="h-8 w-auto max-h-[36px] max-w-[120px] object-contain sm:h-16 md:h-20 sm:max-h-[85px] sm:max-w-[220px]"
       />
     </span>
   );
@@ -85,7 +88,6 @@ export default function ClientMarquee() {
       if (!sequenceRef.current) return;
       sequenceWidthRef.current = sequenceRef.current.offsetWidth;
     };
-
     measure();
     window.addEventListener('resize', measure);
     return () => window.removeEventListener('resize', measure);
@@ -124,18 +126,14 @@ export default function ClientMarquee() {
 
   const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
     if (!draggingRef.current) return;
-
     const dx = e.clientX - pointerRef.current.x;
     const dt = (e.timeStamp - pointerRef.current.t) / 1000;
-
     offsetRef.current += dx;
-
     if (dt > 0) {
       const vx = dx / dt;
       pointerRef.current.vx = vx;
       velocityRef.current = vx;
     }
-
     pointerRef.current.x = e.clientX;
     pointerRef.current.t = e.timeStamp;
     wrapOffset();
