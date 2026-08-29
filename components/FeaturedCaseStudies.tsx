@@ -5,7 +5,7 @@ import { motion, useReducedMotion, useScroll, useTransform, type MotionValue } f
 import Image from 'next/image';
 import Link from 'next/link';
 
-const BLACK = '#000000';
+const BLACK = 'var(--color-on-surface)';
 const ACCENT = 'var(--color-accent)';
 const MIST = '#9a9fa5';
 
@@ -53,53 +53,61 @@ const CASE_STUDIES = [
     type: 'image' as const,
   },
   {
-    id: 9,
-    title: 'Governor House',
-    category: 'Motion / Video',
-    videoId: 'oQnWA-22Bf4',
-    link:'https://youtu.be/oQnWA-22Bf4',
+    id: 7,
+    title: 'HyperHex 3D Showcase',
+    category: 'Animation / 3D',
+    videoId: '7JT-j8gz5uU',
+    link: 'https://youtu.be/7JT-j8gz5uU',
     type: 'video' as const,
   },
-  {
-    id: 10,
-    title: 'Nexgen Heights',
-    category: 'Motion / Video',
-    videoId: 'm2FYElEVclc',
-    link:'https://youtu.be/m2FYElEVclc',
-    type: 'video' as const,
-  },
-  {
-    id: 11,
-    title: 'Mumtaz Residency',
-    category: 'Motion / Video',
-    videoId: 'WKOskq3aIQQ',
-    link:'https://youtu.be/WKOskq3aIQQ',
-    type: 'video' as const,
-  },
-   {
-    id: 12,
-    title: 'Call Center Interior',
-    category: 'Motion / Video',
-    videoId: '9JFPZnPXQ1Y',
-    link: 'https://youtu.be/9JFPZnPXQ1Y',
-    type: 'video' as const,
-  },
-  {
-    id: 13,
-    title: 'Modern Apartment Interior',
-    category: 'Motion / Video',
-    videoId: 'QhWmY9lXlZY',
-    link: 'https://youtu.be/QhWmY9lXlZY',
-    type: 'video' as const,
-  },
-  {
-    id: 14,
-    title: 'Naran Club',
-    category: 'Motion / Video',
-    videoId: 'a0ESDiUHZFI',
-    link: 'https://youtu.be/a0ESDiUHZFI',
-    type: 'video' as const,
-  },
+  // {
+  //   id: 9,
+  //   title: 'Governor House',
+  //   category: 'Motion / Video',
+  //   videoId: 'oQnWA-22Bf4',
+  //   link:'https://youtu.be/oQnWA-22Bf4',
+  //   type: 'video' as const,
+  // },
+  // {
+  //   id: 10,
+  //   title: 'Nexgen Heights',
+  //   category: 'Motion / Video',
+  //   videoId: 'm2FYElEVclc',
+  //   link:'https://youtu.be/m2FYElEVclc',
+  //   type: 'video' as const,
+  // },
+  // {
+  //   id: 11,
+  //   title: 'Mumtaz Residency',
+  //   category: 'Motion / Video',
+  //   videoId: 'WKOskq3aIQQ',
+  //   link:'https://youtu.be/WKOskq3aIQQ',
+  //   type: 'video' as const,
+  // },
+  //  {
+  //   id: 12,
+  //   title: 'Call Center Interior',
+  //   category: 'Motion / Video',
+  //   videoId: '9JFPZnPXQ1Y',
+  //   link: 'https://youtu.be/9JFPZnPXQ1Y',
+  //   type: 'video' as const,
+  // },
+  // {
+  //   id: 13,
+  //   title: 'Modern Apartment Interior',
+  //   category: 'Motion / Video',
+  //   videoId: 'QhWmY9lXlZY',
+  //   link: 'https://youtu.be/QhWmY9lXlZY',
+  //   type: 'video' as const,
+  // },
+  // {
+  //   id: 14,
+  //   title: 'Naran Club',
+  //   category: 'Motion / Video',
+  //   videoId: 'a0ESDiUHZFI',
+  //   link: 'https://youtu.be/a0ESDiUHZFI',
+  //   type: 'video' as const,
+  // },
 ];
 
 // Duplicate items twice for smooth infinite loop
@@ -280,7 +288,7 @@ export default function FeaturedCaseStudies() {
 
   return (
     <section
-      className="relative w-full bg-white py-16 md:py-24 overflow-hidden font-[family-name:var(--font-dm-sans)] text-ink"
+      className="relative w-full bg-surface py-16 md:py-24 overflow-hidden font-[family-name:var(--font-dm-sans)] text-on-surface"
       id="case-studies"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
@@ -309,19 +317,11 @@ export default function FeaturedCaseStudies() {
                   }}
                   className="shrink-0 group"
                 >
-                  <div className="relative aspect-[4/5] rounded-3xl overflow-hidden bg-white cursor-pointer border border-black/[0.06] transition-all duration-300 transform hover:-translate-y-1">
+                  <div className="relative aspect-[4/5] rounded-3xl overflow-hidden bg-surface-bright cursor-pointer border border-outline-variant transition-all duration-300 transform hover:-translate-y-1">
                     <div className="p-3 h-full flex flex-col">
                       <div className="relative flex-1 overflow-hidden rounded-2xl">
                         <div className="absolute inset-0 overflow-hidden rounded-2xl group-hover:scale-105 transition-transform duration-700">
-                          {project.type === 'video' ? (
-                            <iframe
-                              src={`https://www.youtube.com/embed/${project.videoId}?autoplay=1&mute=1&loop=1&playlist=${project.videoId}&controls=0&modestbranding=1&rel=0&showinfo=0&iv_load_policy=3&playsinline=1`}
-                              title={project.title}
-                              allow="autoplay; encrypted-media"
-                              className="absolute top-1/2 left-1/2 h-[150%] w-[150%] -translate-x-1/2 -translate-y-1/2 pointer-events-none"
-                              style={{ border: 0 }}
-                            />
-                          ) : (
+                          { (
                             <Image
                               src={project.image}
                               alt={project.title}
@@ -343,11 +343,11 @@ export default function FeaturedCaseStudies() {
                       </div>
                       <div className="pt-3 px-1 flex justify-between items-center">
                         <div>
-                          <h3 className="text-base font-bold text-black">{project.title}</h3>
-                          <p className="text-xs text-black/50 font-medium">{project.category}</p>
+                          <h3 className="text-base font-bold text-on-surface">{project.title}</h3>
+                          <p className="text-xs text-on-surface-variant font-medium">{project.category}</p>
                         </div>
                         <span className="flex items-center gap-1 text-xs font-bold" style={{ color: 'var(--color-accent)' }}>
-                          <Link href={`${project.link}`}>View</Link>
+                          <Link href={`#`}>View</Link>
                           <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
                           </svg>
@@ -364,7 +364,7 @@ export default function FeaturedCaseStudies() {
           <button
             onClick={handlePrev}
             aria-label="Previous Slide"
-            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 w-12 h-12 md:w-14 md:h-14 rounded-full bg-white shadow-xl border border-black/10 flex items-center justify-center text-black hover:bg-[var(--color-accent)] hover:text-white transition-all z-20 cursor-pointer"
+            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 w-12 h-12 md:w-14 md:h-14 rounded-full bg-surface shadow-md shadow-outline-variant/30 border border-outline-variant/30 flex items-center justify-center text-on-surface hover:bg-[var(--color-accent)] hover:text-on-primary transition-all z-20 cursor-pointer"
           >
             <svg className="w-5 h-5 md:w-6 md:h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -373,7 +373,7 @@ export default function FeaturedCaseStudies() {
           <button
             onClick={handleNext}
             aria-label="Next Slide"
-            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 w-12 h-12 md:w-14 md:h-14 rounded-full bg-white shadow-xl border border-black/10 flex items-center justify-center text-black hover:bg-[var(--color-accent)] hover:text-white transition-all z-20 cursor-pointer"
+            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 w-12 h-12 md:w-14 md:h-14 rounded-full bg-surface shadow-md shadow-outline-variant/30 border border-outline-variant/30 flex items-center justify-center text-on-surface hover:bg-[var(--color-accent)] hover:text-on-primary transition-all z-20 cursor-pointer"
           >
             <svg className="w-5 h-5 md:w-6 md:h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
@@ -384,3 +384,12 @@ export default function FeaturedCaseStudies() {
     </section>
   );
 }
+// project.type === 'video' ? (
+//                             <iframe
+//                               src={`https://www.youtube.com/embed/${project.videoId}?autoplay=1&mute=1&loop=1&playlist=${project.videoId}&controls=0&modestbranding=1&rel=0&showinfo=0&iv_load_policy=3&playsinline=1`}
+//                               title={project.title}
+//                               allow="autoplay; encrypted-media"
+//                               className="absolute top-1/2 left-1/2 h-[150%] w-[150%] -translate-x-1/2 -translate-y-1/2 pointer-events-none"
+//                               style={{ border: 0 }}
+//                             />
+//                           ) :

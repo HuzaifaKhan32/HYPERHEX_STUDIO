@@ -74,11 +74,8 @@ const socialLinks = [
 
 const companyLinks = [
   { label: 'About Us', href: '#' },
-  { label: 'Capabilities', href: '#services' },
   { label: 'Portfolio', href: '#works' },
-  { label: 'Industries', href: '#' },
   { label: 'Case Studies', href: '#case-studies' },
-  { label: 'Blogs', href: '#' },
   { label: 'Contact', href: '#contact' },
 ];
 
@@ -258,31 +255,56 @@ export default function Footer() {
         </div>
 
 {/* Social Media Links Row Style */}
-<div className="relative z-10 mx-auto mt-16 w-full max-w-[1400px] flex flex-col items-center">
-  <span className="mb-6 block text-center font-mono text-xs font-bold tracking-[0.2em] uppercase text-zinc-400">
-    Social Media
-  </span>
-  <div className="flex flex-wrap items-center justify-center gap-6">
-    {socialLinks.map((social) => (
-      <motion.a
-        key={social.label}
-        href={social.href}
-        whileTap={{ y: 4 }}
-        className="group relative flex items-center justify-between gap-8 rounded-3xl bg-[#F4F4F5] pl-8 pr-3 py-3 border-t-2 border-white shadow-[0_7px_0_0_#E0E0E4,0_12px_20px_rgba(0,0,0,0.08),inset_0_1px_1px_rgba(255,255,255,1)] transition-all duration-200 ease-out hover:shadow-[0_8px_0_0_#15b6e8,0_12px_24px_rgba(21,182,232,0.3),inset_0_1px_1px_rgba(255,255,255,1)]"
-      >
-        {/* Label */}
-        <span className="font-semibold text-base tracking-tight text-[#18181B] transition-colors group-hover:text-[#15b6e8]">
-          {social.label}
-        </span>
+<div className="relative z-10 mx-auto rounded-2xl mt-16 w-full max-w-[1400px] flex flex-col items-center py-5" style={{ backgroundColor: '#EDECEC' }}>
+      <span className="mb-6 block text-center font-mono text-xs font-bold tracking-[0.2em] uppercase text-zinc-400">
+        Social Media
+      </span>
+      <div className="flex flex-wrap items-center justify-center gap-6">
+        {socialLinks.map((social) => (
+          <motion.a
+  key={social.label}
+  href={social.href}
+  target="_blank"
+  rel="noopener noreferrer"
+  whileTap={{ scale: 0.96 }}
+  className="group relative flex items-center justify-between gap-6 px-8 py-4 transition-all duration-200 ease-out"
+  style={{
+    backgroundColor: 'rgb(244, 244, 245)',
+    borderRadius: '24px',
+    boxShadow: 'rgba(255, 255, 255, 0.6) 0px 4px 0px 0px inset, rgba(0, 0, 0, 0.05) 0px -8px 0px 0px inset, rgba(0, 0, 0, 0.1) 0px 3px 3px 0px, rgba(0, 0, 0, 0.06) 0px 7.77px 16px 0px',
+    opacity: 1,
+  }}
+>
+            {/* Label */}
+            <div
+              style={
+                {
+                  '--framer-link-text-color': 'rgb(0, 153, 255)',
+                } as React.CSSProperties
+              }
+            >
+              <span className="font-semibold text-[15px] tracking-tight transition-colors group-hover:text-[rgb(0,153,255)]" style={{ color: '#18181B' }}>
+                {social.label}
+              </span>
+            </div>
 
-        {/* 3D Black Circular Puck */}
-        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#272727] text-white border-t border-white/20 shadow-[0_3px_0_0_#0A0A0C,0_6px_12px_rgba(0,0,0,0.35)] transition-all duration-200 group-hover:scale-105 group-hover:text-[#15b6e8] [&>svg]:h-4 [&>svg]:w-4 [&>svg]:fill-current">
-          {social.icon}
-        </div>
-      </motion.a>
-    ))}
-  </div>
-</div>
+            {/* 3D Circular Puck */}
+            <div
+              className="flex h-9 w-9 shrink-0 items-center justify-center transition-all duration-200 group-hover:scale-105 [&>svg]:h-3.5 [&>svg]:w-3.5 [&>svg]:fill-white"
+              style={{
+                backgroundColor: 'rgb(39, 39, 39)',
+                borderRadius: '100%',
+                boxShadow:
+                  'rgba(0, 0, 0, 0.12) 0px 2.77px 2.21px 0px, rgba(0, 0, 0, 0.14) 0px 3px 3px 0px, rgba(0, 0, 0, 0.15) 0px 100px 80px 0px, rgba(0, 0, 0, 0.15) 0px 41.78px 33.42px 0px, rgba(0, 0, 0, 0.14) 0px 22.34px 17.87px 0px, rgba(0, 0, 0, 0.14) 0px 12.52px 10.02px 0px, rgba(0, 0, 0, 0.13) 0px 6.65px 5.32px 0px, rgba(0, 0, 0, 0.12) 0px 2.77px 2.21px 0px, rgba(255, 255, 255, 0.3) 0px 1px 0px 0px inset, rgb(8, 8, 8) 0px -3px 0px 0px inset',
+                opacity: 1,
+              }}
+            >
+              {social.icon}
+            </div>
+          </motion.a>
+        ))}
+      </div>
+    </div>
 
         {/* Fully Responsive HyperHex Kinetic Interactive Title */}
         <div className="relative z-10 mt-16 lg:mt-24 flex w-full flex-col items-center justify-center select-none overflow-visible">

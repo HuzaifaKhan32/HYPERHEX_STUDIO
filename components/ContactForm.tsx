@@ -71,7 +71,7 @@ export default function ContactForm() {
   };
 
   return (
-    <section id="contact" className="w-full bg-white pt-8 md:pt-16 2xl:pt-20 pb-12 md:pb-24 px-5 lg:px-16 2xl:px-24 2xl:pb-32">
+    <section id="contact" className="w-full bg-surface pt-8 md:pt-16 2xl:pt-20 pb-12 md:pb-24 px-5 lg:px-16 2xl:px-24 2xl:pb-32">
       <motion.div
         ref={panelRef}
         initial={{ opacity: 0, y: 64 }}
@@ -102,13 +102,13 @@ export default function ContactForm() {
           >
             {/* White Card with Faceted Corner */}
             <div
-              className="relative rounded-3xl bg-white p-8 shadow-2xl transition-transform duration-300 md:p-12 2xl:p-16"
+              className="relative rounded-3xl bg-[#f4fafd] p-8 shadow-md shadow-outline-variant/30 transition-transform duration-300 md:p-12 2xl:p-16"
               style={{ clipPath: 'polygon(40px 0, 100% 0, 100% 100%, 0 100%, 0 40px)' }}
             >
               {/* Inner Notch Detail */}
               <div className="absolute top-0 left-0 w-16 h-16 pointer-events-none">
                 <svg fill="none" height="64" viewBox="0 0 64 64" width="64" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M0 40L40 0" stroke="#f0f0f0" strokeWidth="2"></path>
+                  <path d="M0 40L40 0" stroke="var(--color-surface-variant)" strokeWidth="2"></path>
                 </svg>
               </div>
 
@@ -122,14 +122,14 @@ export default function ContactForm() {
                   className="flex flex-col gap-2"
                 >
                   <label
-                    className="font-[family-name:var(--font-dm-sans)] text-sm 2xl:text-base uppercase tracking-widest text-gray-600 flex items-center gap-2 font-semibold"
+                    className="font-[family-name:var(--font-dm-sans)] text-sm 2xl:text-base uppercase tracking-widest text-mist flex items-center gap-2 font-semibold"
                     htmlFor="email"
                   >
                     <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: 'var(--color-accent)' }}></span>
                     Your Email
                   </label>
                   <input
-                    className="w-full rounded-xl bg-[#f0f0f0] px-5 py-4 2xl:px-8 2xl:py-6 2xl:text-lg font-[family-name:var(--font-dm-sans)] text-gray-900 transition-all placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[rgba(21,182,232,0.5)]"
+                    className="w-full rounded-xl bg-[#dde4e6] px-5 py-4 2xl:px-8 2xl:py-6 2xl:text-lg font-[family-name:var(--font-dm-sans)] text-on-surface transition-all placeholder:text-mist focus:outline-none focus:ring-2 focus:ring-[rgba(21,182,232,0.5)]"
                     id="email"
                     placeholder="john@example.com"
                     type="email"
@@ -148,14 +148,14 @@ export default function ContactForm() {
                   className="flex flex-col gap-2"
                 >
                   <label
-                    className="font-[family-name:var(--font-dm-sans)] text-sm 2xl:text-base uppercase tracking-widest text-gray-600 flex items-center gap-2 font-semibold"
+                    className="font-[family-name:var(--font-dm-sans)] text-sm 2xl:text-base uppercase tracking-widest text-mist flex items-center gap-2 font-semibold"
                     htmlFor="phone"
                   >
                     <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: 'var(--color-accent)' }}></span>
                     Your Phone
                   </label>
                   <input
-                    className="w-full bg-[#f0f0f0] rounded-xl px-5 py-4 2xl:px-8 2xl:py-6 2xl:text-lg font-[family-name:var(--font-dm-sans)] text-gray-900 focus:outline-none focus:ring-2 transition-all placeholder:text-gray-400"
+                    className="w-full bg-[#dde4e6] rounded-xl px-5 py-4 2xl:px-8 2xl:py-6 2xl:text-lg font-[family-name:var(--font-dm-sans)] text-on-surface focus:outline-none focus:ring-2 transition-all placeholder:text-mist"
                     id="phone"
                     placeholder="+1 (555) 000-0000"
                     type="tel"
@@ -173,14 +173,14 @@ export default function ContactForm() {
                   className="flex flex-col gap-2"
                 >
                   <label
-                    className="font-[family-name:var(--font-dm-sans)] text-sm 2xl:text-base uppercase tracking-widest text-gray-600 flex items-center gap-2 font-semibold"
+                    className="font-[family-name:var(--font-dm-sans)] text-sm 2xl:text-base uppercase tracking-widest text-mist flex items-center gap-2 font-semibold"
                     htmlFor="message"
                   >
                     <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: 'var(--color-accent)' }}></span>
                     Message
                   </label>
                   <textarea
-                    className="w-full bg-[#f0f0f0] rounded-xl px-5 py-4 2xl:px-8 2xl:py-6 2xl:text-lg font-[family-name:var(--font-dm-sans)] text-gray-900 focus:outline-none focus:ring-2 transition-all resize-none placeholder:text-gray-400"
+                    className="w-full bg-[#dde4e6] rounded-xl px-5 py-4 2xl:px-8 2xl:py-6 2xl:text-lg font-[family-name:var(--font-dm-sans)] text-on-surface focus:outline-none focus:ring-2 transition-all resize-none placeholder:text-mist"
                     id="message"
                     placeholder="Tell us about your project..."
                     rows={4}
@@ -223,7 +223,7 @@ export default function ContactForm() {
               className="mb-12 inline-flex w-max items-center gap-2 rounded-full py-2 pr-4 pl-2"
               style={{ backgroundColor: 'rgba(0, 0, 0, 0.4)' }}
             >
-              <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center shrink-0">
+              <div className="w-8 h-8 rounded-full bg-surface-bright flex items-center justify-center shrink-0">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ color: 'var(--color-accent)' }}>
                   <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
                 </svg>

@@ -3,7 +3,7 @@
 import { useRef } from 'react';
 import { motion, useReducedMotion, useScroll, useTransform, type MotionValue } from 'framer-motion';
 
-const BLACK = '#000000';
+const BLACK = 'var(--color-on-surface)';
 const ACCENT = 'var(--color-accent)';
 const MIST = '#9a9fa5';
 

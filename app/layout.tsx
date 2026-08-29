@@ -32,10 +32,31 @@ export const metadata: Metadata = {
   description: "Building stunning websites that every shot drives income forwards.",
 };
 
+import { ThemeProvider } from "../components/ThemeProvider";
+
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" suppressHydrationWarning className={`light ${syne.variable} ${hankenGrotesk.variable} ${jetbrainsMono.variable} ${dmSans.variable}`}>
-      <body className="antialiased" style={{ fontFamily: 'var(--font-dm-sans)' }}>{children}</body>
+      <body className="antialiased" style={{ fontFamily: 'var(--font-dm-sans)' }}>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              try {
+                if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                  document.documentElement.classList.add('dark');
+                  document.documentElement.classList.remove('light');
+                } else {
+                  document.documentElement.classList.remove('dark');
+                  document.documentElement.classList.add('light');
+                }
+              } catch (_) {}
+            `,
+          }}
+        />
+        <ThemeProvider>
+          {children}
+        </ThemeProvider>
+      </body>
     </html>
   );
 }

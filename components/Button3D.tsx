@@ -2,15 +2,22 @@
 
 import Link from 'next/link';
 import { motion } from 'framer-motion';
+import { type ReactNode } from 'react';
+
+const ARROW_PATHS = {
+  'up-right': 'M7 17L17 7M17 7H8M17 7V16',
+  down: 'M12 5V19M12 19L5 12M12 19L19 12',
+  up: 'M12 19V5M12 5L5 12M12 5L19 12',
+} as const;
 
 interface Button3DProps {
-  children: React.ReactNode;
+  children: ReactNode;
   href?: string;
   onClick?: () => void;
   type?: 'button' | 'submit';
   className?: string;
   showDot?: boolean;
-  arrowDirection?: 'up-right' | 'down' | 'up';
+  arrowDirection?: keyof typeof ARROW_PATHS;
 }
 
 export default function Button3D({
@@ -22,14 +29,8 @@ export default function Button3D({
   showDot = true,
   arrowDirection = 'up-right',
 }: Button3DProps) {
-  const buttonClasses = `group relative inline-flex items-center gap-2 2xl:gap-3 py-1.5 pr-2 pl-4 2xl:py-2.5 2xl:pr-3 2xl:pl-6 rounded-full font-[family-name:var(--font-dm-sans)] text-xs 2xl:text-sm font-bold uppercase tracking-wide transition-all border-b-2 border-r-[1px] border-black/10 border border-white/10 overflow-hidden cursor-pointer ${className}`;
-
-  const buttonStyle: React.CSSProperties = {
-    backgroundColor: 'var(--color-accent)',
-    color: 'var(--color-paper)',
-    boxShadow:
-      'inset 0 2px 4px rgba(0,0,0,0.15), 0 1px 0 rgba(255,255,255,0.15), 0 14px 30px -6px rgba(24, 173, 218, 0.75)',
-  };
+  
+  const buttonClasses = `group relative inline-flex items-center gap-3 rounded-[100px] py-1.5 pl-4 pr-1.5 2xl:py-2.5 2xl:pl-6 2xl:pr-2.5 cursor-pointer outline-none ${className}`;
 
   const arrowIcon = (
     <svg
@@ -38,40 +39,23 @@ export default function Button3D({
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
-      <g id="SVGRepo_iconCarrier">
-        {arrowDirection === 'up-right' ? (
-          <path
-            d="M7 17L17 7M17 7H8M17 7V16"
-            stroke="#000000"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        ) : arrowDirection === 'down' ? (
-          <path
-            d="M12 5V19M12 19L5 12M12 19L19 12"
-            stroke="#000000"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        ) : (
-          <path
-            d="M12 19V5M12 5L5 12M12 5L19 12"
-            stroke="#000000"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        )}
-      </g>
+      <path
+        d={ARROW_PATHS[arrowDirection]}
+        stroke="black"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
     </svg>
   );
 
   const labelContent = (
-    <span className="flex items-center gap-2 2xl:gap-3">
+    <span className="flex items-center gap-2 2xl:gap-3 font-[family-name:var(--font-dm-sans)] text-xs 2xl:text-sm font-bold uppercase tracking-wide text-white">
       {showDot && (
-        <span className="w-1.5 h-1.5 2xl:w-2 2xl:h-2 rounded-full bg-white shrink-0" />
+        <span
+          className="h-1.5 w-1.5 shrink-0 rounded-[100px] 2xl:h-2 2xl:w-2"
+          style={{ backgroundColor: 'rgb(255, 255, 255)' }}
+        />
       )}
       {children}
     </span>
@@ -79,24 +63,57 @@ export default function Button3D({
 
   const buttonContent = (
     <>
-      {/* Vertical Rolling Text Container */}
-      <div className="relative overflow-hidden py-0.5">
-        <div className="flex items-center transition-transform duration-500 ease-in-out group-hover:-translate-y-full">
-          {labelContent}
-        </div>
-        <div className="absolute top-full left-0 flex items-center w-full h-full transition-transform duration-500 ease-in-out group-hover:-translate-y-full">
-          {labelContent}
-        </div>
-      </div>
+      {/* --- BACKGROUND LAYERS --- */}
+      
+      {/* 1. Base Ring (Creates the 3D edge: lighter top, darker bottom) */}
+      <div
+        className="absolute inset-0 z-0 rounded-[100px]"
+        style={{
+          background: 'linear-gradient(180deg, #6cdcfb 0%, #0d8ec4 100%)',
+          opacity: 1,
+        }}
+      />
 
-      {/* Horizontal Sliding Arrow Puck */}
-      <div className="h-7 w-7 2xl:h-9 2xl:w-9 relative overflow-hidden rounded-full bg-white flex items-center justify-center shrink-0 shadow-[inset_0_1px_2px_rgba(0,0,0,0.15),0_1px_2px_rgba(0,0,0,0.15)]">
-        <div className="flex items-center justify-center w-full h-full transition-transform duration-500 ease-in-out group-hover:-translate-x-full">
-          {arrowIcon}
+      {/* 2. Main BG (The Cyan body with a pillowy top inner-shadow) */}
+      <div
+        className="absolute inset-[1px] z-0 rounded-[100px]"
+        style={{
+          backgroundColor: '#15b6e8',
+          boxShadow: 'rgba(255, 255, 255, 0.4) 0px 4px 6px 0px inset',
+          opacity: 1,
+        }}
+      />
+
+      {/* --- CONTENT LAYERS --- */}
+      <div className="relative z-10 flex w-full items-center justify-between gap-3 2xl:gap-4">
+        
+        {/* Rolling Text Mask */}
+        <div className="relative overflow-hidden py-0.5">
+          <div className="flex items-center transition-transform duration-500 ease-in-out group-hover:-translate-y-full">
+            {labelContent}
+          </div>
+          <div className="absolute left-0 top-full flex h-full w-full items-center transition-transform duration-500 ease-in-out group-hover:-translate-y-full">
+            {labelContent}
+          </div>
         </div>
-        <div className="absolute top-0 left-full flex items-center justify-center w-full h-full transition-transform duration-500 ease-in-out group-hover:-translate-x-full">
-          {arrowIcon}
+
+        {/* Icon Puck */}
+        <div
+          className="relative flex h-8 w-8 shrink-0 items-center justify-center overflow-hidden rounded-[100px] text-[#15b6e8] 2xl:h-10 2xl:w-10"
+          style={{
+            backgroundColor: 'rgb(255, 255, 255)',
+            boxShadow: 'rgba(255, 255, 255, 0.3) 0px 4px 6px 0px',
+            opacity: 1,
+          }}
+        >
+          <div className="flex h-full w-full items-center justify-center transition-transform duration-500 ease-in-out group-hover:-translate-x-full">
+            {arrowIcon}
+          </div>
+          <div className="absolute left-full top-0 flex h-full w-full items-center justify-center transition-transform duration-500 ease-in-out group-hover:-translate-x-full">
+            {arrowIcon}
+          </div>
         </div>
+        
       </div>
     </>
   );
@@ -104,7 +121,7 @@ export default function Button3D({
   if (href) {
     return (
       <motion.div whileTap={{ scale: 0.95 }} className="inline-block">
-        <Link href={href} className={buttonClasses} style={buttonStyle}>
+        <Link href={href} className={buttonClasses}>
           {buttonContent}
         </Link>
       </motion.div>
@@ -115,7 +132,6 @@ export default function Button3D({
     <motion.button
       whileTap={{ scale: 0.95 }}
       className={buttonClasses}
-      style={buttonStyle}
       onClick={onClick}
       type={type}
     >

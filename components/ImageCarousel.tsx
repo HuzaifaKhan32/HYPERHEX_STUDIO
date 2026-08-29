@@ -1,42 +1,47 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 
-interface CarouselImage {
+export interface CarouselMedia {
   src: string;
   alt: string;
+  poster?: string;
   type?: 'image' | 'video';
 }
 
 interface ImageCarouselProps {
-  images: CarouselImage[];
+  images: CarouselMedia[];
 }
-
-const PILL_COUNT = 3;
 
 export default function ImageCarousel({ images }: ImageCarouselProps) {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % images.length);
-    }, 5000);
-    return () => clearInterval(interval);
+  const nextSlide = useCallback(() => {
+    setCurrentSlide((prev) => (prev + 1) % images.length);
   }, [images.length]);
 
-  const goToSlide = (index: number) => setCurrentSlide(index);
-
-  // Which of the 3 pills is "active" (0, 1, or 2)
-  const activePill = currentSlide % PILL_COUNT;
-
-  // Each pill navigates to the nearest slide that maps to that pill slot
-  const getSlideForPill = (pillIndex: number) => {
-    const base = Math.floor(currentSlide / PILL_COUNT) * PILL_COUNT;
-    const target = base + pillIndex;
-    return target < images.length ? target : pillIndex; // fallback to start
+  const goToSlide = (index: number) => {
+    setCurrentSlide(index);
   };
+
+  const currentMedia = images[currentSlide];
+  const isVideo = currentMedia?.type === 'video';
+
+  useEffect(() => {
+    if (isVideo) {
+      // For video slides, carousel stays on the slide until video end (onEnded)
+      return;
+    }
+
+    const interval = setInterval(() => {
+      nextSlide();
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, [currentSlide, isVideo, nextSlide]);
 
   return (
     <>
@@ -56,12 +61,23 @@ export default function ImageCarousel({ images }: ImageCarouselProps) {
               >
                 {image.type === 'video' ? (
                   <video
+                    ref={(el) => {
+                      videoRef.current = el;
+                      if (el) {
+                        el.play().catch(() => {});
+                      }
+                    }}
                     src={image.src}
+                    poster={image.poster}
                     autoPlay
-                    loop
                     muted
                     playsInline
                     preload="auto"
+                    onEnded={nextSlide}
+                    onError={() => {
+                      // Fallback: if video fails to play/load, advance after 5s
+                      setTimeout(nextSlide, 5000);
+                    }}
                     className="absolute inset-0 h-full w-full object-cover"
                   />
                 ) : (
@@ -93,22 +109,22 @@ export default function ImageCarousel({ images }: ImageCarouselProps) {
         </AnimatePresence>
       </div>
 
-      {/* Fixed 3-pill indicator — always exactly 3 pills, lower on the screen */}
+      {/* Dynamic pill indicators matching total media items */}
       <div className="absolute left-1/2 z-20 hidden -translate-x-1/2 items-center gap-3 rounded-full border border-white/15 bg-black/45 px-4 py-2.5 shadow-[0_4px_24px_rgba(0,0,0,0.4)] backdrop-blur-md md:bottom-6 md:flex">
-        {Array.from({ length: PILL_COUNT }).map((_, pillIndex) => (
+        {images.map((_, index) => (
           <motion.button
-            key={pillIndex}
-            onClick={() => goToSlide(getSlideForPill(pillIndex))}
-            aria-label={`Go to slide group ${pillIndex + 1}`}
-            aria-current={pillIndex === activePill ? 'true' : undefined}
+            key={index}
+            onClick={() => goToSlide(index)}
+            aria-label={`Go to slide ${index + 1}`}
+            aria-current={index === currentSlide ? 'true' : undefined}
             className={`h-2 rounded-full transition-colors duration-300 ${
-              pillIndex !== activePill ? 'bg-white/40 hover:bg-white/65' : ''
+              index !== currentSlide ? 'bg-white/40 hover:bg-white/65' : ''
             }`}
             style={{
-              backgroundColor: pillIndex === activePill ? 'var(--color-accent)' : undefined,
-              boxShadow: pillIndex === activePill ? '0 0 10px rgba(21,182,232,0.6)' : undefined,
+              backgroundColor: index === currentSlide ? 'var(--color-accent)' : undefined,
+              boxShadow: index === currentSlide ? '0 0 10px rgba(21,182,232,0.6)' : undefined,
             }}
-            animate={{ width: pillIndex === activePill ? 48 : 32 }}
+            animate={{ width: index === currentSlide ? 48 : 32 }}
             transition={{ duration: 0.3 }}
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.95 }}

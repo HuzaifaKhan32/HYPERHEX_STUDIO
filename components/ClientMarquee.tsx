@@ -9,13 +9,13 @@ const BASE_SPEED = -55;
 const RETURN_RATE = 1.6;
 
 const PILL_BASE =
-  'inline-flex shrink-0 items-center justify-center rounded-full h-[72px] min-w-[110px] px-5 mx-1.5 sm:h-[120px] sm:min-w-[160px] sm:px-8 sm:mx-3';
+  'inline-flex shrink-0 items-center justify-center rounded-full h-[62px] min-w-[110px] px-4 mx-1.5 sm:h-[120px] sm:min-w-[160px] sm:px-8 sm:mx-3';
 
 function MarqueePill({ item }: { item: MarqueeItem }) {
   if (item.type === 'label') {
     return (
       <span
-        className={`${PILL_BASE} bg-ink font-[family-name:var(--font-jetbrains)] text-[10px] sm:text-base font-medium tracking-[0.12em] text-paper uppercase px-8 sm:px-14`}
+        className={`${PILL_BASE} bg-ink font-[family-name:var(--font-jetbrains)] text-[10px] sm:text-base font-medium tracking-[0.12em] text-paper uppercase px-4 sm:px-14`}
       >
         {item.name}
       </span>

@@ -20,23 +20,23 @@ export type ClientLogoId = keyof typeof CLIENT_LOGO_PATHS;
 // Optical weight scales visually calibrated from your asset preview:
 const SCALES: Record<ClientLogoId, number> = {
   // 🔴 Very Small / High Padding (Need Major Boost)
-  stadium_view: 2.1,
-  ashaab: 1.85,
-  khalifa: 1.8,
+  stadium_view: 1.5,
+  ashaab: 1.5,
+  khalifa: 1.7,
   
   // 🟡 Medium / Boxed Badges (Need Moderate Boost)
-  lakhani: 1.35,
-  ahsan_town: 1.25,
+  lakhani: 1,
+  ahsan_town: 1,
   
   // 🟢 Horizontal Wide Logos (Slight Boost)
-  commtel: 1.15,
-  dha_city: 1.15,
-  ivf_academy: 1.1,
-  nayyer: 1.1,
+  commtel: 1,
+  dha_city: 1,
+  ivf_academy: 0.8,
+  nayyer: 1.2,
 
   // 🔵 Bold / Tall Logos (Baseline Standard Scale)
-  ahsan_associates: 1.0,
-  ce_and_builders: 1.0,
+  ahsan_associates: 1,
+  ce_and_builders: 1,
 };
 
 export function ClientLogo({
@@ -55,14 +55,14 @@ export function ClientLogo({
   const variantStyles = variant === 'dark' ? 'brightness-0 invert' : '';
 
   return (
-    <div className="flex items-center justify-center overflow-hidden p-2">
+    <div className="flex items-center justify-center overflow-hidden py-2 px-1">
       <Image 
         src={src} 
         alt={`${id.replace(/_/g, ' ')} logo`} 
         width={200} 
         height={100} 
         quality={90}
-        className={`max-h-12 w-auto object-contain pointer-events-none select-none ${variantStyles} ${className}`}
+        className={`max-h-10 w-auto object-contain pointer-events-none select-none ${variantStyles} ${className}`}
         draggable={false}
         style={{ 
           transform: `scale(${scale})`,

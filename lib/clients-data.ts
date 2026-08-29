@@ -1,6 +1,6 @@
 import type { ClientLogoId } from '@/components/client-logos';
 
-export type PillBg = 'cream' | 'black';
+export type PillBg = 'black' | "";
 
 export type MarqueeClientItem = {
   type: 'client';
@@ -17,14 +17,12 @@ export type MarqueeLabelItem = {
 export type MarqueeItem = MarqueeClientItem | MarqueeLabelItem;
 
 export const PILL_BG_COLORS: Record<PillBg, string> = {
-  cream: '#F4F1EA',
-
   black: '#0a0a0a',
+  '': '',
 };
 
-/** All client logos have cream background */
 export function assignPillBg(globalIndex: number): PillBg {
-  return 'cream';
+  return '';
 }
 
 export function logoVariantForBg(bg: PillBg): 'light' | 'dark' {
