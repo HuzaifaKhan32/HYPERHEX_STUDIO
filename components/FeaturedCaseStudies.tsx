@@ -56,6 +56,7 @@ const CASE_STUDIES = [
     id: 7,
     title: 'HyperHex 3D Showcase',
     category: 'Animation / 3D',
+    image: 'https://img.youtube.com/vi/7JT-j8gz5uU/maxresdefault.jpg',
     videoId: '7JT-j8gz5uU',
     link: 'https://youtu.be/7JT-j8gz5uU',
     type: 'video' as const,
