@@ -1,62 +1,31 @@
 'use client';
 
-import { motion, useReducedMotion, useScroll, useTransform, type MotionValue } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 import { useState, useRef } from 'react';
 import Button3D from './Button3D';
 import DotGridBackground from './DotGridBackground';
-
-function ContactTitleWord({
-  children,
-  progress,
-  range,
-}: {
-  children: string;
-  progress: MotionValue<number>;
-  range: [number, number];
-}) {
-  const reduced = useReducedMotion();
-  const color = useTransform(progress, range, ['#9a9fa5', '#ffffff']);
-  const y = useTransform(progress, range, [24, 0]);
-
-  if (reduced) {
-    return <span className="inline-block" style={{ color: 'var(--color-paper)' }}>{children}</span>;
-  }
-
-  return (
-    <motion.span className="inline-block" style={{ color, y }}>
-      {children}
-    </motion.span>
-  );
-}
+import StaggeredHeading from '@/components/ui/StaggeredHeading';
 
 function ContactTitle() {
-  const ref = useRef<HTMLHeadingElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ['start 0.9', 'start 0.35'],
-  });
-
   return (
-    <h2
-      ref={ref}
-      data-cursor="text"
-      className="mb-10 font-[family-name:var(--font-syne)] font-black text-[clamp(36px,5vw,96px)] md:mb-16"
-      style={{ lineHeight: '0.95' }}
-    >
-      <span className="flex flex-wrap gap-x-[0.22em]">
-        <ContactTitleWord progress={scrollYProgress} range={[0, 0.42]}>
-          Fill
-        </ContactTitleWord>
-        <ContactTitleWord progress={scrollYProgress} range={[0.28, 0.68]}>
-          the
-        </ContactTitleWord>
-      </span>
-      <span className="block">
-        <ContactTitleWord progress={scrollYProgress} range={[0.55, 1]}>
-          form
-        </ContactTitleWord>
-      </span>
-    </h2>
+    <StaggeredHeading
+      staggerDelay={0.07}
+      wordDuration={0.55}
+      className="mb-10 font-[family-name:var(--font-syne)] font-black text-[clamp(36px,5vw,96px)] md:mb-16 !tracking-normal"
+      lines={[
+        {
+          words: [
+            { text: 'Fill', color: 'var(--color-paper)' },
+            { text: 'the', color: 'var(--color-paper)' },
+          ],
+        },
+        {
+          words: [
+            { text: 'form', color: 'var(--color-paper)' },
+          ],
+        },
+      ]}
+    />
   );
 }
 
@@ -139,13 +108,13 @@ export default function ContactForm() {
   };
 
   return (
-    <section id="contact" className="w-full bg-surface pt-8 md:pt-16 2xl:pt-20 pb-12 md:pb-24 px-5 lg:px-16 2xl:px-24 2xl:pb-32">
+    <section id="contact" className="w-full pt-8 md:pt-16 2xl:pt-20 pb-12 md:pb-24 px-5 lg:px-16 2xl:px-24 2xl:pb-32">
       <motion.div
         ref={panelRef}
         variants={containerVariants}
         initial={reduced ? 'visible' : 'hidden'}
         whileInView="visible"
-        viewport={{ once: true, amount: 0.3 }}
+        viewport={{ once: true, amount: 0.15 }}
         className="relative mx-auto w-full max-w-[1280px] xl:max-w-[1400px] 2xl:max-w-none overflow-hidden rounded-[2.5rem] shadow-2xl"
         style={{ backgroundColor: 'var(--color-ink)' }}
       >

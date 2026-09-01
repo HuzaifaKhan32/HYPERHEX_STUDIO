@@ -277,7 +277,7 @@ export default function Navbar() {
           </motion.div>
 
           {/* ── Desktop nav pill ── */}
-<nav className="hidden items-center gap-2 2xl:gap-3 max-w-full rounded-[100px] p-1 2xl:p-1.5 backdrop-blur-2xl md:flex" style={{ backgroundColor: 'rgba(0,0,0,0.04)', boxShadow: '0px 5px 6px 0px rgba(0,0,0,0.1),0px 24px 20px 0px rgba(0,0,0,0.12),0px 3px 0px 0px #F5F5F5' }}>
+<nav className="hidden items-center ml-[250px] gap-2 2xl:gap-3 max-w-full rounded-[100px] p-1 2xl:p-1.5 backdrop-blur-2xl md:flex" style={{ backgroundColor: 'rgba(0,0,0,0.04)', boxShadow: '0px 5px 6px 0px rgba(0,0,0,0.1),0px 24px 20px 0px rgba(0,0,0,0.12),0px 3px 0px 0px #F5F5F5' }}>
   {links.map((link) => {
     const isActive = activeLink === link.id;
     return (

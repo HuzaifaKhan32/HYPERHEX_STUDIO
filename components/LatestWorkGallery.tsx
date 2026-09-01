@@ -1,63 +1,53 @@
 'use client';
 
-import React, { useRef, useState, useEffect } from 'react';
-import { motion, AnimatePresence, useReducedMotion, useScroll, useTransform, type MotionValue } from 'framer-motion';
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import Button3D from './Button3D';
 import Image from 'next/image';
+import StaggeredHeading from '@/components/ui/StaggeredHeading';
 
 const BLACK = '#161d1e';
 const ACCENT = '#15b6e8';
-const MIST = '#9a9fa5';
 
-function RevealLine({
-  children, progress, range, className, style,
-}: {
-  children: React.ReactNode; progress: MotionValue<number>; range: [number, number]; className?: string; style?: React.CSSProperties;
-}) {
-  const reduced = useReducedMotion();
-  const y = useTransform(progress, range, [28, 0]);
-  const opacity = useTransform(progress, range, [0.4, 1]);
-  if (reduced) return <span className={className} style={style}>{children}</span>;
-  return (
-    <motion.span className={`block will-change-transform ${className ?? ''}`} style={{ y, opacity, ...style }}>
-      {children}
-    </motion.span>
-  );
-}
 
-function RevealWord({
-  children, progress, range, className, targetColor,
-}: {
-  children: string; progress: MotionValue<number>; range: [number, number]; className?: string; targetColor: string;
-}) {
-  const reduced = useReducedMotion();
-  const color = useTransform(progress, range, [MIST, targetColor]);
-  const y = useTransform(progress, range, [24, 0]);
-  const opacity = useTransform(progress, range, [0.45, 1]);
-  if (reduced) return <span className={`block ${className ?? ''}`} style={{ color: targetColor }}>{children}</span>;
-  return (
-    <motion.span className={`block will-change-transform ${className ?? ''}`} style={{ color, y, opacity }}>
-      {children}
-    </motion.span>
-  );
-}
-
-const headingBase = 'font-[family-name:var(--font-zalando-expanded)] font-black uppercase tracking-[-0.04em]';
 
 function LatestWorkHeading() {
-  const ref = useRef<HTMLHeadingElement>(null);
-  const { scrollYProgress } = useScroll({ target: ref, offset: ['start 0.85', 'start 0.4'] });
   return (
-    <h2 ref={ref} data-cursor="text" className={`${headingBase} w-full`}>
-      <span className="flex flex-col text-left md:hidden">
-        <RevealLine progress={scrollYProgress} range={[0, 0.55]} className="text-[clamp(56px,18vw,84px)] leading-[0.92] tracking-[-0.05em]" style={{ color: BLACK }}>Latest</RevealLine>
-        <RevealWord progress={scrollYProgress} range={[0.35, 1]} targetColor={ACCENT} className="mt-2 text-[clamp(48px,10vw,72px)] leading-none tracking-[0.06em]">Work</RevealWord>
-      </span>
-      <span className="hidden flex-col md:flex">
-        <RevealLine progress={scrollYProgress} range={[0, 0.55]} className="text-[clamp(72px,6vw,120px)] leading-[0.95]" style={{ color: BLACK }}>Latest</RevealLine>
-        <RevealLine progress={scrollYProgress} range={[0.35, 1]} className="text-[clamp(56px,4.5vw,84px)] leading-[0.95]" style={{ color: ACCENT }}>Work</RevealLine>
-      </span>
-    </h2>
+    <div className="w-full">
+      {/* Mobile Heading */}
+      <div className="md:hidden">
+        <StaggeredHeading
+          staggerDelay={0.07}
+          lines={[
+            {
+              words: [{ text: 'Latest', color: BLACK }],
+              className: 'text-[clamp(56px,18vw,84px)] leading-[0.92] tracking-[-0.05em]',
+            },
+            {
+              words: [{ text: 'Work', color: ACCENT }],
+              className: 'mt-2 text-[clamp(48px,10vw,72px)] leading-none tracking-[0.06em]',
+            },
+          ]}
+        />
+      </div>
+
+      {/* Desktop Heading */}
+      <div className="hidden md:block">
+        <StaggeredHeading
+          staggerDelay={0.07}
+          lines={[
+            {
+              words: [{ text: 'Latest', color: BLACK }],
+              className: 'text-[clamp(72px,6vw,120px)] leading-[0.95]',
+            },
+            {
+              words: [{ text: 'Work', color: ACCENT }],
+              className: 'text-[clamp(56px,4.5vw,84px)] leading-[0.95]',
+            },
+          ]}
+        />
+      </div>
+    </div>
   );
 }
 
@@ -77,7 +67,7 @@ function yt(id: string, title: string, category: 'Animation' = 'Animation'): Pro
     id,
     title,
     category,
-    imageUrl: `https://img.youtube.com/vi/${id}/maxresdefault.jpg`,
+    imageUrl: `/images/case-studies/${id}.jpg`,
     embedUrl: `https://www.youtube.com/embed/${id}?autoplay=1&rel=0`,
     isVideo: true,
   };
@@ -132,24 +122,15 @@ const ALL_PROJECTS: Project[] = [
 
 const CATEGORIES = ['All', 'Web', 'Animation', 'Visualization'] as const;
 
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.05,
-    },
-  },
-};
-
+// Cards animate in once using whileInView on each card individually with index-based delay
 const cardVariants = {
-  hidden: { opacity: 0, y: 16 },
+  hidden: { opacity: 0, y: 24 },
   visible: {
     opacity: 1,
     y: 0,
     transition: {
-      duration: 0.3,
-      ease: [0.25, 0.1, 0.25, 1] as const,
+      duration: 0.5,
+      ease: [0.16, 1, 0.3, 1] as [number, number, number, number],
     },
   },
 };
@@ -221,18 +202,19 @@ export default function LatestWorkGallery() {
           </div>
         </div>
 
-        {/* Main Gallery Grid */}
-        <motion.div
+        {/* Main Gallery Grid — each card reveals once, staggered by index */}
+        <div
           key={activeCategory}
-          variants={containerVariants}
-          initial={reduced ? 'visible' : 'hidden'}
-          animate="visible"
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
         >
-          {visible.map((project) => (
+          {visible.map((project, index) => (
             <motion.div
-              variants={cardVariants}
               key={project.id}
+              variants={cardVariants}
+              initial={reduced ? 'visible' : 'hidden'}
+              whileInView="visible"
+              viewport={{ once: true, margin: '-40px' }}
+              transition={{ delay: index * 0.08 }}
               onClick={() => setSelectedProject(project)}
               data-cursor="project"
               className="group relative aspect-[5/3] overflow-hidden rounded-xl cursor-pointer bg-[#111]"
@@ -297,7 +279,7 @@ export default function LatestWorkGallery() {
           {filtered.length === 0 && (
             <div className="col-span-full flex justify-center py-24 text-mist font-bold">No projects found.</div>
           )}
-        </motion.div>
+        </div>
 
         {/* Explore More / View Less */}
         <div className="flex justify-center pt-4 gap-4">

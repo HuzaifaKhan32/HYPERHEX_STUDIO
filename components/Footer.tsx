@@ -153,12 +153,12 @@ export default function Footer() {
 
   return (
     <div className="w-full overflow-hidden">
+      {/* ── Top Core Footer Layer (Dark #090A0F) ── */}
       <footer
-        className="relative isolate flex w-full flex-col overflow-hidden px-5 pt-20 pb-12 lg:px-16 lg:pt-32 lg:pb-16 2xl:px-24"
+        className="relative isolate flex w-full flex-col overflow-hidden bg-[#090A0F]"
         style={{
           borderTopLeftRadius: '45px',
           borderTopRightRadius: '45px',
-          backgroundColor: '#090A0F',
         }}
       >
         {/* Phantom Arc Glow Effects */}
@@ -173,7 +173,7 @@ export default function Footer() {
         />
 
         {/* Footer Main Content Stack */}
-        <div className="relative z-10 mx-auto flex w-full max-w-[1400px] flex-col justify-between gap-16 lg:flex-row xl:gap-24">
+        <div className="relative z-10 mx-auto flex w-full max-w-[1400px] flex-col justify-between gap-16 px-5 pt-20 pb-16 lg:flex-row lg:px-16 lg:pt-32 lg:pb-24 xl:gap-24 2xl:px-24">
           {/* Brand Visual Card */}
           <motion.div
             variants={reveal}
@@ -279,178 +279,210 @@ export default function Footer() {
           </div>
         </div>
 
-{/* Social Media Links Row Style */}
-<div className="relative z-10 mx-auto rounded-2xl mt-16 w-full max-w-[1400px] flex flex-col items-center py-5" style={{ backgroundColor: '#EDECEC' }}>
-      <span className="mb-6 block text-center font-mono text-xs font-bold tracking-[0.2em] uppercase text-zinc-400">
-        Social Media
-      </span>
-      <div className="flex flex-wrap items-center justify-center gap-6">
-        {socialLinks.map((social) => (
-          <motion.a
-  key={social.label}
-  href={social.href}
-  target="_blank"
-  rel="noopener noreferrer"
-  whileTap={{ scale: 0.96 }}
-  className="group relative flex items-center justify-between gap-6 px-8 py-4 transition-all duration-200 ease-out"
-  style={{
-    backgroundColor: 'rgb(244, 244, 245)',
-    borderRadius: '24px',
-    boxShadow: 'rgba(255, 255, 255, 0.6) 0px 4px 0px 0px inset, rgba(0, 0, 0, 0.05) 0px -8px 0px 0px inset, rgba(0, 0, 0, 0.1) 0px 3px 3px 0px, rgba(0, 0, 0, 0.06) 0px 7.77px 16px 0px',
-    opacity: 1,
-  }}
->
-            {/* Label */}
-            <div
-              style={
-                {
-                  '--framer-link-text-color': 'rgb(0, 153, 255)',
-                } as React.CSSProperties
-              }
-            >
-              <span className="font-semibold text-[15px] tracking-tight transition-colors group-hover:text-[rgb(0,153,255)]" style={{ color: '#18181B' }}>
-                {social.label}
-              </span>
-            </div>
-
-            {/* 3D Circular Puck */}
-            <div
-              className="flex h-9 w-9 shrink-0 items-center justify-center transition-all duration-200 group-hover:scale-105 [&>svg]:h-3.5 [&>svg]:w-3.5 [&>svg]:fill-white"
-              style={{
-                backgroundColor: 'rgb(39, 39, 39)',
-                borderRadius: '100%',
-                boxShadow:
-                  'rgba(0, 0, 0, 0.12) 0px 2.77px 2.21px 0px, rgba(0, 0, 0, 0.14) 0px 3px 3px 0px, rgba(0, 0, 0, 0.15) 0px 100px 80px 0px, rgba(0, 0, 0, 0.15) 0px 41.78px 33.42px 0px, rgba(0, 0, 0, 0.14) 0px 22.34px 17.87px 0px, rgba(0, 0, 0, 0.14) 0px 12.52px 10.02px 0px, rgba(0, 0, 0, 0.13) 0px 6.65px 5.32px 0px, rgba(0, 0, 0, 0.12) 0px 2.77px 2.21px 0px, rgba(255, 255, 255, 0.3) 0px 1px 0px 0px inset, rgb(8, 8, 8) 0px -3px 0px 0px inset',
-                opacity: 1,
-              }}
-            >
-              {social.icon}
-            </div>
-          </motion.a>
-        ))}
-      </div>
-    </div>
-
-        {/* Fully Responsive HyperHex Kinetic Interactive Title */}
-        <div className="relative z-10 mt-16 lg:mt-24 flex w-full flex-col items-center justify-center select-none overflow-visible">
-          <div
-            data-cursor="text"
-            className="pointer-events-auto relative flex w-full flex-col items-center cursor-pointer"
-            onMouseEnter={() => setIsHoveringText(true)}
-            onMouseLeave={() => setIsHoveringText(false)}
-            onMouseMove={handleTextMouseMove}
-          >
-            {/* Glow — always mounted, shown/hidden via opacity to avoid mount cost on every move */}
-            <div
-              ref={glowRef}
-              aria-hidden="true"
-              className="pointer-events-none absolute"
-              style={{
-                width: '350px',
-                height: '350px',
-                left: '-175px',
-                top: '-175px',
-                background:
-                  'radial-gradient(circle, rgba(21, 182, 232, 0.35) 0%, rgba(21, 182, 232, 0.15) 30%, transparent 70%)',
-                filter: 'blur(20px)',
-                zIndex: 0,
-                opacity: isHoveringText ? 1 : 0,
-                transition: 'opacity 0.3s ease',
-              }}
-            />
-
-            <div className="relative z-10 flex w-full flex-col items-center px-2">
-              <h1
-                className="w-full text-center font-black uppercase tracking-[-0.02em] whitespace-nowrap"
-                style={{
-                  fontFamily: 'var(--font-syne), sans-serif',
-                  fontSize: 'clamp(32px, 8.5vw, 120px)',
-                  lineHeight: 0.85,
-                  color: '#F4F4F5',
-                }}
-              >
-                HYPERHEX
-              </h1>
-              <div className="flex w-full justify-end pr-[4%] sm:pr-[8%] mt-2">
-                <h2
-                  className="font-bold uppercase tracking-[-0.01em] whitespace-nowrap"
-                  style={{
-                    fontFamily: 'var(--font-syne), sans-serif',
-                    fontSize: 'clamp(16px, 4.2vw, 60px)',
-                    lineHeight: 0.85,
-                    color: '#F4F4F5',
-                  }}
-                >
-                  STUDIOS
-                </h2>
-              </div>
-            </div>
-
-            {/* Clip-path cyan layer — always mounted, clipPath mutated via ref (no re-renders) */}
-            <div
-              ref={clipLayerRef}
-              aria-hidden="true"
-              className="pointer-events-none absolute inset-0 z-20 flex flex-col items-center overflow-visible"
-              style={{
-                clipPath: 'circle(175px at -999px -999px)',
-                opacity: isHoveringText ? 1 : 0,
-                transition: 'opacity 0.3s ease',
-              }}
-            >
-              <h1
-                className="w-full text-center font-black uppercase tracking-[-0.02em] whitespace-nowrap"
-                style={{
-                  fontFamily: 'var(--font-syne), sans-serif',
-                  fontSize: 'clamp(32px, 8.5vw, 120px)',
-                  lineHeight: 0.85,
-                  color: '#15b6e8',
-                }}
-              >
-                HYPERHEX
-              </h1>
-              <div className="flex w-full justify-end pr-[4%] sm:pr-[8%] mt-2">
-                <h2
-                  className="font-bold uppercase tracking-[-0.01em] whitespace-nowrap"
-                  style={{
-                    fontFamily: 'var(--font-syne), sans-serif',
-                    fontSize: 'clamp(16px, 4.2vw, 60px)',
-                    lineHeight: 0.85,
-                    color: '#15b6e8',
-                  }}
-                >
-                  STUDIOS
-                </h2>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Bottom Bar: Copyright & Terms Policy */}
-        <div className="relative z-10 mx-auto mt-12 flex w-full max-w-[1400px] flex-col items-center justify-between gap-6 border-t border-white/10 pt-6 md:flex-row">
-          <p className="text-sm font-medium text-zinc-400">
-            © 2026 HyperHex Studio. All Rights Reserved
-          </p>
-          <div className="flex flex-col items-center gap-6 sm:flex-row md:gap-8">
-            <div className="flex gap-8 text-sm font-medium">
-              {['Terms of Use', 'Privacy Policy'].map((label) => (
+        {/* ── Middle Social Media Links Full-Width Tier (Light #EDECEC) ── */}
+        <div
+          className="relative z-10 w-full overflow-hidden bg-[#EDECEC]"
+          style={{
+            borderTopLeftRadius: '45px',
+            borderTopRightRadius: '45px',
+          }}
+        >
+          <div className="mx-auto flex w-full max-w-[1400px] flex-col items-center px-5 pt-10 pb-12 sm:pt-12 sm:pb-16 lg:px-16 2xl:px-24">
+            <span className="mb-6 block text-center font-mono text-xs font-bold tracking-[0.2em] uppercase text-zinc-500">
+              Social Media
+            </span>
+            <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6">
+              {socialLinks.map((social) => (
                 <motion.a
-                  key={label}
-                  href="#"
-                  className="text-sm font-medium text-zinc-400"
-                  whileHover={{ y: -2, color: '#15b6e8' }}
-                  transition={{ duration: 0.25 }}
+                  key={social.label}
+                  href={social.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  whileTap={{ scale: 0.96 }}
+                  className="group relative flex items-center justify-between gap-6 px-8 py-4 transition-all duration-200 ease-out"
+                  style={{
+                    backgroundColor: 'rgb(244, 244, 245)',
+                    borderRadius: '24px',
+                    boxShadow:
+                      'rgba(255, 255, 255, 0.6) 0px 4px 0px 0px inset, rgba(0, 0, 0, 0.05) 0px -8px 0px 0px inset, rgba(0, 0, 0, 0.1) 0px 3px 3px 0px, rgba(0, 0, 0, 0.06) 0px 7.77px 16px 0px',
+                    opacity: 1,
+                  }}
                 >
-                  {label}
+                  {/* Label */}
+                  <div
+                    style={
+                      {
+                        '--framer-link-text-color': 'rgb(0, 153, 255)',
+                      } as React.CSSProperties
+                    }
+                  >
+                    <span
+                      className="font-semibold text-[15px] tracking-tight transition-colors group-hover:text-[rgb(0,153,255)]"
+                      style={{ color: '#18181B' }}
+                    >
+                      {social.label}
+                    </span>
+                  </div>
+
+                  {/* 3D Circular Puck */}
+                  <div
+                    className="flex h-9 w-9 shrink-0 items-center justify-center transition-all duration-200 group-hover:scale-105 [&>svg]:h-3.5 [&>svg]:w-3.5 [&>svg]:fill-white"
+                    style={{
+                      backgroundColor: 'rgb(39, 39, 39)',
+                      borderRadius: '100%',
+                      boxShadow:
+                        'rgba(0, 0, 0, 0.12) 0px 2.77px 2.21px 0px, rgba(0, 0, 0, 0.14) 0px 3px 3px 0px, rgba(0, 0, 0, 0.15) 0px 100px 80px 0px, rgba(0, 0, 0, 0.15) 0px 41.78px 33.42px 0px, rgba(0, 0, 0, 0.14) 0px 22.34px 17.87px 0px, rgba(0, 0, 0, 0.14) 0px 12.52px 10.02px 0px, rgba(0, 0, 0, 0.13) 0px 6.65px 5.32px 0px, rgba(0, 0, 0, 0.12) 0px 2.77px 2.21px 0px, rgba(255, 255, 255, 0.3) 0px 1px 0px 0px inset, rgb(8, 8, 8) 0px -3px 0px 0px inset',
+                      opacity: 1,
+                    }}
+                  >
+                    {social.icon}
+                  </div>
                 </motion.a>
               ))}
             </div>
-            
-            <Button3D
-              arrowDirection="up"
-              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-            >
-              Back to Top
-            </Button3D>
+          </div>
+
+          {/* ── Bottom Dark Tier: Kinetic Title & Copyright (#090A0F) ── */}
+          <div
+            className="relative z-10 w-full overflow-hidden bg-[#090A0F] px-5 pt-16 pb-12 lg:px-16 lg:pt-24 lg:pb-16 2xl:px-24"
+            style={{
+              borderTopLeftRadius: '45px',
+              borderTopRightRadius: '45px',
+            }}
+          >
+            {/* Phantom Arc Glow Effect for bottom layer */}
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-0 z-0"
+              style={{
+                background:
+                  'radial-gradient(ellipse 120% 145% at 50% -30%, rgba(0,0,0,0) 40%, rgba(21,182,232,0.12) 75%, rgba(0,0,0,0) 90%)',
+                mixBlendMode: 'screen',
+              }}
+            />
+
+            {/* Fully Responsive HyperHex Kinetic Interactive Title */}
+            <div className="relative z-10 mx-auto flex w-full max-w-[1400px] flex-col items-center justify-center select-none overflow-visible">
+              <div
+                data-cursor="text"
+                className="pointer-events-auto relative flex w-full flex-col items-center cursor-pointer"
+                onMouseEnter={() => setIsHoveringText(true)}
+                onMouseLeave={() => setIsHoveringText(false)}
+                onMouseMove={handleTextMouseMove}
+              >
+                {/* Glow */}
+                <div
+                  ref={glowRef}
+                  aria-hidden="true"
+                  className="pointer-events-none absolute"
+                  style={{
+                    width: '350px',
+                    height: '350px',
+                    left: '-175px',
+                    top: '-175px',
+                    background:
+                      'radial-gradient(circle, rgba(21, 182, 232, 0.35) 0%, rgba(21, 182, 232, 0.15) 30%, transparent 70%)',
+                    filter: 'blur(20px)',
+                    zIndex: 0,
+                    opacity: isHoveringText ? 1 : 0,
+                    transition: 'opacity 0.3s ease',
+                  }}
+                />
+
+                <div className="relative z-10 flex w-full flex-col items-center px-2">
+                  <h1
+                    className="w-full text-center font-black uppercase tracking-[-0.02em] whitespace-nowrap"
+                    style={{
+                      fontFamily: 'var(--font-syne), sans-serif',
+                      fontSize: 'clamp(32px, 8.5vw, 120px)',
+                      lineHeight: 0.85,
+                      color: '#F4F4F5',
+                    }}
+                  >
+                    HYPERHEX
+                  </h1>
+                  <div className="flex w-full justify-end pr-[4%] sm:pr-[8%] mt-2">
+                    <h2
+                      className="font-bold uppercase tracking-[-0.01em] whitespace-nowrap"
+                      style={{
+                        fontFamily: 'var(--font-syne), sans-serif',
+                        fontSize: 'clamp(16px, 4.2vw, 60px)',
+                        lineHeight: 0.85,
+                        color: '#F4F4F5',
+                      }}
+                    >
+                      STUDIOS
+                    </h2>
+                  </div>
+                </div>
+
+                {/* Clip-path cyan layer */}
+                <div
+                  ref={clipLayerRef}
+                  aria-hidden="true"
+                  className="pointer-events-none absolute inset-0 z-20 flex flex-col items-center overflow-visible"
+                  style={{
+                    clipPath: 'circle(175px at -999px -999px)',
+                    opacity: isHoveringText ? 1 : 0,
+                    transition: 'opacity 0.3s ease',
+                  }}
+                >
+                  <h1
+                    className="w-full text-center font-black uppercase tracking-[-0.02em] whitespace-nowrap"
+                    style={{
+                      fontFamily: 'var(--font-syne), sans-serif',
+                      fontSize: 'clamp(32px, 8.5vw, 120px)',
+                      lineHeight: 0.85,
+                      color: '#15b6e8',
+                    }}
+                  >
+                    HYPERHEX
+                  </h1>
+                  <div className="flex w-full justify-end pr-[4%] sm:pr-[8%] mt-2">
+                    <h2
+                      className="font-bold uppercase tracking-[-0.01em] whitespace-nowrap"
+                      style={{
+                        fontFamily: 'var(--font-syne), sans-serif',
+                        fontSize: 'clamp(16px, 4.2vw, 60px)',
+                        lineHeight: 0.85,
+                        color: '#15b6e8',
+                      }}
+                    >
+                      STUDIOS
+                    </h2>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Bottom Bar: Copyright & Terms Policy */}
+            <div className="relative z-10 mx-auto mt-12 flex w-full max-w-[1400px] flex-col items-center justify-between gap-6 border-t border-white/10 pt-6 md:flex-row">
+              <p className="text-sm font-medium text-zinc-400">
+                © 2026 HyperHex Studio. All Rights Reserved
+              </p>
+              <div className="flex flex-col items-center gap-6 sm:flex-row md:gap-8">
+                <div className="flex gap-8 text-sm font-medium">
+                  {['Terms of Use', 'Privacy Policy'].map((label) => (
+                    <motion.a
+                      key={label}
+                      href="#"
+                      className="text-sm font-medium text-zinc-400"
+                      whileHover={{ y: -2, color: '#15b6e8' }}
+                      transition={{ duration: 0.25 }}
+                    >
+                      {label}
+                    </motion.a>
+                  ))}
+                </div>
+                
+                <Button3D
+                  arrowDirection="up"
+                  onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                >
+                  Back to Top
+                </Button3D>
+              </div>
+            </div>
           </div>
         </div>
       </footer>

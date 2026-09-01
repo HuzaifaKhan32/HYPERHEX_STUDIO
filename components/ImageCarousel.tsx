@@ -78,10 +78,14 @@ export default function ImageCarousel({ images, onFirstReady }: ImageCarouselPro
                           transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
                           className="absolute inset-0 h-full w-full z-10 pointer-events-none"
                         >
-                          <img
+                          <Image
                             src={image.poster}
                             alt={image.alt}
-                            className="w-full h-full object-cover"
+                            fill
+                            sizes="(max-width: 768px) 100vw, (max-width: 1400px) 100vw, 1400px"
+                            quality={85}
+                            priority={index === 0}
+                            className="object-cover"
                           />
                         </motion.div>
                       )}
