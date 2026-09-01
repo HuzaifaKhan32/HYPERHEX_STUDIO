@@ -80,6 +80,7 @@ export default function ServiceCard({
       href={href}
       onMouseEnter={handleEnter}
       onMouseLeave={handleLeave}
+      data-cursor="project"
       className={`service-card group relative block h-full min-h-[300px] rounded-none bg-black p-[2px] [clip-path:polygon(0_0,100%_0,100%_calc(100%-24px),calc(100%-24px)_100%,0_100%)] hover:drop-shadow-[0_0_25px_rgba(21,182,232,0.9)] hover:-translate-y-0.5 active:translate-y-1 transition-all duration-300 focus-visible:outline-none ${className}`}
     >
       {/* Inner Card Body */}

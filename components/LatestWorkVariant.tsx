@@ -5,8 +5,8 @@ import { motion, useReducedMotion, useScroll, useTransform, type MotionValue } f
 import Button3D from './Button3D';
 import Image from 'next/image';
 
-const BLACK = 'var(--color-on-surface)';
-const ACCENT = 'var(--color-accent)';
+const BLACK = '#161d1e';
+const ACCENT = '#15b6e8';
 const MIST = '#9a9fa5';
 const PAGE_SIZE = 3; // cards per "page" load
 
@@ -63,6 +63,10 @@ function LatestWorkHeading() {
 }
 
 const ALL_PROJECTS = [
+  { id: 'web-1', title: 'CE and Builders',     tags: ['Web Design', 'Live Site'], category: 'Web', type: 'image' as const, image: '/images/ce-and-builders.png', projectUrl: 'https://ceandbuilders.com/' },
+  { id: 'web-2', title: 'Nayyer Builders',     tags: ['Development', 'Live Site'], category: 'Web', type: 'image' as const, image: '/images/nayyer-builder.png', projectUrl: 'https://nayyerbuilders.com/' },
+  { id: 'web-3', title: 'Kurta Dukan',         tags: ['E-Commerce', 'Live Site'],  category: 'Web', type: 'image' as const, image: '/images/kurta-Dukan.png', projectUrl: 'https://www.kurtadukan.com/' },
+  { id: 'web-4', title: 'Leather Crafted',     tags: ['E-Commerce', 'Live Site'],  category: 'Web', type: 'image' as const, image: '/images/leather-crafted.png', projectUrl: 'https://leather-crafted.com/' },
   { id: 1,  title: 'HyperHex 3D Showcase',tags: ['Motion', 'Showcase'],   category: 'Animation',     type: 'video' as const, videoId: '7JT-j8gz5uU' },
   { id: 2,  title: 'Apex Vanguard V8',    tags: ['Automotive', 'Render'], category: 'Animation',     type: 'video' as const, videoId: '7wRGPltVun4' },
   { id: 3,  title: 'Hexa Core Identity',  tags: ['Abstract'],             category: 'Animation',     type: 'video' as const, videoId: 'YvvRPa5zVAM' },
@@ -82,7 +86,7 @@ const ALL_PROJECTS = [
   { id: 17, title: 'Luxury Watch 3D',     tags: ['Product Design'],       category: 'Visualization', type: 'image' as const, image: '/portfolio/watch.png' },
 ];
 
-const CATEGORIES = ['All', 'Animation', 'Visualization'];
+const CATEGORIES = ['All', 'Web', 'Animation', 'Visualization'];
 
 // // ── Real YouTube play button SVG (official shape) ──────────────────────────
 // function YouTubePlayButton() {
@@ -167,6 +171,12 @@ const CATEGORIES = ['All', 'Animation', 'Visualization'];
 
 // ── Image Card ─────────────────────────────────────────────────────────────
 function ImageCard({ project }: { project: (typeof ALL_PROJECTS)[number] & { type: 'image' } }) {
+  const handleClick = () => {
+    if ('projectUrl' in project && project.projectUrl) {
+      window.open(project.projectUrl, '_blank', 'noopener,noreferrer');
+    }
+  };
+
   return (
     <motion.div
       layout
@@ -174,6 +184,7 @@ function ImageCard({ project }: { project: (typeof ALL_PROJECTS)[number] & { typ
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: 20 }}
       transition={{ duration: 0.35 }}
+      onClick={handleClick}
       className="group bg-surface-bright rounded-3xl cursor-pointer border-2 border-outline-variant/30 shadow-[0_4px_0_0_var(--color-outline-variant)] hover:border-[var(--color-accent)] hover:shadow-[0_4px_0_0_rgba(21,182,232,1)] transition-all duration-300 transform hover:-translate-y-1 flex flex-col p-3"
     >
       <div className="relative h-56 md:h-64 lg:h-72 w-full overflow-hidden rounded-2xl">

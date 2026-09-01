@@ -1,20 +1,30 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 import Image from 'next/image';
-import { useState } from 'react';
+import { useState, useRef, useCallback } from 'react';
 import { Globe, Share2, MessageSquare, ExternalLink } from 'lucide-react';
 import Button3D from './Button3D';
 
 const EASE = [0.4, 0, 0.2, 1] as const;
 
 const reveal = {
-  hidden: { opacity: 0, y: 48 },
-  visible: (delay = 0) => ({
+  hidden: { opacity: 0, y: 32 },
+  visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.7, delay, ease: EASE },
-  }),
+    transition: { duration: 0.7, ease: EASE },
+  },
+};
+
+const listVariants = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: 0.05,
+      delayChildren: 0.1,
+    },
+  },
 };
 
 const navLinks = [
@@ -89,15 +99,9 @@ const serviceLinks = [
   { label: 'Mobile App Development', href: '#' },
 ];
 
-function FooterLink({ href, children, index }: { href: string; children: string; index: number }) {
+function FooterLink({ href, children }: { href: string; children: string }) {
   return (
-    <motion.li
-      custom={0.2 + index * 0.08}
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, margin: '-40px' }}
-      variants={reveal}
-    >
+    <motion.li variants={reveal}>
       <motion.a
         href={href}
         onClick={(e) => {
@@ -127,15 +131,25 @@ function FooterLink({ href, children, index }: { href: string; children: string;
 
 export default function Footer() {
   const [isHoveringText, setIsHoveringText] = useState(false);
-  const [localMousePosition, setLocalMousePosition] = useState({ x: 0, y: 0 });
+  const reduced = useReducedMotion();
 
-  const handleTextMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+  // Ref-based mouse position — avoids React re-renders on every mousemove
+  const glowRef = useRef<HTMLDivElement>(null);
+  const clipLayerRef = useRef<HTMLDivElement>(null);
+
+  const handleTextMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
     const rect = e.currentTarget.getBoundingClientRect();
-    setLocalMousePosition({
-      x: e.clientX - rect.left,
-      y: e.clientY - rect.top,
-    });
-  };
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    if (glowRef.current) {
+      glowRef.current.style.left = `${x - 175}px`;
+      glowRef.current.style.top = `${y - 175}px`;
+    }
+    if (clipLayerRef.current) {
+      clipLayerRef.current.style.clipPath = `circle(175px at ${x}px ${y}px)`;
+    }
+  }, []);
 
   return (
     <div className="w-full overflow-hidden">
@@ -162,11 +176,10 @@ export default function Footer() {
         <div className="relative z-10 mx-auto flex w-full max-w-[1400px] flex-col justify-between gap-16 lg:flex-row xl:gap-24">
           {/* Brand Visual Card */}
           <motion.div
-            custom={0}
-            initial="hidden"
+            variants={reveal}
+            initial={reduced ? 'visible' : 'hidden'}
             whileInView="visible"
             viewport={{ once: true, margin: '-60px' }}
-            variants={reveal}
             className="flex max-w-xs flex-col gap-6"
           >
             <motion.div
@@ -215,13 +228,19 @@ export default function Footer() {
               <span className="font-mono text-xs font-bold tracking-[0.2em] uppercase text-zinc-400">
                 Company
               </span>
-              <ul className="flex flex-col gap-3">
-                {companyLinks.map((link, index) => (
-                  <FooterLink key={link.label} href={link.href} index={index}>
+              <motion.ul
+                variants={listVariants}
+                initial={reduced ? 'visible' : 'hidden'}
+                whileInView="visible"
+                viewport={{ once: true, margin: '-40px' }}
+                className="flex flex-col gap-3"
+              >
+                {companyLinks.map((link) => (
+                  <FooterLink key={link.label} href={link.href}>
                     {link.label}
                   </FooterLink>
                 ))}
-              </ul>
+              </motion.ul>
             </div>
 
             {/* Our Services Section */}
@@ -229,13 +248,19 @@ export default function Footer() {
               <span className="font-mono text-xs font-bold tracking-[0.2em] uppercase text-zinc-400">
                 Our Services
               </span>
-              <ul className="flex flex-col gap-3">
-                {serviceLinks.map((link, index) => (
-                  <FooterLink key={link.label} href={link.href} index={index}>
+              <motion.ul
+                variants={listVariants}
+                initial={reduced ? 'visible' : 'hidden'}
+                whileInView="visible"
+                viewport={{ once: true, margin: '-40px' }}
+                className="flex flex-col gap-3"
+              >
+                {serviceLinks.map((link) => (
+                  <FooterLink key={link.label} href={link.href}>
                     {link.label}
                   </FooterLink>
                 ))}
-              </ul>
+              </motion.ul>
             </div>
 
             {/* South Asia Operations Section */}
@@ -309,26 +334,30 @@ export default function Footer() {
         {/* Fully Responsive HyperHex Kinetic Interactive Title */}
         <div className="relative z-10 mt-16 lg:mt-24 flex w-full flex-col items-center justify-center select-none overflow-visible">
           <div
+            data-cursor="text"
             className="pointer-events-auto relative flex w-full flex-col items-center cursor-pointer"
             onMouseEnter={() => setIsHoveringText(true)}
             onMouseLeave={() => setIsHoveringText(false)}
             onMouseMove={handleTextMouseMove}
           >
-            {isHoveringText && (
-              <div
-                className="pointer-events-none absolute"
-                style={{
-                  width: '350px',
-                  height: '350px',
-                  left: `${localMousePosition.x - 175}px`,
-                  top: `${localMousePosition.y - 175}px`,
-                  background:
-                    'radial-gradient(circle, rgba(21, 182, 232, 0.35) 0%, rgba(21, 182, 232, 0.15) 30%, transparent 70%)',
-                  filter: 'blur(20px)',
-                  zIndex: 0,
-                }}
-              />
-            )}
+            {/* Glow — always mounted, shown/hidden via opacity to avoid mount cost on every move */}
+            <div
+              ref={glowRef}
+              aria-hidden="true"
+              className="pointer-events-none absolute"
+              style={{
+                width: '350px',
+                height: '350px',
+                left: '-175px',
+                top: '-175px',
+                background:
+                  'radial-gradient(circle, rgba(21, 182, 232, 0.35) 0%, rgba(21, 182, 232, 0.15) 30%, transparent 70%)',
+                filter: 'blur(20px)',
+                zIndex: 0,
+                opacity: isHoveringText ? 1 : 0,
+                transition: 'opacity 0.3s ease',
+              }}
+            />
 
             <div className="relative z-10 flex w-full flex-col items-center px-2">
               <h1
@@ -357,39 +386,42 @@ export default function Footer() {
               </div>
             </div>
 
-            {isHoveringText && (
-              <div
-                className="pointer-events-none absolute inset-0 z-20 flex flex-col items-center overflow-visible"
+            {/* Clip-path cyan layer — always mounted, clipPath mutated via ref (no re-renders) */}
+            <div
+              ref={clipLayerRef}
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-0 z-20 flex flex-col items-center overflow-visible"
+              style={{
+                clipPath: 'circle(175px at -999px -999px)',
+                opacity: isHoveringText ? 1 : 0,
+                transition: 'opacity 0.3s ease',
+              }}
+            >
+              <h1
+                className="w-full text-center font-black uppercase tracking-[-0.02em] whitespace-nowrap"
                 style={{
-                  clipPath: `circle(175px at ${localMousePosition.x}px ${localMousePosition.y}px)`,
+                  fontFamily: 'var(--font-syne), sans-serif',
+                  fontSize: 'clamp(32px, 8.5vw, 120px)',
+                  lineHeight: 0.85,
+                  color: '#15b6e8',
                 }}
               >
-                <h1
-                  className="w-full text-center font-black uppercase tracking-[-0.02em] whitespace-nowrap"
+                HYPERHEX
+              </h1>
+              <div className="flex w-full justify-end pr-[4%] sm:pr-[8%] mt-2">
+                <h2
+                  className="font-bold uppercase tracking-[-0.01em] whitespace-nowrap"
                   style={{
                     fontFamily: 'var(--font-syne), sans-serif',
-                    fontSize: 'clamp(32px, 8.5vw, 120px)',
+                    fontSize: 'clamp(16px, 4.2vw, 60px)',
                     lineHeight: 0.85,
                     color: '#15b6e8',
                   }}
                 >
-                  HYPERHEX
-                </h1>
-                <div className="flex w-full justify-end pr-[4%] sm:pr-[8%] mt-2">
-                  <h2
-                    className="font-bold uppercase tracking-[-0.01em] whitespace-nowrap"
-                    style={{
-                      fontFamily: 'var(--font-syne), sans-serif',
-                      fontSize: 'clamp(16px, 4.2vw, 60px)',
-                      lineHeight: 0.85,
-                      color: '#15b6e8',
-                    }}
-                  >
-                    STUDIOS
-                  </h2>
-                </div>
+                  STUDIOS
+                </h2>
               </div>
-            )}
+            </div>
           </div>
         </div>
 

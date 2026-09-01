@@ -34,11 +34,15 @@ export const metadata: Metadata = {
 
 import { ThemeProvider } from "../components/ThemeProvider";
 
+import CustomCursor from "@/components/CustomCursor";
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`light ${syne.variable} ${hankenGrotesk.variable} ${jetbrainsMono.variable} ${dmSans.variable}`}>
-      <body className="antialiased" style={{ fontFamily: 'var(--font-dm-sans)' }}>
+    <html lang="en" suppressHydrationWarning className={`light ${syne.variable} ${hankenGrotesk.variable} ${jetbrainsMono.variable} ${dmSans.variable}`}>
+      <body suppressHydrationWarning className="antialiased relative" style={{ fontFamily: 'var(--font-dm-sans)' }}>
         <ThemeProvider>
+          {/* <AmbientCursorGlow /> */}
+          <CustomCursor />
           {children}
         </ThemeProvider>
       </body>

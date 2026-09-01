@@ -154,6 +154,7 @@ export default function ClientMarquee() {
       className="w-full overflow-hidden bg-background pt-12 pb-8 md:pt-14 md:pb-10"
     >
       <div
+        data-cursor="drag"
         className="w-full cursor-grab touch-none select-none overflow-hidden"
         onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}

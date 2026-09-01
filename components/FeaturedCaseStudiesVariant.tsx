@@ -3,8 +3,8 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence, useReducedMotion, useScroll, useTransform, type MotionValue } from 'framer-motion';
 
-const BLACK   = 'var(--color-on-surface)';
-const ACCENT  = 'var(--color-accent)';
+const BLACK   = '#161d1e';
+const ACCENT  = '#15b6e8';
 const MIST    = '#9a9fa5';
 const MAIN_GAP = 12; // px gap between main cards
 const SUB_GAP  = 10; // px gap between sub cards
@@ -124,7 +124,7 @@ function FeaturedHeading() {
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start 0.85', 'start 0.4'] });
   const hb = 'font-[family-name:var(--font-zalando-expanded)] font-black uppercase tracking-[-0.04em]';
   return (
-    <h2 ref={ref} className={`${hb} w-full mb-12 md:mb-16 overflow-hidden`}>
+    <h2 ref={ref} data-cursor="text" className={`${hb} w-full mb-12 md:mb-16 overflow-hidden`}>
       <span className="flex flex-col text-left md:hidden">
         <RevealLine progress={scrollYProgress} range={[0, 0.55]} className="text-[clamp(36px,11vw,52px)] leading-[0.92] tracking-[-0.03em]" style={{ color: BLACK }}>Featured</RevealLine>
         <RevealWord progress={scrollYProgress} range={[0.35, 1]} targetColor={ACCENT} className="mt-1 text-[clamp(24px,7vw,34px)] leading-tight tracking-[0.02em]">Case Studies</RevealWord>
@@ -200,6 +200,7 @@ export default function FeaturedCaseStudiesVariant() {
               className="w-[55vw] md:w-[45vw] shrink-0 group"
             >
               <div
+                data-cursor="project"
                 className="relative aspect-[4/3] rounded-2xl overflow-hidden cursor-pointer"
                 onClick={() => setSelected(study)}
               >
@@ -285,6 +286,7 @@ export default function FeaturedCaseStudiesVariant() {
                     ? 'border-[var(--color-accent)] shadow-[0_0_16px_rgba(21,182,232,0.45)] scale-[1.05]'
                     : 'border-transparent scale-100 hover:border-outline-variant/50'
                 }`}
+                data-cursor="project"
               >
                 <div className="relative aspect-[4/3] overflow-hidden">
                   <img

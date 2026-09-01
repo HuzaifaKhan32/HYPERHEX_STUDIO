@@ -5,8 +5,8 @@ import { motion, useReducedMotion, useScroll, useTransform, type MotionValue } f
 import Image from 'next/image';
 import Link from 'next/link';
 
-const BLACK = 'var(--color-on-surface)';
-const ACCENT = 'var(--color-accent)';
+const BLACK = '#161d1e';
+const ACCENT = '#15b6e8';
 const MIST = '#9a9fa5';
 
 const CASE_STUDIES = [

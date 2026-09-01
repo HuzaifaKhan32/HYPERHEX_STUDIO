@@ -145,3 +145,20 @@ html {
   --color-inverse-primary: #006875;
   --color-surface-tint: #00daf3;
 }
+
+/* Custom Cursor Rules */
+html.custom-cursor-active,
+html.custom-cursor-active body,
+html.custom-cursor-active a,
+html.custom-cursor-active button,
+html.custom-cursor-active [role="button"] {
+  cursor: none !important;
+}
+
+html.custom-cursor-active input,
+html.custom-cursor-active textarea,
+html.custom-cursor-active select,
+html.custom-cursor-active [contenteditable="true"] {
+  cursor: auto !important;
+}
+

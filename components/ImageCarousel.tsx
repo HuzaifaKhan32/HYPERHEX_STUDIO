@@ -13,10 +13,13 @@ export interface CarouselMedia {
 
 interface ImageCarouselProps {
   images: CarouselMedia[];
+  onFirstReady?: () => void;
 }
 
-export default function ImageCarousel({ images }: ImageCarouselProps) {
+export default function ImageCarousel({ images, onFirstReady }: ImageCarouselProps) {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [isVideoPlaying, setIsVideoPlaying] = useState(false);
+  const [hasNotified, setHasNotified] = useState(false);
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
   const nextSlide = useCallback(() => {
@@ -29,6 +32,10 @@ export default function ImageCarousel({ images }: ImageCarouselProps) {
 
   const currentMedia = images[currentSlide];
   const isVideo = currentMedia?.type === 'video';
+
+  useEffect(() => {
+    setIsVideoPlaying(false);
+  }, [currentSlide]);
 
   useEffect(() => {
     if (isVideo) {
@@ -60,26 +67,53 @@ export default function ImageCarousel({ images }: ImageCarouselProps) {
                 className="absolute inset-0 h-full w-full"
               >
                 {image.type === 'video' ? (
-                  <video
-                    ref={(el) => {
-                      videoRef.current = el;
-                      if (el) {
-                        el.play().catch(() => {});
-                      }
-                    }}
-                    src={image.src}
-                    poster={image.poster}
-                    autoPlay
-                    muted
-                    playsInline
-                    preload="auto"
-                    onEnded={nextSlide}
-                    onError={() => {
-                      // Fallback: if video fails to play/load, advance after 5s
-                      setTimeout(nextSlide, 5000);
-                    }}
-                    className="absolute inset-0 h-full w-full object-cover"
-                  />
+                  <div className="relative w-full h-full">
+                    {/* Cinematic poster focus overlay */}
+                    <AnimatePresence>
+                      {!isVideoPlaying && image.poster && (
+                        <motion.div
+                          initial={{ opacity: 1, scale: 1.05, filter: 'blur(8px) brightness(0.7)' }}
+                          animate={{ opacity: 1, scale: 1, filter: 'blur(0px) brightness(1)' }}
+                          exit={{ opacity: 0, scale: 0.98, filter: 'blur(4px)' }}
+                          transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+                          className="absolute inset-0 h-full w-full z-10 pointer-events-none"
+                        >
+                          <img
+                            src={image.poster}
+                            alt={image.alt}
+                            className="w-full h-full object-cover"
+                          />
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+
+                    <video
+                      ref={(el) => {
+                        videoRef.current = el;
+                        if (el) {
+                          el.play().catch(() => {});
+                        }
+                      }}
+                      src={image.src}
+                      autoPlay
+                      muted
+                      playsInline
+                      preload="auto"
+                      onEnded={nextSlide}
+                      onPlaying={() => {
+                        setIsVideoPlaying(true);
+                        if (index === 0 && onFirstReady && !hasNotified) {
+                          setHasNotified(true);
+                          onFirstReady();
+                        }
+                      }}
+                      onError={() => {
+                        // Fallback: if video fails to play/load, advance after 5s
+                        setTimeout(nextSlide, 5000);
+                      }}
+                      className="absolute inset-0 h-full w-full object-cover"
+                    />
+                  </div>
                 ) : (
                   <>
                     <Image

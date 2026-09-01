@@ -5,8 +5,8 @@ import { motion, AnimatePresence, useReducedMotion, useScroll, useTransform, typ
 import Button3D from './Button3D';
 import Image from 'next/image';
 
-const BLACK = 'var(--color-on-surface)';
-const ACCENT = 'var(--color-accent)';
+const BLACK = '#161d1e';
+const ACCENT = '#15b6e8';
 const MIST = '#9a9fa5';
 
 function RevealLine({
@@ -48,7 +48,7 @@ function LatestWorkHeading() {
   const ref = useRef<HTMLHeadingElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start 0.85', 'start 0.4'] });
   return (
-    <h2 ref={ref} className={`${headingBase} w-full`}>
+    <h2 ref={ref} data-cursor="text" className={`${headingBase} w-full`}>
       <span className="flex flex-col text-left md:hidden">
         <RevealLine progress={scrollYProgress} range={[0, 0.55]} className="text-[clamp(56px,18vw,84px)] leading-[0.92] tracking-[-0.05em]" style={{ color: BLACK }}>Latest</RevealLine>
         <RevealWord progress={scrollYProgress} range={[0.35, 1]} targetColor={ACCENT} className="mt-2 text-[clamp(48px,10vw,72px)] leading-none tracking-[0.06em]">Work</RevealWord>
@@ -64,9 +64,10 @@ function LatestWorkHeading() {
 type Project = {
   id: string;
   title: string;
-  category: 'Animation' | 'Visualization';
+  category: 'Animation' | 'Visualization' | 'Web';
   imageUrl: string;
   embedUrl?: string;
+  projectUrl?: string;
   isVideo: boolean;
 };
 
@@ -93,7 +94,23 @@ function imgProject(id: string, title: string, path: string): Project {
   };
 }
 
+// ── Web live project helper ────────────────────────────────────────────────
+function webProject(id: string, title: string, path: string, projectUrl: string): Project {
+  return {
+    id,
+    title,
+    category: 'Web',
+    imageUrl: path,
+    projectUrl,
+    isVideo: false,
+  };
+}
+
 const ALL_PROJECTS: Project[] = [
+  webProject('web-ce', 'CE and Builders', '/images/ce-and-builders.png', 'https://ceandbuilders.com/'),
+  webProject('web-nayyer', 'Nayyer Builders', '/images/nayyer-builder.png', 'https://nayyerbuilders.com/'),
+  webProject('web-kurta', 'Kurta Dukan', '/images/kurta-Dukan.png', 'https://www.kurtadukan.com/'),
+  webProject('web-leather', 'Leather Crafted', '/images/leather-crafted.png', 'https://leather-crafted.com/'),
   yt('7JT-j8gz5uU', 'HyperHex 3D Showcase', 'Animation'),
   yt('7wRGPltVun4', 'Apex Vanguard V8', 'Animation'),
   yt('YvvRPa5zVAM', 'Hexa Core Identity', 'Animation'),
@@ -113,12 +130,35 @@ const ALL_PROJECTS: Project[] = [
   imgProject('img-watch', 'Luxury Watch 3D', '/portfolio/watch.png'),
 ];
 
-const CATEGORIES = ['All', 'Animation', 'Visualization'] as const;
+const CATEGORIES = ['All', 'Web', 'Animation', 'Visualization'] as const;
+
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.05,
+    },
+  },
+};
+
+const cardVariants = {
+  hidden: { opacity: 0, y: 16 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.3,
+      ease: [0.25, 0.1, 0.25, 1] as const,
+    },
+  },
+};
 
 export default function LatestWorkGallery() {
   const [activeCategory, setActiveCategory] = useState('All');
   const [visibleCount, setVisibleCount] = useState(6);
   const [selectedProject, setSelectedProject] = useState<typeof ALL_PROJECTS[number] | null>(null);
+  const reduced = useReducedMotion();
 
   const filtered = ALL_PROJECTS.filter(
     (p) => activeCategory === 'All' || p.category === activeCategory
@@ -181,23 +221,28 @@ export default function LatestWorkGallery() {
           </div>
         </div>
 
-        {/* Main Gallery Grid from User Snippet */}
-        <motion.div layout className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {/* Main Gallery Grid */}
+        <motion.div
+          key={activeCategory}
+          variants={containerVariants}
+          initial={reduced ? 'visible' : 'hidden'}
+          animate="visible"
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
+        >
           {visible.map((project) => (
             <motion.div
-              layout
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 20 }}
-              transition={{ duration: 0.35 }}
+              variants={cardVariants}
               key={project.id}
               onClick={() => setSelectedProject(project)}
+              data-cursor="project"
               className="group relative aspect-[5/3] overflow-hidden rounded-xl cursor-pointer bg-[#111]"
             >
               {/* Thumbnail */}
               <img
                 src={project.imageUrl}
                 alt={project.title}
+                loading="eager"
+                decoding="async"
                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
               />
               {/* Hover overlay */}
@@ -215,6 +260,15 @@ export default function LatestWorkGallery() {
                     </svg>
                     Watch Video
                   </div>
+                ) : project.projectUrl ? (
+                  <div className="mt-4 px-5 py-2 rounded-full bg-white text-black font-semibold text-xs md:text-sm uppercase tracking-wider flex items-center gap-2 shadow-lg">
+                    <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                      <polyline points="15 3 21 3 21 9"></polyline>
+                      <line x1="10" y1="14" x2="21" y2="3"></line>
+                    </svg>
+                    View Project
+                  </div>
                 ) : (
                   <div className="mt-4 px-5 py-2 rounded-full bg-white text-black font-semibold text-xs md:text-sm uppercase tracking-wider flex items-center gap-2 shadow-lg">
                     <svg className="w-3.5 h-3.5 fill-black" viewBox="0 0 24 24">
@@ -224,12 +278,20 @@ export default function LatestWorkGallery() {
                   </div>
                 )}
               </div>
-              {/* Small play badge (always visible on video cards) */}
-              {project.isVideo && (
+              {/* Top-right badge (video play icon or web external link icon) */}
+              {project.isVideo ? (
                 <div className="absolute top-3 right-3 z-10 w-8 h-8 rounded-full bg-black/50 border border-white/20 backdrop-blur-sm flex items-center justify-center pointer-events-none">
                   <svg className="w-3.5 h-3.5 text-white ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>
                 </div>
-              )}
+              ) : project.projectUrl ? (
+                <div className="absolute top-3 right-3 z-10 w-8 h-8 rounded-full bg-black/50 border border-white/20 backdrop-blur-sm flex items-center justify-center pointer-events-none">
+                  <svg className="w-3.5 h-3.5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                    <polyline points="15 3 21 3 21 9"></polyline>
+                    <line x1="10" y1="14" x2="21" y2="3"></line>
+                  </svg>
+                </div>
+              ) : null}
             </motion.div>
           ))}
           {filtered.length === 0 && (
@@ -315,13 +377,31 @@ export default function LatestWorkGallery() {
                     />
                   </div>
                 )}
-                <div className="p-5 md:p-6 bg-[#0c0c0c] border-t border-white/10 backdrop-blur-md">
-                  <p className="text-xs uppercase tracking-[0.4em] text-white/60 mb-1">
-                    {selectedProject.category}
-                  </p>
-                  <h2 className="text-xl md:text-2xl font-bold uppercase tracking-wide text-white">
-                    {selectedProject.title}
-                  </h2>
+                <div className="p-5 md:p-6 bg-[#0c0c0c] border-t border-white/10 backdrop-blur-md flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                  <div>
+                    <p className="text-xs uppercase tracking-[0.4em] text-white/60 mb-1">
+                      {selectedProject.category}
+                    </p>
+                    <h2 className="text-xl md:text-2xl font-bold uppercase tracking-wide text-white">
+                      {selectedProject.title}
+                    </h2>
+                  </div>
+                  {selectedProject.projectUrl && (
+                    <a
+                      href={selectedProject.projectUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl text-white font-bold text-xs sm:text-sm uppercase tracking-wider transition-all hover:scale-105 active:scale-95 shadow-[0_0_20px_rgba(21,182,232,0.4)] self-start sm:self-auto shrink-0"
+                      style={{ backgroundColor: 'var(--color-accent)' }}
+                    >
+                      <span>Visit Live Site</span>
+                      <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                        <polyline points="15 3 21 3 21 9"></polyline>
+                        <line x1="10" y1="14" x2="21" y2="3"></line>
+                      </svg>
+                    </a>
+                  )}
                 </div>
               </div>
             </motion.div>

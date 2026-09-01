@@ -39,6 +39,7 @@ function ContactTitle() {
   return (
     <h2
       ref={ref}
+      data-cursor="text"
       className="mb-10 font-[family-name:var(--font-syne)] font-black text-[clamp(36px,5vw,96px)] md:mb-16"
       style={{ lineHeight: '0.95' }}
     >
@@ -59,11 +60,78 @@ function ContactTitle() {
   );
 }
 
+const containerVariants = {
+  hidden: { opacity: 0, y: 64 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.7,
+      ease: [0.4, 0, 0.2, 1] as const,
+      staggerChildren: 0.1,
+      delayChildren: 0.15,
+    },
+  },
+};
+
+const leftColVariants = {
+  hidden: { opacity: 0, y: 40 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.8,
+      ease: [0.16, 1, 0.3, 1] as const,
+      staggerChildren: 0.08,
+      delayChildren: 0.1,
+    },
+  },
+};
+
+const rightColVariants = {
+  hidden: { opacity: 0, y: 60 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.8,
+      ease: [0.16, 1, 0.3, 1] as const,
+      staggerChildren: 0.08,
+      delayChildren: 0.1,
+    },
+  },
+};
+
+const childVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.6,
+      ease: [0.16, 1, 0.3, 1] as const,
+    },
+  },
+};
+
+const badgeVariants = {
+  hidden: { opacity: 0, x: 20 },
+  visible: {
+    opacity: 1,
+    x: 0,
+    transition: {
+      duration: 0.6,
+      ease: [0.16, 1, 0.3, 1] as const,
+    },
+  },
+};
+
 export default function ContactForm() {
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
   const [message, setMessage] = useState('');
   const panelRef = useRef<HTMLDivElement>(null);
+  const reduced = useReducedMotion();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -74,10 +142,10 @@ export default function ContactForm() {
     <section id="contact" className="w-full bg-surface pt-8 md:pt-16 2xl:pt-20 pb-12 md:pb-24 px-5 lg:px-16 2xl:px-24 2xl:pb-32">
       <motion.div
         ref={panelRef}
-        initial={{ opacity: 0, y: 64 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: '-80px' }}
-        transition={{ duration: 0.7, ease: [0.4, 0, 0.2, 1] }}
+        variants={containerVariants}
+        initial={reduced ? 'visible' : 'hidden'}
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.3 }}
         className="relative mx-auto w-full max-w-[1280px] xl:max-w-[1400px] 2xl:max-w-none overflow-hidden rounded-[2.5rem] shadow-2xl"
         style={{ backgroundColor: 'var(--color-ink)' }}
       >
@@ -93,11 +161,8 @@ export default function ContactForm() {
         <div className="relative z-10 flex flex-col gap-8 p-6 md:flex-row md:gap-16 md:p-16 2xl:gap-32 2xl:p-24 2xl:py-40">
           {/* Form Card — below content on mobile, left on desktop */}
           <motion.div
-            initial={{ opacity: 0, y: 100 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            whileHover={{ y: -6 }}
-            viewport={{ once: true }}
-            transition={{ duration: 1, ease: [0.16, 1, 0.3, 1], delay: 0.15 }}
+            variants={leftColVariants}
+            whileHover={reduced ? undefined : { y: -6 }}
             className="relative order-2 w-full md:order-1 md:w-[45%]"
           >
             {/* White Card with Faceted Corner */}
@@ -115,10 +180,7 @@ export default function ContactForm() {
               <form className="flex flex-col gap-6" onSubmit={handleSubmit}>
                 {/* Email Field */}
                 <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.9, delay: 0.2 }}
+                  variants={childVariants}
                   className="flex flex-col gap-2"
                 >
                   <label
@@ -141,10 +203,7 @@ export default function ContactForm() {
 
                 {/* Phone Field */}
                 <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.9, delay: 0.35 }}
+                  variants={childVariants}
                   className="flex flex-col gap-2"
                 >
                   <label
@@ -166,10 +225,7 @@ export default function ContactForm() {
 
                 {/* Message Field */}
                 <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.9, delay: 0.5 }}
+                  variants={childVariants}
                   className="flex flex-col gap-2"
                 >
                   <label
@@ -192,10 +248,7 @@ export default function ContactForm() {
 
                 {/* Submit Button */}
                 <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.9, delay: 0.65 }}
+                  variants={childVariants}
                   className="mt-4"
                 >
                   <Button3D type="submit" className="justify-between">
@@ -208,19 +261,13 @@ export default function ContactForm() {
 
           {/* Content — first on mobile, right on desktop */}
           <motion.div
-            initial={{ opacity: 0, y: 120 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
+            variants={rightColVariants}
             className="relative z-10 order-1 flex w-full flex-col justify-center md:order-2 md:w-[55%] md:pl-8"
           >
             {/* Badge */}
             <motion.div
-              initial={{ opacity: 0, x: 24 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.9, delay: 0.25 }}
-              className="mb-12 inline-flex w-max items-center gap-2 rounded-full py-2 pr-4 pl-2"
+              variants={badgeVariants}
+              className="mb-12 inline-flex w-max items-center gap-2 rounded-full py-2 pr-4 pl-2 pointer-events-auto"
               style={{ backgroundColor: 'rgba(0, 0, 0, 0.4)' }}
             >
               <div className="w-8 h-8 rounded-full bg-surface-bright flex items-center justify-center shrink-0">
@@ -240,10 +287,7 @@ export default function ContactForm() {
             <div className="flex flex-col gap-10">
               {/* Email Row */}
               <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.9, delay: 0.45 }}
+                variants={childVariants}
                 className="flex items-center gap-4"
               >
                 <div className="w-14 h-14 rounded-full flex items-center justify-center shrink-0" style={{ backgroundColor: 'rgba(255, 255, 255, 0.05)' }}>
@@ -270,10 +314,7 @@ export default function ContactForm() {
 
               {/* Office Row */}
               <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.9, delay: 0.6 }}
+                variants={childVariants}
                 className="flex items-center gap-4"
               >
                 <div className="w-14 h-14 rounded-full flex items-center justify-center shrink-0" style={{ backgroundColor: 'rgba(255, 255, 255, 0.05)' }}>

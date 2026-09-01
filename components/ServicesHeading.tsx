@@ -3,8 +3,8 @@
 import { useRef } from 'react';
 import { motion, useReducedMotion, useScroll, useTransform, type MotionValue } from 'framer-motion';
 
-const BLACK = 'var(--color-on-surface)';
-const ACCENT = 'var(--color-accent)';
+const BLACK = '#161d1e';
+const ACCENT = '#15b6e8';
 const MIST = '#9a9fa5';
 
 function RevealLine({
@@ -83,7 +83,7 @@ export default function ServicesHeading() {
   });
 
   return (
-    <h2 ref={ref} className={`${headingBase} w-full overflow-hidden`}>
+    <h2 ref={ref} data-cursor="text" className={`${headingBase} w-full overflow-hidden`}>
       {/* Mobile — tight reverse-pyramid hierarchy */}
       <span className="flex flex-col items-center text-center md:hidden">
         <RevealWord
