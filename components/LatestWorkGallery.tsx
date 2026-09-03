@@ -54,7 +54,7 @@ function LatestWorkHeading() {
 type Project = {
   id: string;
   title: string;
-  category: 'Animation' | 'Visualization' | 'Web';
+  category: 'Animation' | 'Visualization' | 'Web' | "Drone Animation";
   imageUrl: string;
   embedUrl?: string;
   projectUrl?: string;
@@ -73,6 +73,16 @@ function yt(id: string, title: string, category: 'Animation' = 'Animation'): Pro
   };
 }
 
+function yt_drone(id: string, title: string, category: 'Drone Animation' = 'Drone Animation'): Project {
+  return {
+    id,
+    title,
+    category,
+    imageUrl: `/images/case-studies/${id}.jpg`,
+    embedUrl: `https://www.youtube.com/embed/${id}?autoplay=1&rel=0`,
+    isVideo: true,
+  };
+}
 // ── Portfolio image helper ─────────────────────────────────────────────────
 function imgProject(id: string, title: string, path: string): Project {
   return {
@@ -101,14 +111,13 @@ const ALL_PROJECTS: Project[] = [
   webProject('web-nayyer', 'Nayyer Builders', '/images/nayyer-builder.png', 'https://nayyerbuilders.com/'),
   webProject('web-kurta', 'Kurta Dukan', '/images/kurta-Dukan.png', 'https://www.kurtadukan.com/'),
   webProject('web-leather', 'Leather Crafted', '/images/leather-crafted.png', 'https://leather-crafted.com/'),
-  yt('7JT-j8gz5uU', 'HyperHex 3D Showcase', 'Animation'),
-  yt('7wRGPltVun4', 'Apex Vanguard V8', 'Animation'),
-  yt('YvvRPa5zVAM', 'Hexa Core Identity', 'Animation'),
-  yt('NJgPMovdV2Y', 'Oculus Pavilion', 'Animation'),
-  yt('a0ESDiUHZFI', 'Naran Club', 'Animation'),
-  yt('QhWmY9lXlZY', 'Modern Apartment', 'Animation'),
-  yt('oQnWA-22Bf4', 'Governor House', 'Animation'),
-  yt('9JFPZnPXQ1Y', 'Call Center Interior', 'Animation'),
+  yt('7JT-j8gz5uU', 'Luxury Watch 3D animation', 'Animation'),
+  yt_drone('7wRGPltVun4', 'Jaguar Builder', 'Drone Animation'),
+  yt_drone('YvvRPa5zVAM', 'Ahsan Town Project', 'Drone Animation'),
+  yt_drone('NJgPMovdV2Y', 'Al Jannat Farmhouse', 'Drone Animation'),
+  yt('QhWmY9lXlZY', 'Modern Apartment Interior Design', 'Animation'),
+  yt('oQnWA-22Bf4', 'Governor House – Conference Room', 'Animation'),
+  yt('9JFPZnPXQ1Y', 'Call Center Interior 3D', 'Animation'),
   yt('WKOskq3aIQQ', 'Mumtaz Residency', 'Animation'),
   yt('m2FYElEVclc', 'Nexgen Heights', 'Animation'),
   imgProject('img-car', 'Car Configurator', '/portfolio/car-configurator.jpg'),
@@ -120,7 +129,7 @@ const ALL_PROJECTS: Project[] = [
   imgProject('img-watch', 'Luxury Watch 3D', '/portfolio/watch.png'),
 ];
 
-const CATEGORIES = ['All', 'Web', 'Animation', 'Visualization'] as const;
+const CATEGORIES = ['All', 'Web', 'Animation', 'Visualization', "Drone Animation"] as const;
 
 // Cards animate in once using whileInView on each card individually with index-based delay
 const cardVariants = {

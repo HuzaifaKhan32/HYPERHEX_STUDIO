@@ -61,54 +61,6 @@ const CASE_STUDIES = [
     link: 'https://youtu.be/7JT-j8gz5uU',
     type: 'video' as const,
   },
-  // {
-  //   id: 9,
-  //   title: 'Governor House',
-  //   category: 'Motion / Video',
-  //   videoId: 'oQnWA-22Bf4',
-  //   link:'https://youtu.be/oQnWA-22Bf4',
-  //   type: 'video' as const,
-  // },
-  // {
-  //   id: 10,
-  //   title: 'Nexgen Heights',
-  //   category: 'Motion / Video',
-  //   videoId: 'm2FYElEVclc',
-  //   link:'https://youtu.be/m2FYElEVclc',
-  //   type: 'video' as const,
-  // },
-  // {
-  //   id: 11,
-  //   title: 'Mumtaz Residency',
-  //   category: 'Motion / Video',
-  //   videoId: 'WKOskq3aIQQ',
-  //   link:'https://youtu.be/WKOskq3aIQQ',
-  //   type: 'video' as const,
-  // },
-  //  {
-  //   id: 12,
-  //   title: 'Call Center Interior',
-  //   category: 'Motion / Video',
-  //   videoId: '9JFPZnPXQ1Y',
-  //   link: 'https://youtu.be/9JFPZnPXQ1Y',
-  //   type: 'video' as const,
-  // },
-  // {
-  //   id: 13,
-  //   title: 'Modern Apartment Interior',
-  //   category: 'Motion / Video',
-  //   videoId: 'QhWmY9lXlZY',
-  //   link: 'https://youtu.be/QhWmY9lXlZY',
-  //   type: 'video' as const,
-  // },
-  // {
-  //   id: 14,
-  //   title: 'Naran Club',
-  //   category: 'Motion / Video',
-  //   videoId: 'a0ESDiUHZFI',
-  //   link: 'https://youtu.be/a0ESDiUHZFI',
-  //   type: 'video' as const,
-  // },
 ];
 
 // Duplicate items twice for smooth infinite loop
@@ -234,13 +186,12 @@ function FeaturedHeading() {
 }
 
 export default function FeaturedCaseStudies() {
-  // Start at index equal to array length so user can slide backwards immediately if desired
   const [activeIndex, setActiveIndex] = useState(CASE_STUDIES.length);
   const [isPaused, setIsPaused] = useState(false);
   const [enableTransition, setEnableTransition] = useState(true);
   const [visibleCount, setVisibleCount] = useState(3);
 
-  const GAP = 20; // 20px gap
+  const GAP = 20;
 
   useEffect(() => {
     const handleResize = () => {
@@ -254,7 +205,6 @@ export default function FeaturedCaseStudies() {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  // Auto slide interval
   useEffect(() => {
     if (isPaused) return;
     const interval = setInterval(() => {
@@ -265,9 +215,7 @@ export default function FeaturedCaseStudies() {
     return () => clearInterval(interval);
   }, [isPaused]);
 
-  // Handle seamless loop when transition completes
   const handleTransitionEnd = () => {
-    // If we passed the middle set of items, reset back to equivalent index in first set
     if (activeIndex >= CASE_STUDIES.length * 2) {
       setEnableTransition(false);
       setActiveIndex(activeIndex - CASE_STUDIES.length);
@@ -295,12 +243,17 @@ export default function FeaturedCaseStudies() {
       onMouseLeave={() => setIsPaused(false)}
     >
       <div className="max-w-[1280px] xl:max-w-[1400px] 2xl:max-w-none mx-auto px-5 lg:px-16 2xl:px-24">
-
         <FeaturedHeading />
 
         <div className="relative">
-          {/* Main viewport with strict overflow hidden */}
-          <div className="w-full overflow-hidden rounded-3xl p-1 -m-1">
+          {/* Main Viewport Container with Glass Effect and Edge Fade Mask */}
+          <div
+            className="w-full overflow-hidden rounded-3xl p-4 -m-4 bg-white/10 dark:bg-black/10 backdrop-blur-xl border border-white/20 dark:border-white/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.12)]"
+            style={{
+              WebkitMaskImage: 'linear-gradient(to right, transparent 0%, black 5%, black 95%, transparent 100%)',
+              maskImage: 'linear-gradient(to right, transparent 0%, black 5%, black 95%, transparent 100%)',
+            }}
+          >
             <div
               className="flex"
               style={{
@@ -318,20 +271,19 @@ export default function FeaturedCaseStudies() {
                   }}
                   className="shrink-0 group"
                 >
-                  <div className="relative aspect-[4/5] rounded-3xl overflow-hidden bg-surface-bright cursor-pointer border border-outline-variant transition-all duration-300 transform hover:-translate-y-1">
+                  {/* Glassmorphic Card Outer */}
+                  <div className="relative aspect-[4/5] rounded-3xl overflow-hidden bg-white/20 dark:bg-black/20 backdrop-blur-md cursor-pointer border border-white/30 dark:border-white/10 shadow-lg transition-all duration-300 transform hover:-translate-y-1 hover:border-white/50 dark:hover:border-white/30">
                     <div className="p-3 h-full flex flex-col">
                       <div className="relative flex-1 overflow-hidden rounded-2xl">
                         <div className="absolute inset-0 overflow-hidden rounded-2xl group-hover:scale-105 transition-transform duration-700">
-                          { (
-                            <Image
-                              src={project.image}
-                              alt={project.title}
-                              fill
-                              sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                              quality={85}
-                              className="object-cover"
-                            />
-                          )}
+                          <Image
+                            src={project.image}
+                            alt={project.title}
+                            fill
+                            sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                            quality={85}
+                            className="object-cover"
+                          />
                         </div>
                         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col justify-end p-6">
                           <span className="text-xs font-bold uppercase tracking-widest text-[var(--color-accent)] mb-1">
@@ -342,6 +294,8 @@ export default function FeaturedCaseStudies() {
                           </h4>
                         </div>
                       </div>
+                      
+                      {/* Glass Content Footer */}
                       <div className="pt-3 px-1 flex justify-between items-center">
                         <div>
                           <h3 className="text-base font-bold text-on-surface">{project.title}</h3>
@@ -361,11 +315,11 @@ export default function FeaturedCaseStudies() {
             </div>
           </div>
 
-          {/* Navigation Buttons */}
+          {/* Navigation Buttons with Frosted Glass Styling */}
           <button
             onClick={handlePrev}
             aria-label="Previous Slide"
-            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 w-12 h-12 md:w-14 md:h-14 rounded-full bg-surface shadow-md shadow-outline-variant/30 border border-outline-variant/30 flex items-center justify-center text-on-surface hover:bg-[var(--color-accent)] hover:text-on-primary transition-all z-20 cursor-pointer"
+            className="absolute left-2 top-1/2 -translate-y-1/2 w-12 h-12 md:w-14 md:h-14 rounded-full bg-white/30 dark:bg-black/30 backdrop-blur-xl border border-white/40 dark:border-white/20 shadow-xl flex items-center justify-center text-on-surface hover:bg-[var(--color-accent)] hover:text-white hover:border-[var(--color-accent)] transition-all z-20 cursor-pointer"
           >
             <svg className="w-5 h-5 md:w-6 md:h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -374,7 +328,7 @@ export default function FeaturedCaseStudies() {
           <button
             onClick={handleNext}
             aria-label="Next Slide"
-            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 w-12 h-12 md:w-14 md:h-14 rounded-full bg-surface shadow-md shadow-outline-variant/30 border border-outline-variant/30 flex items-center justify-center text-on-surface hover:bg-[var(--color-accent)] hover:text-on-primary transition-all z-20 cursor-pointer"
+            className="absolute right-2 top-1/2 -translate-y-1/2 w-12 h-12 md:w-14 md:h-14 rounded-full bg-white/30 dark:bg-black/30 backdrop-blur-xl border border-white/40 dark:border-white/20 shadow-xl flex items-center justify-center text-on-surface hover:bg-[var(--color-accent)] hover:text-white hover:border-[var(--color-accent)] transition-all z-20 cursor-pointer"
           >
             <svg className="w-5 h-5 md:w-6 md:h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
@@ -385,12 +339,3 @@ export default function FeaturedCaseStudies() {
     </section>
   );
 }
-// project.type === 'video' ? (
-//                             <iframe
-//                               src={`https://www.youtube.com/embed/${project.videoId}?autoplay=1&mute=1&loop=1&playlist=${project.videoId}&controls=0&modestbranding=1&rel=0&showinfo=0&iv_load_policy=3&playsinline=1`}
-//                               title={project.title}
-//                               allow="autoplay; encrypted-media"
-//                               className="absolute top-1/2 left-1/2 h-[150%] w-[150%] -translate-x-1/2 -translate-y-1/2 pointer-events-none"
-//                               style={{ border: 0 }}
-//                             />
-//                           ) :

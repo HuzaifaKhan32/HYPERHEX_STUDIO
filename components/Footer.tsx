@@ -1,10 +1,63 @@
 'use client';
 
-import { motion, useReducedMotion } from 'framer-motion';
+import { motion, useReducedMotion, Variants } from 'framer-motion';
 import Image from 'next/image';
 import { useState, useRef, useCallback } from 'react';
 import { Globe, Share2, MessageSquare, ExternalLink } from 'lucide-react';
 import Button3D from './Button3D';
+// Motion variants for container-level staggered children
+const containerVariants: Variants = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: 0.04, // Delay between each letter
+      delayChildren: 0.1,    // Initial wait before starting
+    },
+  },
+};
+
+// Motion variants for individual letter animation
+const letterVariants: Variants = {
+  hidden: {
+    y: '100%',
+    opacity: 0,
+  },
+  visible: {
+    y: '0%',
+    opacity: 1,
+    transition: {
+      duration: 0.5,
+      ease: [0.215, 0.61, 0.355, 1], // Smooth custom cubic-bezier
+    },
+  },
+};
+
+interface AnimatedTextProps {
+  text: string;
+  className?: string;
+}
+
+function AnimatedText({ text, className = '' }: AnimatedTextProps) {
+  return (
+    <motion.div
+      variants={containerVariants}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, amount: 0.3 }} // Triggers when 30% of text is in view
+      className={`inline-flex overflow-hidden ${className}`}
+    >
+      {text.split('').map((char, index) => (
+        <motion.span
+          key={`${char}-${index}`}
+          variants={letterVariants}
+          className="inline-block"
+        >
+          {char === ' ' ? '\u00A0' : char}
+        </motion.span>
+      ))}
+    </motion.div>
+  );
+}
 
 const EASE = [0.4, 0, 0.2, 1] as const;
 
@@ -26,6 +79,7 @@ const listVariants = {
     },
   },
 };
+
 
 const navLinks = [
   { label: 'Home', href: '#' },
@@ -279,16 +333,13 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* ── Middle Social Media Links Full-Width Tier (Light #EDECEC) ── */}
-        <div
-          className="relative z-10 w-full overflow-hidden bg-[#EDECEC]"
-          style={{
-            borderTopLeftRadius: '45px',
-            borderTopRightRadius: '45px',
-          }}
-        >
-          <div className="mx-auto flex w-full max-w-[1400px] flex-col items-center px-5 pt-10 pb-12 sm:pt-12 sm:pb-16 lg:px-16 2xl:px-24">
-            <span className="mb-6 block text-center font-mono text-xs font-bold tracking-[0.2em] uppercase text-zinc-500">
+        {/* ── Middle Social Media Links Full-Width Tier ── */}
+        <div className="relative z-10">
+          <div className="relative z-10 w-full px-5 py-6 lg:px-16 2xl:px-24">
+          <div
+            className="mx-auto flex max-w-[1400px] flex-col items-center overflow-hidden bg-[#EDECEC] rounded-[45px] px-6 pt-10 pb-12 sm:pt-12 sm:pb-16 shadow-xl"
+          >
+            <span className="mb-8 block text-center font-mono text-xs font-bold tracking-[0.2em] uppercase text-zinc-500">
               Social Media
             </span>
             <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6">
@@ -341,14 +392,11 @@ export default function Footer() {
               ))}
             </div>
           </div>
+        </div>
 
-          {/* ── Bottom Dark Tier: Kinetic Title & Copyright (#090A0F) ── */}
+          {/* ── Bottom Dark Tier: Kinetic Title & Copyright ── */}
           <div
-            className="relative z-10 w-full overflow-hidden bg-[#090A0F] px-5 pt-16 pb-12 lg:px-16 lg:pt-24 lg:pb-16 2xl:px-24"
-            style={{
-              borderTopLeftRadius: '45px',
-              borderTopRightRadius: '45px',
-            }}
+            className="relative z-10 w-full overflow-hidden px-5 pt-16 pb-12 lg:px-16 lg:pt-24 lg:pb-16 2xl:px-24"
           >
             {/* Phantom Arc Glow Effect for bottom layer */}
             <div
@@ -360,7 +408,7 @@ export default function Footer() {
                 mixBlendMode: 'screen',
               }}
             />
-
+            
             {/* Fully Responsive HyperHex Kinetic Interactive Title */}
             <div className="relative z-10 mx-auto flex w-full max-w-[1400px] flex-col items-center justify-center select-none overflow-visible">
               <div
@@ -389,34 +437,65 @@ export default function Footer() {
                   }}
                 />
 
-                <div className="relative z-10 flex w-full flex-col items-center px-2">
-                  <h1
-                    className="w-full text-center font-black uppercase tracking-[-0.02em] whitespace-nowrap"
-                    style={{
-                      fontFamily: 'var(--font-syne), sans-serif',
-                      fontSize: 'clamp(32px, 8.5vw, 120px)',
-                      lineHeight: 0.85,
-                      color: '#F4F4F5',
-                    }}
-                  >
-                    HYPERHEX
-                  </h1>
-                  <div className="flex w-full justify-end pr-[4%] sm:pr-[8%] mt-2">
-                    <h2
-                      className="font-bold uppercase tracking-[-0.01em] whitespace-nowrap"
-                      style={{
-                        fontFamily: 'var(--font-syne), sans-serif',
-                        fontSize: 'clamp(16px, 4.2vw, 60px)',
-                        lineHeight: 0.85,
-                        color: '#F4F4F5',
-                      }}
-                    >
-                      STUDIOS
-                    </h2>
-                  </div>
-                </div>
+                <div className="relative z-10 mx-auto flex w-full max-w-[1400px] flex-col items-center justify-center select-none overflow-visible">
+  <div className="relative z-10 mx-auto flex w-full max-w-[1400px] flex-col items-center justify-center select-none overflow-visible">
+  <div
+    data-cursor="text"
+    className="pointer-events-auto relative flex w-full flex-col items-center cursor-pointer overflow-hidden sm:overflow-visible"
+    onMouseEnter={() => setIsHoveringText(true)}
+    onMouseLeave={() => setIsHoveringText(false)}
+    onMouseMove={handleTextMouseMove}
+  >
+    {/* Glow */}
+    <div
+      ref={glowRef}
+      aria-hidden="true"
+      className="pointer-events-none absolute"
+      style={{
+        width: '350px',
+        height: '350px',
+        left: '-175px',
+        top: '-175px',
+        background:
+          'radial-gradient(circle, rgba(21, 182, 232, 0.35) 0%, rgba(21, 182, 232, 0.15) 30%, transparent 70%)',
+        filter: 'blur(20px)',
+        zIndex: 0,
+        opacity: isHoveringText ? 1 : 0,
+        transition: 'opacity 0.3s ease',
+      }}
+    />
 
-                {/* Clip-path cyan layer */}
+    <div className="relative z-10 flex w-full flex-col items-center px-4">
+      <h1
+        className="w-full text-center font-black uppercase tracking-[0.01em] whitespace-nowrap font-extrabold"
+        style={{
+          fontFamily: 'sans-serif',
+          fontSize: 'clamp(28px, 11.5vw, 175px)',
+          lineHeight: 0.85,
+          color: '#F4F4F5',
+        }}
+      >
+        HYPERHEX
+      </h1>
+      <div className="flex w-full justify-center">
+        <h2
+          className="font-bold uppercase tracking-[-0.01em] whitespace-nowrap mt-2 sm:mt-3"
+          style={{
+            fontFamily: 'sans-serif',
+            fontSize: 'clamp(16px, 6vw, 90px)',
+            lineHeight: 0.85,
+            color: '#F4F4F5',
+          }}
+        >
+          STUDIOS
+        </h2>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+                {/* Clip-path cyan layer
                 <div
                   ref={clipLayerRef}
                   aria-hidden="true"
@@ -451,7 +530,7 @@ export default function Footer() {
                       STUDIOS
                     </h2>
                   </div>
-                </div>
+                </div> */}
               </div>
             </div>
 

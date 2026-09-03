@@ -25,18 +25,18 @@ function createCaseStudy(
 
 // ── Main Featured Case Studies (Deduplicated, Unique) ──────────────────────
 export const MAIN_CASE_STUDIES: CaseStudy[] = [
-  createCaseStudy('7JT-j8gz5uU', 'HyperHex Showcase', 'Animation / 3D'),
-  createCaseStudy('7wRGPltVun4', 'Volvo Experience', 'Automotive / 3D'),
-  createCaseStudy('YvvRPa5zVAM', 'Interactive Web', 'Interactive Web'),
-  createCaseStudy('NJgPMovdV2Y', 'Exterior House', 'Product Render'),
-  createCaseStudy('a0ESDiUHZFI', 'Governor House', 'Spatial Design'),
+  createCaseStudy('7JT-j8gz5uU', 'Luxury Watch 3D Animation', 'Cinematic Product Visualization'),
+  createCaseStudy('7wRGPltVun4', 'Jaguar Builders', 'Cinematic Drone Film'),
+  createCaseStudy('YvvRPa5zVAM', 'Ahsan Town Project', 'Cinematic Drone Animation'),
+  createCaseStudy('NJgPMovdV2Y', 'Al Jannat Farmhouse', 'Cinematic Drone Video'),
+  createCaseStudy('a0ESDiUHZFI', 'Naran Club', '3D Architectural Animation'),
 ];
 
 // ── Sub Featured Case Studies (Deduplicated, Unique) ───────────────────────
 export const SUB_CASE_STUDIES: CaseStudy[] = [
-  createCaseStudy('QhWmY9lXlZY', 'IVF Academy', 'UI/UX System'),
-  createCaseStudy('oQnWA-22Bf4', 'NS Arcade', 'ArchViz Render'),
-  createCaseStudy('9JFPZnPXQ1Y', 'Naran Club', 'Animation'),
-  createCaseStudy('WKOskq3aIQQ', 'Modern Apartment', 'Architecture'),
-  createCaseStudy('m2FYElEVclc', 'Call Center Design', 'Interior Design'),
+  createCaseStudy('QhWmY9lXlZY', 'Modern Apartment Interior Design ', '3D Visualization'),
+  createCaseStudy('oQnWA-22Bf4', 'Governor House – Conference Room', '3D Visualization'),
+  createCaseStudy('9JFPZnPXQ1Y', 'Call Center Interior 3D', '3D Planning'),
+  createCaseStudy('WKOskq3aIQQ', 'Mumtaz Residency', '3D Architecture Visualization'),
+  createCaseStudy('m2FYElEVclc', 'Nexgen Heights', '3D Architectural Animation'),
 ];

@@ -5,7 +5,7 @@ import { motion, AnimatePresence, useMotionValueEvent, useScroll } from 'framer-
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Button3D from './Button3D';
-import { ThemeToggle } from './ThemeToggle';
+// import { ThemeToggle } from './ThemeToggle';
 
 // ── Animated hamburger → X ─────────────────────────────────────────────────
 function HamburgerIcon({ isOpen, scrolled }: { isOpen: boolean; scrolled: boolean }) {
@@ -232,7 +232,7 @@ export default function Navbar() {
 
           {/* ── Logo with hover-expand text ── */}
           <motion.div
-            className="flex cursor-pointer items-center gap-2"
+            className="group flex cursor-pointer items-center gap-5"
             onHoverStart={() => setIsLogoHovered(true)}
             onHoverEnd={() => setIsLogoHovered(false)}
           >
@@ -262,22 +262,69 @@ export default function Navbar() {
               transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] }}
               className="hidden overflow-hidden sm:inline-flex shrink-0"
             >
-              <div
-                className="inline-flex shrink-0 whitespace-nowrap rounded-full px-4 py-2 2xl:px-6 2xl:py-3"
-                style={{ backgroundColor: 'var(--color-void)' }}
-              >
-                <span
-                  className="font-[family-name:var(--font-syne)] text-sm 2xl:text-base font-bold tracking-tight uppercase"
-                  style={{ color: 'var(--color-accent)' }}
-                >
-                  HYPERHex Studio
-                </span>
+              {/* Button3D-styled label badge — visual only, logo Link above is the click target */}
+              <div className="relative inline-flex items-center gap-3 rounded-[100px] py-1.5 pl-4 pr-1.5 pointer-events-none select-none shrink-0 whitespace-nowrap">
+
+                {/* Base Ring — 3D bottom edge */}
+                <div
+                  className="absolute inset-0 z-0 rounded-[100px]"
+                  style={{ background: 'linear-gradient(180deg, #6cdcfb 0%, #0d8ec4 100%)' }}
+                />
+
+                {/* Main cyan body with inner highlight */}
+                <div
+                  className="absolute inset-[1px] z-0 rounded-[100px]"
+                  style={{
+                    backgroundColor: '#15b6e8',
+                    boxShadow: 'rgba(255, 255, 255, 0.4) 0px 4px 6px 0px inset',
+                  }}
+                />
+
+                {/* Content */}
+                <div className="relative z-10 flex items-center justify-between gap-3">
+                  {/* Rolling text */}
+                  <div className="relative overflow-hidden py-0.5">
+                    <div className="flex items-center transition-transform duration-500 ease-in-out group-hover:-translate-y-full">
+                      <span className="flex items-center gap-2 font-[family-name:var(--font-dm-sans)] text-xs font-bold uppercase tracking-wide text-white">
+                        <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-white" />
+                        HYPERHex Studio
+                      </span>
+                    </div>
+                    <div className="absolute left-0 top-full flex h-full w-full items-center transition-transform duration-500 ease-in-out group-hover:-translate-y-full">
+                      <span className="flex items-center gap-2 font-[family-name:var(--font-dm-sans)] text-xs font-bold uppercase tracking-wide text-white">
+                        <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-white" />
+                        HYPERHex Studio
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Icon puck */}
+                  <div
+                    className="relative flex h-8 w-8 shrink-0 items-center justify-center overflow-hidden rounded-full"
+                    style={{
+                      backgroundColor: 'rgb(255, 255, 255)',
+                      boxShadow: 'rgba(255, 255, 255, 0.3) 0px 4px 6px 0px',
+                    }}
+                  >
+                    <div className="flex h-full w-full items-center justify-center transition-transform duration-500 ease-in-out group-hover:-translate-x-full">
+                      <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none">
+                        <path d="M7 17L17 7M17 7H8M17 7V16" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
+                    </div>
+                    <div className="absolute left-full top-0 flex h-full w-full items-center justify-center transition-transform duration-500 ease-in-out group-hover:-translate-x-full">
+                      <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none">
+                        <path d="M7 17L17 7M17 7H8M17 7V16" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+
               </div>
             </motion.div>
           </motion.div>
 
           {/* ── Desktop nav pill ── */}
-<nav className="hidden items-center ml-[250px] gap-2 2xl:gap-3 max-w-full rounded-[100px] p-1 2xl:p-1.5 backdrop-blur-2xl md:flex" style={{ backgroundColor: 'rgba(0,0,0,0.04)', boxShadow: '0px 5px 6px 0px rgba(0,0,0,0.1),0px 24px 20px 0px rgba(0,0,0,0.12),0px 3px 0px 0px #F5F5F5' }}>
+<nav className="hidden items-center gap-2 2xl:gap-3 max-w-full rounded-[100px] p-1 2xl:p-1.5 backdrop-blur-2xl md:flex" style={{ backgroundColor: 'rgba(0,0,0,0.04)', boxShadow: '0px 5px 6px 0px rgba(0,0,0,0.1),0px 24px 20px 0px rgba(0,0,0,0.12),0px 3px 0px 0px #F5F5F5' }}>
   {links.map((link) => {
     const isActive = activeLink === link.id;
     return (

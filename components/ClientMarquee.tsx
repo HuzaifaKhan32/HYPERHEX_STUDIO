@@ -15,7 +15,7 @@ function MarqueePill({ item }: { item: MarqueeItem }) {
   if (item.type === 'label') {
     return (
       <span
-        className={`${PILL_BASE} bg-ink font-[family-name:var(--font-jetbrains)] text-[10px] sm:text-base font-medium tracking-[0.12em] text-paper uppercase px-4 sm:px-14`}
+        className={`${PILL_BASE} font-[family-name:var(--font-jetbrains)] text-[10px] sm:text-base font-medium tracking-[0.12em] text-black uppercase px-4 sm:px-14`}
       >
         {item.name}
       </span>
@@ -47,9 +47,19 @@ function MarqueePill({ item }: { item: MarqueeItem }) {
 }
 
 function MarqueeSequence({ items }: { items: MarqueeItem[] }) {
+  // Retain all items, but allow a maximum of 2 label blocks ("Our Clients")
+  let labelCount = 0;
+  const filteredItems = items.filter((item) => {
+    if (item.type === 'label') {
+      labelCount++;
+      return labelCount <= 2;
+    }
+    return true;
+  });
+
   return (
     <div className="flex shrink-0 items-center">
-      {items.map((item, index) => (
+      {filteredItems.map((item, index) => (
         <MarqueePill
           key={`${item.type}-${item.type === 'client' ? item.id : item.name}-${index}`}
           item={item}
@@ -151,7 +161,7 @@ export default function ClientMarquee() {
   return (
     <section
       aria-label="Our clients"
-      className="w-full overflow-hidden bg-background pt-12 pb-8 md:pt-14 md:pb-10"
+      className="w-full overflow-hidden bg-transparent pt-12 pb-8 md:pt-14 md:pb-10"
     >
       <div
         data-cursor="drag"

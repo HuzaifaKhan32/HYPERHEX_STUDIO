@@ -7,6 +7,8 @@ import LatestWorkGallery from '@/components/LatestWorkGallery';
 import ContactForm from '@/components/ContactForm';
 import Footer from '@/components/Footer';
 import ScrollProgress from '@/components/ScrollProgress';
+import AboutUs from '@/components/AboutUs';
+import TestimonialsSection from '@/components/TestimonialsSection';
 
 // Lazy-load CaseStudiesSection to reduce initial bundle size and avoid blocking critical path
 const CaseStudiesSection = dynamic(() => import('@/components/CaseStudiesSection'), {
@@ -25,9 +27,11 @@ export default function Home() {
       <main className="w-full pt-24 md:pt-28">
         <Hero />
         <ClientMarquee />
+        <AboutUs />
         <CaseStudiesSection />
         <Services />
         <LatestWorkGallery />
+        <TestimonialsSection />
         <ContactForm />
       </main>
       <Footer />
