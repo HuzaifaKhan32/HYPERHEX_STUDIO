@@ -7,17 +7,12 @@ import { motion, useReducedMotion } from 'framer-motion';
 import { MAIN_CASE_STUDIES, SUB_CASE_STUDIES, type CaseStudy } from '@/lib/case-studies-data';
 import StaggeredHeading from '@/components/ui/StaggeredHeading';
 
-// Dynamically import the Video Modal with SSR disabled
-const CaseStudyModal = dynamic(() => import('./CaseStudyModal'), {
-  ssr: false,
-});
+const CaseStudyModal = dynamic(() => import('./CaseStudyModal'), { ssr: false });
 
 const BLACK = '#161d1e';
 const ACCENT = '#15b6e8';
-const MAIN_GAP = 16; // px gap between main cards
-const SUB_GAP = 12;  // px gap between sub cards
+const SUB_GAP = 12;
 
-// ── Measure viewport width safely ────────────────────────────────────────────
 function useVW() {
   const [vw, setVw] = useState(0);
   useEffect(() => {
@@ -29,7 +24,6 @@ function useVW() {
   return vw;
 }
 
-// ── Measure element width on mount and resize ────────────────────────────────
 function useElWidth(ref: React.RefObject<HTMLElement | null>) {
   const [w, setW] = useState(0);
   useEffect(() => {
@@ -43,7 +37,6 @@ function useElWidth(ref: React.RefObject<HTMLElement | null>) {
   return w;
 }
 
-// ── Enhanced Infinite Slider Hook with Drag & Timer Reset Support ───────────
 function useInfiniteSlider(autoMs: number, n: number) {
   const [idx, setIdx] = useState(n);
   const [anim, setAnim] = useState(true);
@@ -117,8 +110,7 @@ function useInfiniteSlider(autoMs: number, n: number) {
 
 function FeaturedHeading() {
   return (
-    <div className="w-full mb-12 md:mb-16">
-      {/* Mobile Heading */}
+    <div className="w-full mb-6 md:mb-8">
       <div className="md:hidden">
         <StaggeredHeading
           staggerDelay={0.07}
@@ -138,7 +130,6 @@ function FeaturedHeading() {
         />
       </div>
 
-      {/* Desktop Heading */}
       <div className="hidden md:block">
         <StaggeredHeading
           staggerDelay={0.07}
@@ -161,46 +152,40 @@ function FeaturedHeading() {
   );
 }
 
-// ── CaseStudiesSection Component ─────────────────────────────────────────────
 export default function CaseStudiesSection() {
   const vw = useVW();
   const reduced = useReducedMotion();
 
-  // Deduplicated base items
   const mainItems = MAIN_CASE_STUDIES;
   const subItems = SUB_CASE_STUDIES;
 
   const mainN = mainItems.length;
   const subN = subItems.length;
 
-  // Tripled sets for seamless infinite wrapping
   const mainTriple = useMemo(() => [...mainItems, ...mainItems, ...mainItems], [mainItems]);
   const subTriple = useMemo(() => [...subItems, ...subItems, ...subItems], [subItems]);
 
-  // Sliders state
   const mainSlider = useInfiniteSlider(5000, mainN);
   const subSlider = useInfiniteSlider(5000, subN);
 
-  // Main slider dimensions
   const mainCardRef = useRef<HTMLDivElement>(null);
   const mainCardW = useElWidth(mainCardRef);
-  const mainStep = mainCardW + MAIN_GAP;
+
+  const gapPx = 0; 
+  const mainStep = mainCardW + gapPx;
   const mainTx = mainCardW > 0 ? vw / 2 - mainCardW / 2 - mainSlider.idx * mainStep : 0;
 
-  // Sub slider dimensions
   const subCardRef = useRef<HTMLDivElement>(null);
   const subCardW = useElWidth(subCardRef);
   const subStep = subCardW + SUB_GAP;
   const subTx = subCardW > 0 ? vw / 2 - subCardW / 2 - subSlider.idx * subStep : 0;
 
-  // Modal State: selected item
   const [selected, setSelected] = useState<CaseStudy | null>(null);
 
   const handleCloseModal = useCallback(() => {
     setSelected(null);
   }, []);
 
-  // Handle Drag Ending logic for Infinite Dragging
   const handleDragEndMain = (_: unknown, info: { offset: { x: number } }) => {
     const threshold = 50;
     if (info.offset.x < -threshold) {
@@ -228,16 +213,14 @@ export default function CaseStudiesSection() {
       className="relative w-full bg-surface py-16 md:py-24 overflow-hidden font-[family-name:var(--font-dm-sans)] text-on-surface"
       id="case-studies"
     >
-      {/* Header Container */}
       <div className="max-w-[1280px] xl:max-w-[1400px] 2xl:max-w-none mx-auto px-5 lg:px-16 2xl:px-24 mb-10">
         <FeaturedHeading />
       </div>
 
-      {/* ──────────────── SLIDERS WRAPPER ──────────────── */}
       <motion.div
         initial={reduced ? 'visible' : 'hidden'}
         whileInView="visible"
-        viewport={{ once: true, margin: '-40px' }}
+        viewport={{ once: true, margin: '-20px' }}
         variants={{
           hidden: { opacity: 0, y: 28 },
           visible: {
@@ -247,19 +230,18 @@ export default function CaseStudiesSection() {
           },
         }}
       >
-        {/* ──────────────── MAIN SLIDER ──────────────────────────────────────── */}
+        {/* MAIN SLIDER */}
         <div className="relative w-full overflow-hidden select-none py-4">
           <motion.div
             drag="x"
             dragConstraints={{ left: 0, right: 0 }}
             dragElastic={0.15}
             onDragEnd={handleDragEndMain}
-            className="flex cursor-grab active:cursor-grabbing"
+            className="flex cursor-grab active:cursor-grabbing items-center"
             style={{
-              gap: `${MAIN_GAP}px`,
               transform: `translate3d(${mainTx}px, 0, 0)`,
               transition: mainSlider.anim
-                ? 'transform 1500ms cubic-bezier(0.25, 1, 0.5, 1)'
+                ? 'transform 1200ms cubic-bezier(0.25, 1, 0.5, 1)'
                 : 'none',
             }}
             onTransitionEnd={mainSlider.onTransitionEnd}
@@ -272,63 +254,59 @@ export default function CaseStudiesSection() {
                 <div
                   key={`main-${study.id}-${idx}`}
                   ref={idx === 0 ? mainCardRef : undefined}
-                  className="w-[70vw] sm:w-[55vw] md:w-[45vw] xl:w-[38vw] 2xl:w-[32vw] shrink-0 group transition-all duration-700 ease-out"
-                  style={{
-                    transform: isCenter ? 'scale(1)' : 'scale(0.92)',
-                    opacity: isCenter ? 1 : Math.max(0.4, 1 - distanceFromCenter * 0.25),
-                  }}
+                  className="w-[80vw] sm:w-[60vw] md:w-[65vw] xl:w-[48vw] 2xl:w-[40vw] shrink-0 group"
                 >
-                  <div
+                  <motion.div
+                    animate={{
+                      scale: isCenter ? 1 : 0.88,
+                      opacity: isCenter ? 1 : Math.max(0.4, 1 - distanceFromCenter * 0.3),
+                    }}
+                    transition={{ duration: 0.5, ease: [0.25, 1, 0.5, 1] }}
                     data-cursor="project"
-                    className="relative aspect-[4/3] rounded-2xl overflow-hidden cursor-pointer bg-surface-bright shadow-xl"
+                    className="relative aspect-[16/9] md:aspect-[16/8.5] rounded-2xl overflow-hidden cursor-pointer bg-surface-bright shadow-2xl origin-center"
                     onClick={() => setSelected(study)}
                   >
-                    {/* Optimized Next.js Image with WebP support */}
                     <Image
                       src={study.thumbnail}
                       alt={study.title}
                       fill
-                      sizes="(max-width: 768px) 70vw, (max-width: 1200px) 45vw, 650px"
+                      sizes="(max-width: 768px) 85vw, (max-width: 1200px) 60vw, 850px"
                       quality={85}
                       className={`object-cover transition-all duration-700 ease-out group-hover:scale-105 ${
-                        !isCenter ? 'filter blur-[3px] brightness-90' : 'filter-none'
+                        !isCenter ? 'filter blur-[2px] brightness-75' : 'filter-none'
                       }`}
                     />
 
-                    {/* Camera Focus Backdrop Blur Overlay for side peeking cards */}
                     {!isCenter && (
-                      <div className="absolute inset-0 bg-black/20 backdrop-blur-[2px] transition-all duration-500 pointer-events-none" />
+                      <div className="absolute inset-0 bg-black/30 backdrop-blur-[2px] transition-all duration-500 pointer-events-none" />
                     )}
 
-                    {/* Small play badge indicator */}
                     {study.isVideo && (
-                      <div className="absolute top-3 right-3 z-10 w-8 h-8 rounded-full bg-black/50 border border-white/20 flex items-center justify-center pointer-events-none group-hover:opacity-0 transition-opacity duration-300">
-                        <svg className="w-3.5 h-3.5 text-white ml-0.5" fill="currentColor" viewBox="0 0 24 24">
+                      <div className="absolute top-4 right-4 z-10 w-9 h-9 rounded-full bg-black/50 border border-white/20 flex items-center justify-center pointer-events-none group-hover:opacity-0 transition-opacity duration-300">
+                        <svg className="w-4 h-4 text-white ml-0.5" fill="currentColor" viewBox="0 0 24 24">
                           <path d="M8 5v14l11-7z" />
                         </svg>
                       </div>
                     )}
 
-                    {/* Default Card Bottom Gradient Overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex flex-col justify-end p-5 md:p-7 pointer-events-none transition-opacity duration-300 group-hover:opacity-0">
-                      <span className="text-xs font-bold uppercase tracking-widest text-[var(--color-accent)] mb-1">
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex flex-col justify-end p-6 md:p-8 pointer-events-none transition-opacity duration-300 group-hover:opacity-0">
+                      <span className="text-xs font-bold uppercase tracking-widest text-[var(--color-accent)] mb-1.5">
                         {study.category}
                       </span>
-                      <h3 className="font-[family-name:var(--font-syne)] font-bold text-lg md:text-2xl text-white uppercase tracking-tight leading-tight">
+                      <h3 className="font-[family-name:var(--font-syne)] font-bold text-xl md:text-3xl text-white uppercase tracking-tight leading-tight">
                         {study.title}
                       </h3>
                     </div>
 
-                    {/* Hover Reveal Card Overlay */}
                     <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center pointer-events-none z-20">
                       <span className="text-xs uppercase tracking-[0.3em] mb-3 text-white/70">
                         {study.category}
                       </span>
-                      <h3 className="text-lg md:text-2xl font-bold uppercase tracking-wider px-6 text-center text-white">
+                      <h3 className="text-xl md:text-3xl font-bold uppercase tracking-wider px-6 text-center text-white">
                         {study.title}
                       </h3>
                       {study.isVideo && (
-                        <div className="mt-4 px-5 py-2 rounded-full bg-white text-black font-semibold text-xs md:text-sm uppercase tracking-wider flex items-center gap-2 shadow-lg">
+                        <div className="mt-4 px-6 py-2.5 rounded-full bg-white text-black font-semibold text-xs md:text-sm uppercase tracking-wider flex items-center gap-2 shadow-lg">
                           <svg className="w-3.5 h-3.5 fill-black" viewBox="0 0 24 24">
                             <path d="M8 5v14l11-7z" />
                           </svg>
@@ -336,13 +314,13 @@ export default function CaseStudiesSection() {
                         </div>
                       )}
                     </div>
-                  </div>
+                  </motion.div>
                 </div>
               );
             })}
           </motion.div>
 
-          {/* Prev Arrow (Main Slider) */}
+          {/* Nav Controls */}
           <button
             onClick={mainSlider.goPrev}
             aria-label="Previous main slide"
@@ -353,7 +331,6 @@ export default function CaseStudiesSection() {
             </svg>
           </button>
 
-          {/* Next Arrow (Main Slider) */}
           <button
             onClick={mainSlider.goNext}
             aria-label="Next main slide"
@@ -365,8 +342,8 @@ export default function CaseStudiesSection() {
           </button>
         </div>
 
-        {/* ──────────────── SUB SLIDER ───────────────────────────────────────── */}
-        <div className="relative w-full my-8 select-none overflow-hidden py-2">
+        {/* SUB SLIDER (Landscape sizes, uniform focus) */}
+        <div className="relative w-full my-1 select-none overflow-hidden py-2">
           <motion.div
             drag="x"
             dragConstraints={{ left: 0, right: 0 }}
@@ -382,76 +359,56 @@ export default function CaseStudiesSection() {
             }}
             onTransitionEnd={subSlider.onTransitionEnd}
           >
-            {subTriple.map((study, idx) => {
-              const isActive = idx === subSlider.idx;
-              return (
-                <div
-                  key={`sub-${study.id}-${idx}`}
-                  ref={idx === 0 ? subCardRef : undefined}
-                  onClick={() => {
-                    if (isActive) {
-                      setSelected(study);
-                    } else {
-                      subSlider.goTo(idx, subSlider.idx);
-                    }
-                  }}
-                  className={`w-[45vw] sm:w-[32vw] md:w-[22vw] lg:w-[18vw] xl:w-[15vw] 2xl:w-[13vw] shrink-0 group cursor-pointer overflow-hidden rounded-xl transition-all duration-300 border-2 ${
-                    isActive
-                      ? 'border-[var(--color-accent)] shadow-[0_0_20px_rgba(21,182,232,0.45)] scale-[1.05] z-10'
-                      : 'border-transparent scale-95 opacity-75 hover:opacity-100 hover:border-outline-variant/50'
-                  }`}
-                  data-cursor="project"
-                >
-                  <div className="relative aspect-[4/3] overflow-hidden bg-surface-bright">
-                    <Image
-                      src={study.thumbnail}
-                      alt={study.title}
-                      fill
-                      sizes="(max-width: 768px) 45vw, (max-width: 1200px) 22vw, 280px"
-                      quality={80}
-                      className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
-                    />
+            {subTriple.map((study, idx) => (
+              <div
+                key={`sub-${study.id}-${idx}`}
+                ref={idx === 0 ? subCardRef : undefined}
+                onClick={() => setSelected(study)}
+                className="w-[70vw] sm:w-[48vw] md:w-[42vw] lg:w-[32vw] xl:w-[24vw] 2xl:w-[20vw] shrink-0 group cursor-pointer overflow-hidden rounded-xl border border-white/10 bg-surface-bright shadow-lg hover:border-[var(--color-accent)]/50 transition-colors duration-300"
+                data-cursor="project"
+              >
+                <div className="relative aspect-[16/9] overflow-hidden">
+                  <Image
+                    src={study.thumbnail}
+                    alt={study.title}
+                    fill
+                    sizes="(max-width: 768px) 70vw, (max-width: 1200px) 35vw, 400px"
+                    quality={85}
+                    className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+                  />
 
-                    {/* Play badge */}
-                    {study.isVideo && (
-                      <div className="absolute top-2.5 right-2.5 z-10 w-7 h-7 rounded-full bg-black/50 border border-white/20 flex items-center justify-center pointer-events-none group-hover:opacity-0 transition-opacity duration-300">
-                        <svg className="w-3 h-3 text-white ml-0.5" fill="currentColor" viewBox="0 0 24 24">
-                          <path d="M8 5v14l11-7z" />
-                        </svg>
-                      </div>
-                    )}
-
-                    {/* Sub Card Hover Reveal */}
-                    <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center z-20">
-                      <span className="text-[9px] md:text-[10px] uppercase tracking-[0.2em] mb-1 text-white/70 pointer-events-none">
-                        {study.category}
-                      </span>
-                      <p className="text-xs md:text-sm font-bold uppercase tracking-wide px-2 text-center text-white leading-tight pointer-events-none">
-                        {study.title}
-                      </p>
-                      {study.isVideo && (
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setSelected(study);
-                          }}
-                          className="mt-2 px-3.5 py-1.5 rounded-full bg-white text-black font-semibold text-[10px] md:text-xs uppercase tracking-wider flex items-center gap-1 shadow-lg pointer-events-auto cursor-pointer hover:scale-105 active:scale-95 transition-transform"
-                        >
-                          <svg className="w-2.5 h-2.5 fill-black" viewBox="0 0 24 24">
-                            <path d="M8 5v14l11-7z" />
-                          </svg>
-                          Watch Video
-                        </button>
-                      )}
+                  {study.isVideo && (
+                    <div className="absolute top-3 right-3 z-10 w-7 h-7 rounded-full bg-black/50 border border-white/20 flex items-center justify-center pointer-events-none group-hover:opacity-0 transition-opacity duration-300">
+                      <svg className="w-3 h-3 text-white ml-0.5" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M8 5v14l11-7z" />
+                      </svg>
                     </div>
+                  )}
+
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex flex-col justify-end p-4 transition-opacity duration-300 group-hover:opacity-0 pointer-events-none">
+                    <span className="text-[10px] font-bold uppercase tracking-widest text-[var(--color-accent)] mb-0.5">
+                      {study.category}
+                    </span>
+                    <h4 className="font-bold text-sm md:text-base text-white uppercase tracking-wide leading-tight line-clamp-1">
+                      {study.title}
+                    </h4>
+                  </div>
+
+                  <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center p-4 z-20 pointer-events-none">
+                    <span className="text-[9px] md:text-[10px] uppercase tracking-[0.2em] mb-1 text-white/70">
+                      {study.category}
+                    </span>
+                    <p className="text-xs md:text-sm font-bold uppercase tracking-wide text-center text-white leading-tight">
+                      {study.title}
+                    </p>
                   </div>
                 </div>
-              );
-            })}
+              </div>
+            ))}
           </motion.div>
         </div>
 
-        {/* ── Bullet Navigation (Sub Slider) ── */}
+        {/* Indicator Bullets */}
         <div className="flex justify-center gap-3 mt-2">
           {subItems.map((_, idx) => (
             <button
@@ -468,7 +425,6 @@ export default function CaseStudiesSection() {
         </div>
       </motion.div>
 
-      {/* ── Lazy Loaded Video Lightbox Modal ── */}
       <CaseStudyModal caseStudy={selected} onClose={handleCloseModal} />
     </section>
   );
