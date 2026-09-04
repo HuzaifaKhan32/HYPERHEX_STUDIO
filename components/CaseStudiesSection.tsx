@@ -13,33 +13,37 @@ const BLACK = '#161d1e';
 const ACCENT = '#15b6e8';
 const SUB_GAP = 12;
 
-function useVW() {
-  const [vw, setVw] = useState(0);
-  useEffect(() => {
-    const update = () => setVw(window.innerWidth);
-    update();
-    window.addEventListener('resize', update, { passive: true });
-    return () => window.removeEventListener('resize', update);
-  }, []);
-  return vw;
-}
+// Throttle ResizeObserver updates with requestAnimationFrame to prevent layout thrashing
+function useContainerWidth(ref: React.RefObject<HTMLElement | null>) {
+  const [width, setWidth] = useState(0);
 
-function useElWidth(ref: React.RefObject<HTMLElement | null>) {
-  const [w, setW] = useState(0);
   useEffect(() => {
-    const measure = () => {
-      if (ref.current) setW(ref.current.offsetWidth);
+    const el = ref.current;
+    if (!el) return;
+
+    let rafId: number | null = null;
+    const observer = new ResizeObserver((entries) => {
+      if (!entries[0]) return;
+      const w = entries[0].contentRect.width;
+      if (rafId) cancelAnimationFrame(rafId);
+      rafId = requestAnimationFrame(() => {
+        setWidth(w);
+      });
+    });
+
+    observer.observe(el);
+    return () => {
+      observer.disconnect();
+      if (rafId) cancelAnimationFrame(rafId);
     };
-    measure();
-    window.addEventListener('resize', measure, { passive: true });
-    return () => window.removeEventListener('resize', measure);
   }, [ref]);
-  return w;
+
+  return width;
 }
 
+// Continuous infinite slider hook driven by a virtual index (no array tripling or DOM mounting bloat)
 function useInfiniteSlider(autoMs: number, n: number) {
-  const [idx, setIdx] = useState(n);
-  const [anim, setAnim] = useState(true);
+  const [idx, setIdx] = useState(0);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
   const pauseTimer = useCallback(() => {
@@ -51,64 +55,40 @@ function useInfiniteSlider(autoMs: number, n: number) {
 
   const resetTimer = useCallback(() => {
     pauseTimer();
-    timerRef.current = setInterval(() => {
-      setAnim(true);
-      setIdx((p) => p + 1);
-    }, autoMs);
-  }, [autoMs, pauseTimer]);
+    if (autoMs > 0 && n > 0) {
+      timerRef.current = setInterval(() => {
+        setIdx((prev) => prev + 1);
+      }, autoMs);
+    }
+  }, [autoMs, n, pauseTimer]);
 
   const goNext = useCallback(() => {
-    setAnim(true);
-    setIdx((p) => p + 1);
+    setIdx((prev) => prev + 1);
     resetTimer();
   }, [resetTimer]);
 
   const goPrev = useCallback(() => {
-    setAnim(true);
-    setIdx((p) => p - 1);
+    setIdx((prev) => prev - 1);
     resetTimer();
   }, [resetTimer]);
 
   const goTo = useCallback(
-    (abs: number, currentIdx: number) => {
-      const rel = ((abs % n) + n) % n;
-      const opts = [rel, n + rel, 2 * n + rel];
-      const best = opts.reduce((a, b) =>
-        Math.abs(a - currentIdx) <= Math.abs(b - currentIdx) ? a : b
-      );
-      setAnim(true);
-      setIdx(best);
+    (bulletIdx: number) => {
+      setIdx((currentIdx) => {
+        const currentMod = ((currentIdx % n) + n) % n;
+        let diff = bulletIdx - currentMod;
+        if (diff > n / 2) diff -= n;
+        if (diff < -n / 2) diff += n;
+        return currentIdx + diff;
+      });
       resetTimer();
     },
     [n, resetTimer]
   );
 
-  const onTransitionEnd = useCallback(() => {
-    setIdx((prev) => {
-      if (prev >= n * 2) {
-        setAnim(false);
-        return prev - n;
-      }
-      if (prev < n) {
-        setAnim(false);
-        return prev + n;
-      }
-      return prev;
-    });
-  }, [n]);
-
-  useEffect(() => {
-    if (!anim) {
-      const id = requestAnimationFrame(() => setAnim(true));
-      return () => cancelAnimationFrame(id);
-    }
-  }, [anim]);
-
   useEffect(() => {
     resetTimer();
-    return () => {
-      pauseTimer();
-    };
+    return () => pauseTimer();
   }, [resetTimer, pauseTimer]);
 
   const activeBullet = ((idx % n) + n) % n;
@@ -118,8 +98,6 @@ function useInfiniteSlider(autoMs: number, n: number) {
     goNext,
     goPrev,
     goTo,
-    anim,
-    onTransitionEnd,
     activeBullet,
     resetTimer,
     pauseTimer,
@@ -128,75 +106,34 @@ function useInfiniteSlider(autoMs: number, n: number) {
 
 function FeaturedHeading() {
   return (
-    <div className="w-full mb-6 md:mb-8 select-none">
-      <div className="md:hidden">
-        <StaggeredHeading
-          staggerDelay={0.07}
-          lines={[
-            {
-              words: [{ text: 'Featured', color: BLACK }],
-              className: 'text-[clamp(36px,11vw,52px)] leading-[0.92] tracking-[-0.03em]',
-            },
-            {
-              words: [
-                { text: 'Case', color: ACCENT },
-                { text: 'Studies', color: ACCENT },
-              ],
-              className: 'mt-1 text-[clamp(24px,7vw,34px)] leading-tight tracking-[0.02em]',
-            },
-          ]}
-        />
+    <div className="flex flex-col gap-3 mb-6 md:mb-8 select-none">
+      <div className="inline-flex w-fit items-center gap-2 rounded-full border border-[#bac9cc] bg-white px-4 py-2 shadow-sm transition-transform hover:-translate-y-0.5">
+        <span className="h-2 w-2 animate-pulse rounded-full bg-[#15b6e8]" />
+        <span className="text-xs font-semibold tracking-wide text-[#3b494c]">
+          Case Studies
+        </span>
       </div>
-
-      <div className="hidden md:block">
-        <StaggeredHeading
-          staggerDelay={0.07}
-          lines={[
-            {
-              words: [{ text: 'Featured', color: BLACK }],
-              className: 'text-[clamp(72px,6vw,120px)] leading-[0.95]',
-            },
-            {
-              words: [
-                { text: 'Case', color: ACCENT },
-                { text: 'Studies', color: ACCENT },
-              ],
-              className: 'text-[clamp(46px,3.5vw,74px)] leading-[0.95]',
-            },
-          ]}
-        />
-      </div>
+      
+      <h2 className="flex flex-col text-4xl font-extrabold tracking-tight md:text-6xl lg:text-7xl 2xl:text-8xl">
+        <span className="text-[#161d1e]">Featured</span>
+        <span className="bg-gradient-to-b from-[#15b6e8] to-transparent bg-clip-text text-transparent">Case Studies</span>
+      </h2>
     </div>
   );
 }
 
 export default function CaseStudiesSection() {
-  const vw = useVW();
+  const sectionRef = useRef<HTMLElement>(null);
+  const containerWidth = useContainerWidth(sectionRef);
   const reduced = useReducedMotion();
 
   const mainItems = MAIN_CASE_STUDIES;
   const subItems = SUB_CASE_STUDIES;
-
   const mainN = mainItems.length;
   const subN = subItems.length;
 
-  const mainTriple = useMemo(() => [...mainItems, ...mainItems, ...mainItems], [mainItems]);
-  const subTriple = useMemo(() => [...subItems, ...subItems, ...subItems], [subItems]);
-
   const mainSlider = useInfiniteSlider(5000, mainN);
   const subSlider = useInfiniteSlider(5000, subN);
-
-  const mainCardRef = useRef<HTMLDivElement>(null);
-  const mainCardW = useElWidth(mainCardRef);
-
-  const gapPx = 0;
-  const mainStep = mainCardW + gapPx;
-  const mainTx = mainCardW > 0 ? vw / 2 - mainCardW / 2 - mainSlider.idx * mainStep : 0;
-
-  const subCardRef = useRef<HTMLDivElement>(null);
-  const subCardW = useElWidth(subCardRef);
-  const subStep = subCardW + SUB_GAP;
-  const subTx = subCardW > 0 ? vw / 2 - subCardW / 2 - subSlider.idx * subStep : 0;
 
   const [selected, setSelected] = useState<CaseStudy | null>(null);
 
@@ -204,8 +141,51 @@ export default function CaseStudiesSection() {
     setSelected(null);
   }, []);
 
+  // Compute responsive card widths and track offsets cleanly based on measured container dimensions
+  const vw = containerWidth || (typeof window !== 'undefined' ? window.innerWidth : 1200);
+
+  // Main Card Dimensions
+  const mainCardW = useMemo(() => {
+    if (vw < 640) return vw * 0.80;
+    if (vw < 768) return vw * 0.60;
+    if (vw < 1280) return vw * 0.65;
+    if (vw < 1536) return vw * 0.48;
+    return vw * 0.40;
+  }, [vw]);
+
+  const mainCardH = useMemo(() => {
+    return vw < 768 ? mainCardW / (16 / 9) : mainCardW / (16 / 8.5);
+  }, [vw, mainCardW]);
+
+  const mainStep = mainCardW;
+  const mainTx = vw / 2 - mainCardW / 2 - mainSlider.idx * mainStep;
+
+  // Sub Card Dimensions
+  const subCardW = useMemo(() => {
+    if (vw < 640) return vw * 0.70;
+    if (vw < 768) return vw * 0.48;
+    if (vw < 1024) return vw * 0.42;
+    if (vw < 1280) return vw * 0.32;
+    if (vw < 1536) return vw * 0.24;
+    return vw * 0.20;
+  }, [vw]);
+
+  const subCardH = useMemo(() => subCardW / (16 / 9), [subCardW]);
+  const subStep = subCardW + SUB_GAP;
+  const subTx = vw / 2 - subCardW / 2 - subSlider.idx * subStep;
+
+  // Sliding Window: Render ONLY 5 virtual slides around current active index (2 on left, active, 2 on right)
+  const mainVirtualIndices = useMemo(() => {
+    return [mainSlider.idx - 2, mainSlider.idx - 1, mainSlider.idx, mainSlider.idx + 1, mainSlider.idx + 2];
+  }, [mainSlider.idx]);
+
+  const subVirtualIndices = useMemo(() => {
+    return [subSlider.idx - 2, subSlider.idx - 1, subSlider.idx, subSlider.idx + 1, subSlider.idx + 2];
+  }, [subSlider.idx]);
+
   return (
     <section
+      ref={sectionRef}
       className="relative w-full bg-surface py-16 md:py-24 overflow-hidden font-[family-name:var(--font-dm-sans)] text-on-surface select-none"
       id="case-studies"
       onContextMenu={(e) => e.preventDefault()}
@@ -230,27 +210,34 @@ export default function CaseStudiesSection() {
         {/* MAIN SLIDER */}
         <div
           className="relative w-full overflow-hidden select-none py-4"
+          style={{ height: mainCardH + 32 }}
           onMouseEnter={() => mainSlider.pauseTimer()}
           onMouseLeave={() => mainSlider.resetTimer()}
         >
           <motion.div
-            className="flex items-center"
+            className="absolute top-4 left-0 h-full will-change-transform"
             animate={{ x: mainTx }}
-            transition={{
-              duration: mainSlider.anim ? 0.7 : 0,
-              ease: [0.25, 1, 0.5, 1],
-            }}
-            onAnimationComplete={mainSlider.onTransitionEnd}
+            transition={{ duration: 0.7, ease: [0.25, 1, 0.5, 1] }}
           >
-            {mainTriple.map((study, idx) => {
-              const isCenter = idx === mainSlider.idx;
-              const distanceFromCenter = Math.abs(idx - mainSlider.idx);
+            {mainVirtualIndices.map((vIndex) => {
+              const itemIdx = ((vIndex % mainN) + mainN) % mainN;
+              const study = mainItems[itemIdx];
+              const isCenter = vIndex === mainSlider.idx;
+              const distanceFromCenter = Math.abs(vIndex - mainSlider.idx);
+              const isFar = distanceFromCenter >= 2;
 
               return (
                 <div
-                  key={`main-${study.id}-${idx}`}
-                  ref={idx === 0 ? mainCardRef : undefined}
-                  className="w-[80vw] sm:w-[60vw] md:w-[65vw] xl:w-[48vw] 2xl:w-[40vw] shrink-0 group select-none"
+                  key={`main-v-${vIndex}`}
+                  style={{
+                    position: 'absolute',
+                    left: `${vIndex * mainStep}px`,
+                    width: `${mainCardW}px`,
+                    height: `${mainCardH}px`,
+                    contentVisibility: isFar ? 'auto' : undefined,
+                    contain: isFar ? 'layout paint style' : undefined,
+                  }}
+                  className="shrink-0 group select-none"
                   onContextMenu={(e) => e.preventDefault()}
                 >
                   <motion.div
@@ -260,25 +247,31 @@ export default function CaseStudiesSection() {
                     }}
                     transition={{ duration: 0.5, ease: [0.25, 1, 0.5, 1] }}
                     data-cursor="project"
-                    className="relative aspect-[16/9] md:aspect-[16/8.5] rounded-2xl overflow-hidden cursor-pointer bg-surface-bright shadow-2xl origin-center select-none"
+                    className="relative w-full h-full rounded-2xl overflow-hidden cursor-pointer bg-surface-bright shadow-2xl origin-center select-none"
                     onClick={() => setSelected(study)}
                   >
                     <Image
                       src={study.thumbnail}
                       alt={study.title}
                       fill
-                      sizes="(max-width: 768px) 85vw, (max-width: 1200px) 60vw, 850px"
-                      quality={85}
+                      sizes="(max-width: 640px) 80vw, (max-width: 768px) 60vw, (max-width: 1280px) 65vw, 48vw"
+                      quality={80}
+                      loading={isCenter ? 'eager' : 'lazy'}
+                      priority={isCenter}
                       draggable={false}
                       onDragStart={(e) => e.preventDefault()}
                       style={{ userSelect: 'none', WebkitUserDrag: 'none' } as React.CSSProperties}
                       className={`object-cover transition-all duration-500 ease-out group-hover:scale-105 pointer-events-none select-none ${
-                        !isCenter ? 'filter blur-[2px] brightness-75' : 'filter-none'
+                        !isCenter && !isFar ? 'filter blur-[2px] brightness-75' : ''
                       }`}
                     />
 
-                    {!isCenter && (
+                    {!isCenter && !isFar && (
                       <div className="absolute inset-0 bg-black/30 backdrop-blur-[2px] transition-all duration-500 pointer-events-none" />
+                    )}
+
+                    {!isCenter && isFar && (
+                      <div className="absolute inset-0 bg-black/40 pointer-events-none" />
                     )}
 
                     {study.isVideo && (
@@ -342,55 +335,68 @@ export default function CaseStudiesSection() {
           </button>
         </div>
 
-        {/* SUB SLIDER (Landscape sizes, uniform focus) */}
+        {/* SUB SLIDER */}
         <div
           className="relative w-full my-1 select-none overflow-hidden py-2"
+          style={{ height: subCardH + 16 }}
           onMouseEnter={() => subSlider.pauseTimer()}
           onMouseLeave={() => subSlider.resetTimer()}
         >
           <motion.div
-            className="flex items-center"
-            style={{ gap: `${SUB_GAP}px` }}
+            className="absolute top-2 left-0 h-full will-change-transform"
             animate={{ x: subTx }}
-            transition={{
-              duration: subSlider.anim ? 0.5 : 0,
-              ease: [0.25, 1, 0.5, 1],
-            }}
-            onAnimationComplete={subSlider.onTransitionEnd}
+            transition={{ duration: 0.5, ease: [0.25, 1, 0.5, 1] }}
           >
-            {subTriple.map((study, idx) => {
-              const isCenter = idx === subSlider.idx;
+            {subVirtualIndices.map((vIndex) => {
+              const itemIdx = ((vIndex % subN) + subN) % subN;
+              const study = subItems[itemIdx];
+              const isCenter = vIndex === subSlider.idx;
+              const distanceFromCenter = Math.abs(vIndex - subSlider.idx);
+              const isFar = distanceFromCenter >= 2;
 
               return (
                 <div
-                  key={`sub-${study.id}-${idx}`}
-                  ref={idx === 0 ? subCardRef : undefined}
+                  key={`sub-v-${vIndex}`}
                   onClick={() => setSelected(study)}
                   onContextMenu={(e) => e.preventDefault()}
-                  className={`w-[70vw] sm:w-[48vw] md:w-[42vw] lg:w-[32vw] xl:w-[24vw] 2xl:w-[20vw] shrink-0 group cursor-pointer overflow-hidden rounded-xl border bg-surface-bright shadow-lg transition-all duration-500 select-none ${
+                  style={{
+                    position: 'absolute',
+                    left: `${vIndex * subStep}px`,
+                    width: `${subCardW}px`,
+                    height: `${subCardH}px`,
+                    contentVisibility: isFar ? 'auto' : undefined,
+                    contain: isFar ? 'layout paint style' : undefined,
+                  }}
+                  className={`shrink-0 group cursor-pointer overflow-hidden rounded-xl border bg-surface-bright shadow-lg transition-all duration-500 select-none ${
                     isCenter
                       ? 'border-[var(--color-accent)]/80 opacity-100'
                       : 'border-white/10 opacity-75'
                   }`}
                   data-cursor="project"
                 >
-                  <div className="relative aspect-[16/9] overflow-hidden select-none">
+                  <div className="relative w-full h-full overflow-hidden select-none">
                     <Image
                       src={study.thumbnail}
                       alt={study.title}
                       fill
-                      sizes="(max-width: 768px) 70vw, (max-width: 1200px) 35vw, 400px"
-                      quality={85}
+                      sizes="(max-width: 640px) 70vw, (max-width: 768px) 48vw, (max-width: 1024px) 42vw, 32vw"
+                      quality={80}
+                      loading={isCenter ? 'eager' : 'lazy'}
+                      priority={isCenter}
                       draggable={false}
                       onDragStart={(e) => e.preventDefault()}
                       style={{ userSelect: 'none', WebkitUserDrag: 'none' } as React.CSSProperties}
                       className={`object-cover transition-all duration-500 ease-out group-hover:scale-105 pointer-events-none select-none ${
-                        !isCenter ? 'filter blur-[1.5px] brightness-75' : 'filter-none'
+                        !isCenter && !isFar ? 'filter blur-[1.5px] brightness-75' : ''
                       }`}
                     />
 
-                    {!isCenter && (
+                    {!isCenter && !isFar && (
                       <div className="absolute inset-0 bg-black/30 backdrop-blur-[1px] transition-all duration-300 pointer-events-none" />
+                    )}
+
+                    {!isCenter && isFar && (
+                      <div className="absolute inset-0 bg-black/40 pointer-events-none" />
                     )}
 
                     {study.isVideo && (
@@ -430,7 +436,7 @@ export default function CaseStudiesSection() {
           {subItems.map((_, idx) => (
             <button
               key={`dot-${idx}`}
-              onClick={() => subSlider.goTo(subN + idx, subSlider.idx)}
+              onClick={() => subSlider.goTo(idx)}
               className={`transition-all duration-500 rounded-full h-2 ${
                 subSlider.activeBullet === idx
                   ? 'w-8 bg-[var(--color-accent)]'

@@ -13,40 +13,18 @@ const ACCENT = '#15b6e8';
 
 function LatestWorkHeading() {
   return (
-    <div className="w-full">
-      {/* Mobile Heading */}
-      <div className="md:hidden">
-        <StaggeredHeading
-          staggerDelay={0.07}
-          lines={[
-            {
-              words: [{ text: 'Latest', color: BLACK }],
-              className: 'text-[clamp(56px,18vw,84px)] leading-[0.92] tracking-[-0.05em]',
-            },
-            {
-              words: [{ text: 'Work', color: ACCENT }],
-              className: 'mt-2 text-[clamp(48px,10vw,72px)] leading-none tracking-[0.06em]',
-            },
-          ]}
-        />
+    <div className="flex flex-col gap-3 select-none">
+      <div className="inline-flex w-fit items-center gap-2 rounded-full border border-[#bac9cc] bg-white px-4 py-2 shadow-sm transition-transform hover:-translate-y-0.5">
+        <span className="h-2 w-2 animate-pulse rounded-full bg-[#15b6e8]" />
+        <span className="text-xs font-semibold tracking-wide text-[#3b494c]">
+          Latest Work
+        </span>
       </div>
-
-      {/* Desktop Heading */}
-      <div className="hidden md:block">
-        <StaggeredHeading
-          staggerDelay={0.07}
-          lines={[
-            {
-              words: [{ text: 'Latest', color: BLACK }],
-              className: 'text-[clamp(72px,6vw,120px)] leading-[0.95]',
-            },
-            {
-              words: [{ text: 'Work', color: ACCENT }],
-              className: 'text-[clamp(56px,4.5vw,84px)] leading-[0.95]',
-            },
-          ]}
-        />
-      </div>
+      
+      <h2 className="flex flex-col text-4xl font-extrabold tracking-tight md:text-6xl lg:text-7xl 2xl:text-8xl">
+        <span className="text-[#161d1e]">Latest</span>
+        <span className="bg-gradient-to-b from-[#15b6e8] to-transparent bg-clip-text text-transparent">Work</span>
+      </h2>
     </div>
   );
 }
@@ -67,7 +45,7 @@ function yt(id: string, title: string, category: 'Animation' = 'Animation'): Pro
     id,
     title,
     category,
-    imageUrl: `/images/case-studies/${id}.jpg`,
+    imageUrl: `/images/case-studies/${id}.webp`,
     embedUrl: `https://www.youtube.com/embed/${id}?autoplay=1&rel=0`,
     isVideo: true,
   };
@@ -78,7 +56,7 @@ function yt_drone(id: string, title: string, category: 'Drone Animation' = 'Dron
     id,
     title,
     category,
-    imageUrl: `/images/case-studies/${id}.jpg`,
+    imageUrl: `/images/case-studies/${id}.webp`,
     embedUrl: `https://www.youtube.com/embed/${id}?autoplay=1&rel=0`,
     isVideo: true,
   };
@@ -107,10 +85,10 @@ function webProject(id: string, title: string, path: string, projectUrl: string)
 }
 
 const ALL_PROJECTS: Project[] = [
-  webProject('web-ce', 'CE and Builders', '/images/ce-and-builders.png', 'https://ceandbuilders.com/'),
-  webProject('web-nayyer', 'Nayyer Builders', '/images/nayyer-builder.png', 'https://nayyerbuilders.com/'),
-  webProject('web-kurta', 'Kurta Dukan', '/images/kurta-Dukan.png', 'https://www.kurtadukan.com/'),
-  webProject('web-leather', 'Leather Crafted', '/images/leather-crafted.png', 'https://leather-crafted.com/'),
+  webProject('web-ce', 'CE and Builders', '/images/ce-and-builders.webp', 'https://ceandbuilders.com/'),
+  webProject('web-nayyer', 'Nayyer Builders', '/images/nayyer-builder.webp', 'https://nayyerbuilders.com/'),
+  webProject('web-kurta', 'Kurta Dukan', '/images/kurta-Dukan.webp', 'https://www.kurtadukan.com/'),
+  webProject('web-leather', 'Leather Crafted', '/images/leather-crafted.webp', 'https://leather-crafted.com/'),
   yt('QM7FBByPTX8', 'I Handle The Heat', 'Animation'),
   yt('SXNb1vR_snw', 'NS Arcade | 3D Animation', 'Animation'),
   yt('Jq_njk26M3E', 'Commtel | 3D Design & Animation', 'Animation'),

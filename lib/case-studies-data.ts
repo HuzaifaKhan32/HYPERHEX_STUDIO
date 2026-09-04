@@ -17,7 +17,7 @@ function createCaseStudy(
     id,
     title,
     category,
-    thumbnail: `/images/case-studies/${id}.jpg`,
+    thumbnail: `/images/case-studies/${id}.webp`,
     embedUrl: `https://www.youtube.com/embed/${id}?autoplay=1&rel=0`,
     isVideo,
   };

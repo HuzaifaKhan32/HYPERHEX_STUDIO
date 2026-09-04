@@ -8,25 +8,25 @@ import { useRef, useState, useEffect } from 'react';
 const carouselImages = [
   {
     src: '/media/hero-loop-4.mp4',
-    poster: '/media/hero-loop-4-thumbnail.png',
+    poster: '/media/hero-loop-4-thumbnail.webp',
     alt: 'Hero 3D Showcase Video',
     type: 'video' as const,
   },
   {
     src: '/media/hero-loop-5.mp4',
-    poster: '/media/hero-loop-5-thumbnail.png',
+    poster: '/media/hero-loop-5-thumbnail.webp',
     alt: 'Hero 3D Showcase Video',
     type: 'video' as const,
   },
   {
     src: '/media/hero-loop-6.mp4',
-    poster: '/media/hero-loop-6-thumbnail.png',
+    poster: '/media/hero-loop-6-thumbnail.webp',
     alt: 'Hero 3D Showcase Video',
     type: 'video' as const,
   },
   {
     src: '/media/hero-loop-7.mp4',
-    poster: '/media/hero-loop-7-thumbnail.png',
+    poster: '/media/hero-loop-7-thumbnail.webp',
     alt: 'Hero 3D Showcase Video',
     type: 'video' as const,
   },

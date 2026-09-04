@@ -16,7 +16,7 @@ export const services: ServiceItem[] = [
     description:
       'Photorealistic renders and spatial studies that communicate form, light, and material before a single beam is placed.',
     panel: 'cyan',
-    href: '#contact',
+    href: '#works',
     icon: (
       <svg className={iconClass} viewBox="0 0 24 24" fill="none" aria-hidden="true">
         <path d="M3 21h18M5 21V9l7-5 7 5v12" stroke="currentColor" strokeWidth="1.75" strokeLinejoin="round" />
@@ -29,7 +29,7 @@ export const services: ServiceItem[] = [
     description:
       'Studio-grade product modeling and rendering for e-commerce, pitch decks, and launch campaigns.',
     panel: 'ink',
-    href: '#contact',
+    href: '#works',
     icon: (
       <svg className={iconClass} viewBox="0 0 24 24" fill="none" aria-hidden="true">
         <path d="M12 3 4.5 7.5v9L12 21l7.5-4.5v-9L12 3Z" stroke="currentColor" strokeWidth="1.75" strokeLinejoin="round" />
@@ -42,7 +42,7 @@ export const services: ServiceItem[] = [
     description:
       'Real-time configurators that let users swap materials, colors, and options with instant visual feedback.',
     panel: 'cyan',
-    href: '#contact',
+    href: '#works',
     icon: (
       <svg className={iconClass} viewBox="0 0 24 24" fill="none" aria-hidden="true">
         <rect x="3" y="7" width="18" height="12" rx="2" stroke="currentColor" strokeWidth="1.75" />
@@ -56,7 +56,7 @@ export const services: ServiceItem[] = [
     description:
       'High-end procedural animations and physics-based simulations for hyper-realistic visual storytelling.',
     panel: 'ink',
-    href: '#contact',
+    href: '#works',
     icon: (
       <svg className={iconClass} viewBox="0 0 24 24" fill="none" aria-hidden="true">
         <path
@@ -73,7 +73,7 @@ export const services: ServiceItem[] = [
     description:
       'Immersive spatial interfaces, scroll-driven narratives, and avant-garde UI/UX built for the browser.',
     panel: 'cyan',
-    href: '#contact',
+    href: '#works',
     icon: (
       <svg className={iconClass} viewBox="0 0 24 24" fill="none" aria-hidden="true">
         <rect x="2" y="4" width="20" height="16" rx="2" stroke="currentColor" strokeWidth="1.75" />
@@ -86,7 +86,7 @@ export const services: ServiceItem[] = [
     description:
       'Room-scale and standalone VR experiences for product demos, training, and brand activations.',
     panel: 'ink',
-    href: '#contact',
+    href: '#works',
     icon: (
       <svg className={iconClass} viewBox="0 0 24 24" fill="none" aria-hidden="true">
         <path
@@ -103,7 +103,7 @@ export const services: ServiceItem[] = [
     description:
       'Unreal and WebGL pipelines for live configurators, digital twins, and real-time visualization.',
     panel: 'cyan',
-    href: '#contact',
+    href: '#works',
     icon: (
       <svg className={iconClass} viewBox="0 0 24 24" fill="none" aria-hidden="true">
         <circle cx="12" cy="12" r="8" stroke="currentColor" strokeWidth="1.75" />
@@ -116,7 +116,7 @@ export const services: ServiceItem[] = [
     description:
       'Performance-first Next.js builds, design-system integration, and production-ready front-end architecture.',
     panel: 'ink',
-    href: '#contact',
+    href: '#works',
     icon: (
       <svg className={iconClass} viewBox="0 0 24 24" fill="none" aria-hidden="true">
         <path d="M8 6l-4 6 4 6M16 6l4 6-4 6M14 4l-4 16" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" />
@@ -128,7 +128,7 @@ export const services: ServiceItem[] = [
     description:
       'Campaign visuals, conversion-focused landing experiences, and sales enablement assets that drive revenue.',
     panel: 'cyan',
-    href: '#contact',
+    href: '#works',
     icon: (
       <svg className={iconClass} viewBox="0 0 24 24" fill="none" aria-hidden="true">
         <path
@@ -146,7 +146,7 @@ export const services: ServiceItem[] = [
     description:
       'Dynamic aerial cinematography and FPV drone simulations designed for high-impact visual narratives.',
     panel: 'cyan',
-    href: '#contact',
+    href: '#works',
     icon: (
       <svg className={iconClass} viewBox="0 0 24 24" fill="none" aria-hidden="true">
         <path d="M12 12m-2 0a2 2 0 1 0 4 0a2 2 0 1 0-4 0" stroke="currentColor" strokeWidth="1.75" />
@@ -165,7 +165,7 @@ export const droneAnimationService: ServiceItem = {
   description:
     'Dynamic aerial cinematography and FPV drone simulations designed for high-impact visual narratives.',
   panel: 'cyan',
-  href: '#contact',
+  href: '#works',
   icon: (
     <svg className={iconClass} viewBox="0 0 24 24" fill="none" aria-hidden="true">
       <path d="M12 12m-2 0a2 2 0 1 0 4 0a2 2 0 1 0-4 0" stroke="currentColor" strokeWidth="1.75" />

@@ -97,7 +97,7 @@ function MobileMenu({ isOpen, onClose }: { isOpen: boolean; onClose: () => void 
                 <div className="flex items-center gap-2.5">
                   <div className="relative h-9 w-9 rounded-full overflow-hidden border border-black/10">
                     <Image
-                      src="/logo/hyperhex-logo-H.png"
+                      src="/logo/hyperhex-logo-H.avif"
                       alt="HyperHex"
                       fill
                       sizes="36px"
@@ -243,7 +243,7 @@ export default function Navbar() {
               className="relative z-10 flex h-11 w-11 2xl:h-14 2xl:w-14 shrink-0 items-center justify-center overflow-hidden rounded-full border border-white/20 bg-black/10 hover:scale-105 transition-transform duration-200"
             >
               <Image
-                src="/logo/hyperhex-logo-H.png"
+                src="/logo/hyperhex-logo-H.avif"
                 alt="HyperHex Logo"
                 fill
                 sizes="56px"

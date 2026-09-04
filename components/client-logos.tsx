@@ -2,17 +2,17 @@ import Image from 'next/image';
 
 // Exact paths matching your public/ folder filenames
 const CLIENT_LOGO_PATHS = {
-  ahsan_associates: '/clients-logo/ahsan-associates.png',
-  ahsan_town: '/clients-logo/ahsan-town.png',
-  ashaab: '/clients-logo/Ashaab_Logo_Final-03-removebg-preview.png',
-  ce_and_builders: '/clients-logo/CE AND BUILDERS.png',
-  commtel: '/clients-logo/COMMTEL-removebg-preview.png',
-  dha_city: '/clients-logo/dha city.png',
-  ivf_academy: '/clients-logo/IVF ACADEMY USA.png',
-  khalifa: '/clients-logo/KHALIFA-removebg-preview.png',
-  lakhani: '/clients-logo/LAKHANI PROPERTIES.png',
-  nayyer: '/clients-logo/Nayyer-Logo-FF-01-(1)-01-22.png',
-  stadium_view: '/clients-logo/Stadium View Residencia_Upper Case Logo-02.png',
+  ahsan_associates: '/clients-logo/ahsan-associates.webp',
+  ahsan_town: '/clients-logo/ahsan-town.webp',
+  ashaab: '/clients-logo/Ashaab_Logo_Final-03-removebg-preview.webp',
+  ce_and_builders: '/clients-logo/CE AND BUILDERS-2.webp',
+  commtel: '/clients-logo/COMMTEL-removebg-preview.webp',
+  dha_city: '/clients-logo/dha-city.webp',
+  ivf_academy: '/clients-logo/IVF ACADEMY USA.webp',
+  khalifa: '/clients-logo/KHALIFA-removebg-preview.webp',
+  lakhani: '/clients-logo/LAKHANI PROPERTIES.webp',
+  nayyer: '/clients-logo/Nayyer-Logo-FF-01-(1)-01-22.webp',
+  stadium_view: '/clients-logo/Stadium View Residencia_Upper Case Logo-02.webp',
 } as const;
 
 export type ClientLogoId = keyof typeof CLIENT_LOGO_PATHS;

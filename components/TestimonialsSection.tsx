@@ -131,44 +131,18 @@ export default function HyperHexTestimonials() {
       <div className="max-w-[1280px] mx-auto px-5 lg:px-16 flex flex-col">
 
         {/* Header & Control Buttons */}
-        <div className="flex items-end justify-between mb-8 gap-4">
-          <div>
-            <div className="inline-flex items-center gap-2 bg-[#f4fafd] px-3.5 py-1 rounded-full border border-[#bac9cc] mb-3">
-              <span className="w-2 h-2 rounded-full bg-[#15b6e8]" />
-              <span className="text-xs font-semibold tracking-wider uppercase text-[#006875]">
-                Testimonials
-              </span>
-            </div>
-
-            <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-[#161d1e] uppercase">
-              Don't just <span className="text-[#15b6e8]">take</span> our word
-            </h2>
+        <div className="flex flex-col gap-3 mb-8">
+          <div className="inline-flex w-fit items-center gap-2 rounded-full border border-[#bac9cc] bg-white px-4 py-2 shadow-sm transition-transform hover:-translate-y-0.5">
+            <span className="h-2 w-2 animate-pulse rounded-full bg-[#15b6e8]" />
+            <span className="text-xs font-semibold tracking-wide text-[#3b494c]">
+              Testimonials
+            </span>
           </div>
 
-          {/* Previous & Next Control Buttons */}
-          {/* <div className="flex items-center gap-2">
-            <button
-              type="button"
-              onClick={() => handleScroll('left')}
-              aria-label="Previous Testimonial"
-              className="flex items-center justify-center w-12 h-12 rounded-xl border-2 border-outline-variant/30 text-on-surface shadow-[0_4px_0_0_var(--color-outline-variant)] hover:border-accent hover:text-accent hover:shadow-[0_4px_0_0_rgba(21,182,232,1)] hover:-translate-y-0.5 active:shadow-[0_0px_0_0_rgba(21,182,232,1)] active:translate-y-1 transition-all duration-150"
-            >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
-              </svg>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => handleScroll('right')}
-              aria-label="Next Testimonial"
-              className="flex items-center justify-center w-12 h-12 rounded-xl border-2 border-outline-variant/30 text-on-surface shadow-[0_4px_0_0_var(--color-outline-variant)] hover:border-accent hover:text-accent hover:shadow-[0_4px_0_0_rgba(21,182,232,1)] hover:-translate-y-0.5 active:shadow-[0_0px_0_0_rgba(21,182,232,1)] active:translate-y-1 transition-all duration-150"
-            >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-              </svg>
-            </button>
-          </div> */}
+          <h2 className="flex flex-col text-4xl font-extrabold tracking-tight md:text-6xl lg:text-7xl 2xl:text-8xl">
+            <span className="text-[#161d1e]">Don't Just Take</span>
+            <span className="bg-gradient-to-b from-[#15b6e8] to-transparent bg-clip-text text-transparent">Our Word</span>
+          </h2>
         </div>
 
         {/* Carousel Container */}
