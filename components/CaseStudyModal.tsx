@@ -61,7 +61,10 @@ export default function CaseStudyModal({ caseStudy, onClose }: CaseStudyModalPro
             transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
             className="relative z-10 w-full max-w-4xl max-h-[85vh] flex flex-col"
           >
-            <div className="bg-[#111617] rounded-2xl overflow-hidden shadow-2xl relative w-full flex flex-col border border-white/10">
+            <div 
+              className="bg-[#111617] rounded-2xl overflow-hidden shadow-2xl relative w-full flex flex-col border border-white/10 select-none"
+              onContextMenu={(e) => e.preventDefault()}
+            >
               {/* Close Button */}
               <button
                 onClick={onClose}
@@ -98,13 +101,16 @@ export default function CaseStudyModal({ caseStudy, onClose }: CaseStudyModalPro
                   />
                 </div>
               ) : (
-                <div className="relative w-full aspect-video overflow-hidden bg-black flex items-center justify-center">
+                <div className="relative w-full aspect-video overflow-hidden bg-black flex items-center justify-center select-none">
                   <Image
                     src={caseStudy.thumbnail}
                     alt={caseStudy.title}
                     fill
                     sizes="(max-width: 1024px) 100vw, 896px"
-                    className="object-contain"
+                    draggable={false}
+                    onDragStart={(e) => e.preventDefault()}
+                    style={{ userSelect: 'none', WebkitUserDrag: 'none' } as React.CSSProperties}
+                    className="object-contain select-none pointer-events-none"
                     priority
                   />
                 </div>

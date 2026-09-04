@@ -34,6 +34,9 @@ export const MAIN_CASE_STUDIES: CaseStudy[] = [
 
 // ── Sub Featured Case Studies (Deduplicated, Unique) ───────────────────────
 export const SUB_CASE_STUDIES: CaseStudy[] = [
+  createCaseStudy('QM7FBByPTX8', 'I Handle The Heat', 'AI 3D Animation'),
+  createCaseStudy('SXNb1vR_snw', 'NS Arcade', 'Architectural Visualization'),
+  createCaseStudy('Jq_njk26M3E', 'Commtel', '3D Design & Planning'),
   createCaseStudy('QhWmY9lXlZY', 'Modern Apartment Interior Design ', '3D Visualization'),
   createCaseStudy('oQnWA-22Bf4', 'Governor House – Conference Room', '3D Visualization'),
   createCaseStudy('9JFPZnPXQ1Y', 'Call Center Interior 3D', '3D Planning'),

@@ -42,13 +42,20 @@ function useInfiniteSlider(autoMs: number, n: number) {
   const [anim, setAnim] = useState(true);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
+  const pauseTimer = useCallback(() => {
+    if (timerRef.current) {
+      clearInterval(timerRef.current);
+      timerRef.current = null;
+    }
+  }, []);
+
   const resetTimer = useCallback(() => {
-    if (timerRef.current) clearInterval(timerRef.current);
+    pauseTimer();
     timerRef.current = setInterval(() => {
       setAnim(true);
       setIdx((p) => p + 1);
     }, autoMs);
-  }, [autoMs]);
+  }, [autoMs, pauseTimer]);
 
   const goNext = useCallback(() => {
     setAnim(true);
@@ -100,17 +107,28 @@ function useInfiniteSlider(autoMs: number, n: number) {
   useEffect(() => {
     resetTimer();
     return () => {
-      if (timerRef.current) clearInterval(timerRef.current);
+      pauseTimer();
     };
-  }, [resetTimer]);
+  }, [resetTimer, pauseTimer]);
 
   const activeBullet = ((idx % n) + n) % n;
-  return { idx, setIdx, goNext, goPrev, goTo, anim, onTransitionEnd, activeBullet, resetTimer };
+
+  return {
+    idx,
+    goNext,
+    goPrev,
+    goTo,
+    anim,
+    onTransitionEnd,
+    activeBullet,
+    resetTimer,
+    pauseTimer,
+  };
 }
 
 function FeaturedHeading() {
   return (
-    <div className="w-full mb-6 md:mb-8">
+    <div className="w-full mb-6 md:mb-8 select-none">
       <div className="md:hidden">
         <StaggeredHeading
           staggerDelay={0.07}
@@ -171,7 +189,7 @@ export default function CaseStudiesSection() {
   const mainCardRef = useRef<HTMLDivElement>(null);
   const mainCardW = useElWidth(mainCardRef);
 
-  const gapPx = 0; 
+  const gapPx = 0;
   const mainStep = mainCardW + gapPx;
   const mainTx = mainCardW > 0 ? vw / 2 - mainCardW / 2 - mainSlider.idx * mainStep : 0;
 
@@ -186,32 +204,11 @@ export default function CaseStudiesSection() {
     setSelected(null);
   }, []);
 
-  const handleDragEndMain = (_: unknown, info: { offset: { x: number } }) => {
-    const threshold = 50;
-    if (info.offset.x < -threshold) {
-      mainSlider.goNext();
-    } else if (info.offset.x > threshold) {
-      mainSlider.goPrev();
-    } else {
-      mainSlider.resetTimer();
-    }
-  };
-
-  const handleDragEndSub = (_: unknown, info: { offset: { x: number } }) => {
-    const threshold = 40;
-    if (info.offset.x < -threshold) {
-      subSlider.goNext();
-    } else if (info.offset.x > threshold) {
-      subSlider.goPrev();
-    } else {
-      subSlider.resetTimer();
-    }
-  };
-
   return (
     <section
-      className="relative w-full bg-surface py-16 md:py-24 overflow-hidden font-[family-name:var(--font-dm-sans)] text-on-surface"
+      className="relative w-full bg-surface py-16 md:py-24 overflow-hidden font-[family-name:var(--font-dm-sans)] text-on-surface select-none"
       id="case-studies"
+      onContextMenu={(e) => e.preventDefault()}
     >
       <div className="max-w-[1280px] xl:max-w-[1400px] 2xl:max-w-none mx-auto px-5 lg:px-16 2xl:px-24 mb-10">
         <FeaturedHeading />
@@ -231,20 +228,19 @@ export default function CaseStudiesSection() {
         }}
       >
         {/* MAIN SLIDER */}
-        <div className="relative w-full overflow-hidden select-none py-4">
+        <div
+          className="relative w-full overflow-hidden select-none py-4"
+          onMouseEnter={() => mainSlider.pauseTimer()}
+          onMouseLeave={() => mainSlider.resetTimer()}
+        >
           <motion.div
-            drag="x"
-            dragConstraints={{ left: 0, right: 0 }}
-            dragElastic={0.15}
-            onDragEnd={handleDragEndMain}
-            className="flex cursor-grab active:cursor-grabbing items-center"
-            style={{
-              transform: `translate3d(${mainTx}px, 0, 0)`,
-              transition: mainSlider.anim
-                ? 'transform 1200ms cubic-bezier(0.25, 1, 0.5, 1)'
-                : 'none',
+            className="flex items-center"
+            animate={{ x: mainTx }}
+            transition={{
+              duration: mainSlider.anim ? 0.7 : 0,
+              ease: [0.25, 1, 0.5, 1],
             }}
-            onTransitionEnd={mainSlider.onTransitionEnd}
+            onAnimationComplete={mainSlider.onTransitionEnd}
           >
             {mainTriple.map((study, idx) => {
               const isCenter = idx === mainSlider.idx;
@@ -254,7 +250,8 @@ export default function CaseStudiesSection() {
                 <div
                   key={`main-${study.id}-${idx}`}
                   ref={idx === 0 ? mainCardRef : undefined}
-                  className="w-[80vw] sm:w-[60vw] md:w-[65vw] xl:w-[48vw] 2xl:w-[40vw] shrink-0 group"
+                  className="w-[80vw] sm:w-[60vw] md:w-[65vw] xl:w-[48vw] 2xl:w-[40vw] shrink-0 group select-none"
+                  onContextMenu={(e) => e.preventDefault()}
                 >
                   <motion.div
                     animate={{
@@ -263,7 +260,7 @@ export default function CaseStudiesSection() {
                     }}
                     transition={{ duration: 0.5, ease: [0.25, 1, 0.5, 1] }}
                     data-cursor="project"
-                    className="relative aspect-[16/9] md:aspect-[16/8.5] rounded-2xl overflow-hidden cursor-pointer bg-surface-bright shadow-2xl origin-center"
+                    className="relative aspect-[16/9] md:aspect-[16/8.5] rounded-2xl overflow-hidden cursor-pointer bg-surface-bright shadow-2xl origin-center select-none"
                     onClick={() => setSelected(study)}
                   >
                     <Image
@@ -272,7 +269,10 @@ export default function CaseStudiesSection() {
                       fill
                       sizes="(max-width: 768px) 85vw, (max-width: 1200px) 60vw, 850px"
                       quality={85}
-                      className={`object-cover transition-all duration-700 ease-out group-hover:scale-105 ${
+                      draggable={false}
+                      onDragStart={(e) => e.preventDefault()}
+                      style={{ userSelect: 'none', WebkitUserDrag: 'none' } as React.CSSProperties}
+                      className={`object-cover transition-all duration-500 ease-out group-hover:scale-105 pointer-events-none select-none ${
                         !isCenter ? 'filter blur-[2px] brightness-75' : 'filter-none'
                       }`}
                     />
@@ -343,68 +343,85 @@ export default function CaseStudiesSection() {
         </div>
 
         {/* SUB SLIDER (Landscape sizes, uniform focus) */}
-        <div className="relative w-full my-1 select-none overflow-hidden py-2">
+        <div
+          className="relative w-full my-1 select-none overflow-hidden py-2"
+          onMouseEnter={() => subSlider.pauseTimer()}
+          onMouseLeave={() => subSlider.resetTimer()}
+        >
           <motion.div
-            drag="x"
-            dragConstraints={{ left: 0, right: 0 }}
-            dragElastic={0.15}
-            onDragEnd={handleDragEndSub}
-            className="flex items-center cursor-grab active:cursor-grabbing"
-            style={{
-              gap: `${SUB_GAP}px`,
-              transform: `translate3d(${subTx}px, 0, 0)`,
-              transition: subSlider.anim
-                ? 'transform 500ms cubic-bezier(0.25, 1, 0.5, 1)'
-                : 'none',
+            className="flex items-center"
+            style={{ gap: `${SUB_GAP}px` }}
+            animate={{ x: subTx }}
+            transition={{
+              duration: subSlider.anim ? 0.5 : 0,
+              ease: [0.25, 1, 0.5, 1],
             }}
-            onTransitionEnd={subSlider.onTransitionEnd}
+            onAnimationComplete={subSlider.onTransitionEnd}
           >
-            {subTriple.map((study, idx) => (
-              <div
-                key={`sub-${study.id}-${idx}`}
-                ref={idx === 0 ? subCardRef : undefined}
-                onClick={() => setSelected(study)}
-                className="w-[70vw] sm:w-[48vw] md:w-[42vw] lg:w-[32vw] xl:w-[24vw] 2xl:w-[20vw] shrink-0 group cursor-pointer overflow-hidden rounded-xl border border-white/10 bg-surface-bright shadow-lg hover:border-[var(--color-accent)]/50 transition-colors duration-300"
-                data-cursor="project"
-              >
-                <div className="relative aspect-[16/9] overflow-hidden">
-                  <Image
-                    src={study.thumbnail}
-                    alt={study.title}
-                    fill
-                    sizes="(max-width: 768px) 70vw, (max-width: 1200px) 35vw, 400px"
-                    quality={85}
-                    className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
-                  />
+            {subTriple.map((study, idx) => {
+              const isCenter = idx === subSlider.idx;
 
-                  {study.isVideo && (
-                    <div className="absolute top-3 right-3 z-10 w-7 h-7 rounded-full bg-black/50 border border-white/20 flex items-center justify-center pointer-events-none group-hover:opacity-0 transition-opacity duration-300">
-                      <svg className="w-3 h-3 text-white ml-0.5" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M8 5v14l11-7z" />
-                      </svg>
+              return (
+                <div
+                  key={`sub-${study.id}-${idx}`}
+                  ref={idx === 0 ? subCardRef : undefined}
+                  onClick={() => setSelected(study)}
+                  onContextMenu={(e) => e.preventDefault()}
+                  className={`w-[70vw] sm:w-[48vw] md:w-[42vw] lg:w-[32vw] xl:w-[24vw] 2xl:w-[20vw] shrink-0 group cursor-pointer overflow-hidden rounded-xl border bg-surface-bright shadow-lg transition-all duration-500 select-none ${
+                    isCenter
+                      ? 'border-[var(--color-accent)]/80 opacity-100'
+                      : 'border-white/10 opacity-75'
+                  }`}
+                  data-cursor="project"
+                >
+                  <div className="relative aspect-[16/9] overflow-hidden select-none">
+                    <Image
+                      src={study.thumbnail}
+                      alt={study.title}
+                      fill
+                      sizes="(max-width: 768px) 70vw, (max-width: 1200px) 35vw, 400px"
+                      quality={85}
+                      draggable={false}
+                      onDragStart={(e) => e.preventDefault()}
+                      style={{ userSelect: 'none', WebkitUserDrag: 'none' } as React.CSSProperties}
+                      className={`object-cover transition-all duration-500 ease-out group-hover:scale-105 pointer-events-none select-none ${
+                        !isCenter ? 'filter blur-[1.5px] brightness-75' : 'filter-none'
+                      }`}
+                    />
+
+                    {!isCenter && (
+                      <div className="absolute inset-0 bg-black/30 backdrop-blur-[1px] transition-all duration-300 pointer-events-none" />
+                    )}
+
+                    {study.isVideo && (
+                      <div className="absolute top-3 right-3 z-10 w-7 h-7 rounded-full bg-black/50 border border-white/20 flex items-center justify-center pointer-events-none group-hover:opacity-0 transition-opacity duration-300">
+                        <svg className="w-3 h-3 text-white ml-0.5" fill="currentColor" viewBox="0 0 24 24">
+                          <path d="M8 5v14l11-7z" />
+                        </svg>
+                      </div>
+                    )}
+
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex flex-col justify-end p-4 transition-opacity duration-300 group-hover:opacity-0 pointer-events-none">
+                      <span className="text-[10px] font-bold uppercase tracking-widest text-[var(--color-accent)] mb-0.5">
+                        {study.category}
+                      </span>
+                      <h4 className="font-bold text-sm md:text-base text-white uppercase tracking-wide leading-tight line-clamp-1">
+                        {study.title}
+                      </h4>
                     </div>
-                  )}
 
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex flex-col justify-end p-4 transition-opacity duration-300 group-hover:opacity-0 pointer-events-none">
-                    <span className="text-[10px] font-bold uppercase tracking-widest text-[var(--color-accent)] mb-0.5">
-                      {study.category}
-                    </span>
-                    <h4 className="font-bold text-sm md:text-base text-white uppercase tracking-wide leading-tight line-clamp-1">
-                      {study.title}
-                    </h4>
-                  </div>
-
-                  <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center p-4 z-20 pointer-events-none">
-                    <span className="text-[9px] md:text-[10px] uppercase tracking-[0.2em] mb-1 text-white/70">
-                      {study.category}
-                    </span>
-                    <p className="text-xs md:text-sm font-bold uppercase tracking-wide text-center text-white leading-tight">
-                      {study.title}
-                    </p>
+                    <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center p-4 z-20 pointer-events-none">
+                      <span className="text-[9px] md:text-[10px] uppercase tracking-[0.2em] mb-1 text-white/70">
+                        {study.category}
+                      </span>
+                      <p className="text-xs md:text-sm font-bold uppercase tracking-wide text-center text-white leading-tight">
+                        {study.title}
+                      </p>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </motion.div>
         </div>
 
