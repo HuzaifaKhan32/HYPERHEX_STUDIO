@@ -29,10 +29,26 @@ function LatestWorkHeading() {
   );
 }
 
+const CATEGORIES = [
+  'All',
+  'Architecture Visualization',
+  '3D Product',
+  '3D Product Configurator',
+  '3D Animation',
+  'Interactive Web Experience',
+  'VR Development',
+  'Interactive Real-Time',
+  'Web Development',
+  'Marketing & Sales',
+  'Drone Animation',
+] as const;
+
+type CategoryType = (typeof CATEGORIES)[number];
+
 type Project = {
   id: string;
   title: string;
-  category: 'Animation' | 'Visualization' | 'Web' | "Drone Animation";
+  category: CategoryType | CategoryType[];
   imageUrl: string;
   embedUrl?: string;
   projectUrl?: string;
@@ -40,7 +56,7 @@ type Project = {
 };
 
 // ── YouTube video helper ───────────────────────────────────────────────────
-function yt(id: string, title: string, category: 'Animation' = 'Animation'): Project {
+function yt(id: string, title: string, category: CategoryType | CategoryType[] = '3D Animation'): Project {
   return {
     id,
     title,
@@ -51,7 +67,7 @@ function yt(id: string, title: string, category: 'Animation' = 'Animation'): Pro
   };
 }
 
-function yt_drone(id: string, title: string, category: 'Drone Animation' = 'Drone Animation'): Project {
+function yt_drone(id: string, title: string, category: CategoryType | CategoryType[] = 'Drone Animation'): Project {
   return {
     id,
     title,
@@ -61,23 +77,35 @@ function yt_drone(id: string, title: string, category: 'Drone Animation' = 'Dron
     isVideo: true,
   };
 }
+
 // ── Portfolio image helper ─────────────────────────────────────────────────
-function imgProject(id: string, title: string, path: string): Project {
+function imgProject(
+  id: string,
+  title: string,
+  path: string,
+  category: CategoryType | CategoryType[] = 'Architecture Visualization'
+): Project {
   return {
     id,
     title,
-    category: 'Visualization',
+    category,
     imageUrl: path,
     isVideo: false,
   };
 }
 
 // ── Web live project helper ────────────────────────────────────────────────
-function webProject(id: string, title: string, path: string, projectUrl: string): Project {
+function webProject(
+  id: string,
+  title: string,
+  path: string,
+  projectUrl: string,
+  category: CategoryType | CategoryType[] = ['Web Development', 'Interactive Web Experience']
+): Project {
   return {
     id,
     title,
-    category: 'Web',
+    category,
     imageUrl: path,
     projectUrl,
     isVideo: false,
@@ -87,30 +115,28 @@ function webProject(id: string, title: string, path: string, projectUrl: string)
 const ALL_PROJECTS: Project[] = [
   webProject('web-ce', 'CE and Builders', '/images/ce-and-builders.webp', 'https://ceandbuilders.com/'),
   webProject('web-nayyer', 'Nayyer Builders', '/images/nayyer-builder.webp', 'https://nayyerbuilders.com/'),
-  webProject('web-kurta', 'Kurta Dukan', '/images/kurta-Dukan.webp', 'https://www.kurtadukan.com/'),
-  webProject('web-leather', 'Leather Crafted', '/images/leather-crafted.webp', 'https://leather-crafted.com/'),
-  yt('QM7FBByPTX8', 'I Handle The Heat', 'Animation'),
-  yt('SXNb1vR_snw', 'NS Arcade | 3D Animation', 'Animation'),
-  yt('Jq_njk26M3E', 'Commtel | 3D Design & Animation', 'Animation'),
-  yt('7JT-j8gz5uU', 'Luxury Watch 3D animation', 'Animation'),
-  yt_drone('7wRGPltVun4', 'Jaguar Builder', 'Drone Animation'),
-  yt_drone('YvvRPa5zVAM', 'Ahsan Town Project', 'Drone Animation'),
-  yt_drone('NJgPMovdV2Y', 'Al Jannat Farmhouse', 'Drone Animation'),
-  yt('QhWmY9lXlZY', 'Modern Apartment Interior Design', 'Animation'),
-  yt('oQnWA-22Bf4', 'Governor House – Conference Room', 'Animation'),
-  yt('9JFPZnPXQ1Y', 'Call Center Interior 3D', 'Animation'),
-  yt('WKOskq3aIQQ', 'Mumtaz Residency', 'Animation'),
-  yt('m2FYElEVclc', 'Nexgen Heights', 'Animation'),
-  imgProject('img-car', 'Car Configurator', '/portfolio/car-configurator.jpg'),
-  imgProject('img-commtel', 'Commtel Project', '/portfolio/commtel.jpg'),
-  imgProject('img-exterior', 'Exterior House', '/portfolio/exterior-house.jpg'),
-  imgProject('img-governor', 'Governor House Render', '/portfolio/governor-house.jpg'),
-  imgProject('img-ivf', 'IVF Academy', '/portfolio/IVF.png'),
-  imgProject('img-arcade', 'NS Arcade', '/portfolio/ns-arcade.jpg'),
-  imgProject('img-watch', 'Luxury Watch 3D', '/portfolio/watch.png'),
+  webProject('web-kurta', 'Kurta Dukan', '/images/kurta-Dukan.webp', 'https://www.kurtadukan.com/', ['Web Development', 'Interactive Web Experience', 'Marketing & Sales']),
+  webProject('web-leather', 'Leather Crafted', '/images/leather-crafted.webp', 'https://leather-crafted.com/', ['Web Development', 'Interactive Web Experience', 'Marketing & Sales']),
+  yt('QM7FBByPTX8', 'I Handle The Heat', '3D Animation'),
+  yt('SXNb1vR_snw', 'NS Arcade | 3D Animation', ['3D Animation', 'Architecture Visualization']),
+  yt('Jq_njk26M3E', 'Commtel | 3D Design & Animation', ['3D Animation', '3D Product']),
+  yt('7JT-j8gz5uU', 'Luxury Watch 3D animation', ['3D Animation', '3D Product']),
+  yt_drone('7wRGPltVun4', 'Jaguar Builder', ['Drone Animation', 'Architecture Visualization']),
+  yt_drone('YvvRPa5zVAM', 'Ahsan Town Project', ['Drone Animation', 'Architecture Visualization']),
+  yt_drone('NJgPMovdV2Y', 'Al Jannat Farmhouse', ['Drone Animation', 'Architecture Visualization']),
+  yt('QhWmY9lXlZY', 'Modern Apartment Interior Design', 'Architecture Visualization'),
+  yt('oQnWA-22Bf4', 'Governor House – Conference Room', 'Architecture Visualization'),
+  yt('9JFPZnPXQ1Y', 'Call Center Interior 3D', 'Architecture Visualization'),
+  yt('WKOskq3aIQQ', 'Mumtaz Residency', 'Architecture Visualization'),
+  yt('m2FYElEVclc', 'Nexgen Heights', 'Architecture Visualization'),
+  imgProject('img-car', 'Car Configurator', '/portfolio/car-configurator.jpg', ['3D Product Configurator', 'Interactive Real-Time', '3D Product']),
+  imgProject('img-commtel', 'Commtel Project', '/portfolio/commtel.jpg', ['Interactive Real-Time', '3D Product', 'VR Development']),
+  imgProject('img-exterior', 'Exterior House', '/portfolio/exterior-house.jpg', 'Architecture Visualization'),
+  imgProject('img-governor', 'Governor House Render', '/portfolio/governor-house.jpg', 'Architecture Visualization'),
+  imgProject('img-ivf', 'IVF Academy', '/portfolio/IVF.png', 'Architecture Visualization'),
+  imgProject('img-arcade', 'NS Arcade', '/portfolio/ns-arcade.jpg', 'Architecture Visualization'),
+  imgProject('img-watch', 'Luxury Watch 3D', '/portfolio/watch.png', ['3D Product', '3D Animation']),
 ];
-
-const CATEGORIES = ['All', 'Web', 'Animation', 'Visualization', "Drone Animation"] as const;
 
 // Cards animate in once using whileInView on each card individually with index-based delay
 const cardVariants = {
@@ -131,9 +157,13 @@ export default function LatestWorkGallery() {
   const [selectedProject, setSelectedProject] = useState<typeof ALL_PROJECTS[number] | null>(null);
   const reduced = useReducedMotion();
 
-  const filtered = ALL_PROJECTS.filter(
-    (p) => activeCategory === 'All' || p.category === activeCategory
-  );
+  const filtered = ALL_PROJECTS.filter((p) => {
+    if (activeCategory === 'All') return true;
+    if (Array.isArray(p.category)) {
+      return p.category.includes(activeCategory as CategoryType);
+    }
+    return p.category === activeCategory;
+  });
 
   const visible = filtered.slice(0, visibleCount);
   const hasMore = visibleCount < filtered.length;
@@ -220,7 +250,7 @@ export default function LatestWorkGallery() {
               {/* Hover overlay */}
               <div className="absolute inset-0 bg-black/60 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10 pointer-events-none">
                 <span className="text-xs uppercase tracking-[0.3em] mb-2 text-white/60">
-                  {project.category}
+                  {Array.isArray(project.category) ? project.category[0] : project.category}
                 </span>
                 <h3 className="text-xl md:text-2xl font-bold uppercase tracking-wider px-6 text-center text-white">
                   {project.title}
@@ -352,7 +382,7 @@ export default function LatestWorkGallery() {
                 <div className="p-5 md:p-6 bg-[#0c0c0c] border-t border-white/10 backdrop-blur-md flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                   <div>
                     <p className="text-xs uppercase tracking-[0.4em] text-white/60 mb-1">
-                      {selectedProject.category}
+                      {Array.isArray(selectedProject.category) ? selectedProject.category.join(' • ') : selectedProject.category}
                     </p>
                     <h2 className="text-xl md:text-2xl font-bold uppercase tracking-wide text-white">
                       {selectedProject.title}
