@@ -1,15 +1,13 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
-import Button3D from './Button3D';
 import Image from 'next/image';
+import Button3D from './Button3D';
 import StaggeredHeading from '@/components/ui/StaggeredHeading';
 
 const BLACK = '#161d1e';
 const ACCENT = '#15b6e8';
-
-
 
 function LatestWorkHeading() {
   return (
@@ -20,7 +18,7 @@ function LatestWorkHeading() {
           Latest Work
         </span>
       </div>
-      
+
       <h2 className="flex flex-col text-4xl font-extrabold tracking-tight md:text-6xl lg:text-7xl 2xl:text-8xl">
         <span className="text-[#161d1e]">Latest</span>
         <span className="bg-gradient-to-b from-[#15b6e8] to-transparent bg-clip-text text-transparent">Work</span>
@@ -32,10 +30,11 @@ function LatestWorkHeading() {
 const CATEGORIES = [
   'All',
   'Animations',
-  'Web',
+  "Visualization",
   'Configurator',
-  'VR',
   '360 Tour',
+  'VR',
+  'Web',
   'Branding & Advertisement',
   'Interior & Construction',
 ] as const;
@@ -135,48 +134,89 @@ const ALL_PROJECTS: Project[] = [
   imgProject('img-watch', 'Luxury Watch 3D', '/portfolio/watch.png', ['Branding & Advertisement', 'Animations']),
 ];
 
-// Cards animate in once using whileInView on each card individually with index-based delay
+// Base grid-reveal variants used for the initial whileInView entrance. Only
+// opacity/y are animated (compositor-friendly). Increased travel distance
+// (36px, up from 24px) and slightly longer duration (0.6s) so the motion is
+// actually perceptible rather than reading as a quick fade.
 const cardVariants = {
-  hidden: { opacity: 0, y: 24 },
+  hidden: { opacity: 0, y: 36 },
   visible: {
     opacity: 1,
     y: 0,
     transition: {
-      duration: 0.5,
+      duration: 0.6,
       ease: [0.16, 1, 0.3, 1] as [number, number, number, number],
     },
   },
 };
 
+// Separate variants for cards entering/leaving via "Explore More" / "View
+// Less" — a slightly larger, snappier rise since this is a direct response
+// to a click rather than a scroll-triggered reveal, and needs an explicit
+// `exit` so AnimatePresence can animate cards out on "View Less" instead of
+// them just disappearing.
+const drawerCardVariants = {
+  hidden: { opacity: 0, y: 40, scale: 0.96 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: {
+      duration: 0.45,
+      ease: [0.16, 1, 0.3, 1] as [number, number, number, number],
+    },
+  },
+  exit: {
+    opacity: 0,
+    y: 24,
+    scale: 0.96,
+    transition: {
+      duration: 0.3,
+      ease: [0.4, 0, 1, 1] as [number, number, number, number],
+    },
+  },
+};
+
+const INITIAL_COUNT = 6;
+const PAGE_SIZE = 6;
+// Per-card stagger delay, in seconds, for both the initial reveal and the
+// drawer-style load-more/less. Kept as one constant so both interactions
+// feel consistent.
+const STAGGER_STEP = 0.08;
+
 export default function LatestWorkGallery() {
   const [activeCategory, setActiveCategory] = useState('All');
-  const [visibleCount, setVisibleCount] = useState(6);
+  const [visibleCount, setVisibleCount] = useState(INITIAL_COUNT);
   const [selectedProject, setSelectedProject] = useState<typeof ALL_PROJECTS[number] | null>(null);
   const reduced = useReducedMotion();
 
-  const filtered = ALL_PROJECTS.filter((p) => {
-    if (activeCategory === 'All') return true;
-    if (Array.isArray(p.category)) {
-      return p.category.includes(activeCategory as CategoryType);
-    }
-    return p.category === activeCategory;
-  });
+  const filtered = useMemo(
+    () =>
+      ALL_PROJECTS.filter((p) => {
+        if (activeCategory === 'All') return true;
+        if (Array.isArray(p.category)) {
+          return p.category.includes(activeCategory as CategoryType);
+        }
+        return p.category === activeCategory;
+      }),
+    [activeCategory]
+  );
 
   const visible = filtered.slice(0, visibleCount);
   const hasMore = visibleCount < filtered.length;
-  const isExpanded = visibleCount > 6;
+  const isExpanded = visibleCount > INITIAL_COUNT;
 
   const handleLoadMore = () => {
-    if (hasMore) setVisibleCount((prev) => prev + 6);
+    if (hasMore) setVisibleCount((prev) => prev + PAGE_SIZE);
   };
 
   const handleViewLess = () => {
-    setVisibleCount(6);
+    setVisibleCount(INITIAL_COUNT);
   };
 
   const handleCategory = (cat: string) => {
     setActiveCategory(cat);
-    setVisibleCount(6);
+    setVisibleCount(INITIAL_COUNT);
   };
 
   useEffect(() => {
@@ -200,103 +240,137 @@ export default function LatestWorkGallery() {
               {CATEGORIES.map((category) => {
                 const isActive = activeCategory === category;
                 return (
-                  <button
+                  <motion.button
                     key={category}
                     type="button"
                     onClick={() => handleCategory(category)}
                     aria-pressed={isActive}
-                    className={`flex items-center justify-center px-5 py-2.5 bg-surface-bright rounded-xl border-2 font-bold text-xs sm:text-sm uppercase tracking-wider cursor-pointer transition-all duration-150 ${
+                    whileHover={{ y: -2 }}
+                    whileTap={{ y: 1, scale: 0.97 }}
+                    transition={{ duration: 0.15, ease: [0.4, 0, 0.2, 1] }}
+                    className={`flex items-center justify-center px-5 py-2.5 bg-surface-bright rounded-xl border-2 font-bold text-xs sm:text-sm uppercase tracking-wider cursor-pointer transition-[color,border-color,box-shadow] duration-150 ${
                       isActive
-                        ? 'border-accent text-accent shadow-[0_4px_0_0_rgba(21,182,232,1)] -translate-y-0.5'
-                        : 'border-outline-variant/30 text-on-surface shadow-[0_4px_0_0_var(--color-outline-variant)] hover:border-accent hover:text-accent hover:shadow-[0_4px_0_0_rgba(21,182,232,1)] hover:-translate-y-0.5 active:shadow-[0_0px_0_0_rgba(21,182,232,1)] active:translate-y-1'
+                        ? 'border-accent text-accent shadow-[0_4px_0_0_rgba(21,182,232,1)]'
+                        : 'border-outline-variant/30 text-on-surface shadow-[0_4px_0_0_var(--color-outline-variant)] hover:border-accent hover:text-accent hover:shadow-[0_4px_0_0_rgba(21,182,232,1)]'
                     }`}
                   >
                     {category}
-                  </button>
+                  </motion.button>
                 );
               })}
             </div>
           </div>
         </div>
 
-        {/* Main Gallery Grid — each card reveals once, staggered by index */}
-        <div
+        {/* Main Gallery Grid.
+            Two distinct animation regimes share this grid:
+            - Switching category remounts the whole set (key={activeCategory})
+              and every visible card plays its scroll-triggered whileInView
+              entrance, staggered by index — this is a genuinely new list, so
+              replaying the full reveal is correct here.
+            - Clicking "Explore More"/"View Less" does NOT change
+              activeCategory, so the grid itself is not remounted. Only the
+              cards beyond INITIAL_COUNT mount/unmount, and each carries a
+              stable key={project.id}, so AnimatePresence can animate exactly
+              those cards in (drawerCardVariants.hidden -> visible) or out
+              (visible -> exit) without touching the already-visible first
+              batch. */}
+        <motion.div
           key={activeCategory}
+          layout={!reduced}
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
         >
-          {visible.map((project, index) => (
-            <motion.div
-              key={project.id}
-              variants={cardVariants}
-              initial={reduced ? 'visible' : 'hidden'}
-              whileInView="visible"
-              viewport={{ once: true, margin: '-40px' }}
-              transition={{ delay: index * 0.08 }}
-              onClick={() => setSelectedProject(project)}
-              data-cursor="project"
-              className="group relative aspect-[5/3] overflow-hidden rounded-xl cursor-pointer bg-[#111]"
-            >
-              {/* Thumbnail */}
-              <img
-                src={project.imageUrl}
-                alt={project.title}
-                loading="eager"
-                decoding="async"
-                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-              />
-              {/* Hover overlay */}
-              <div className="absolute inset-0 bg-black/60 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10 pointer-events-none">
-                <span className="text-xs uppercase tracking-[0.3em] mb-2 text-white/60">
-                  {Array.isArray(project.category) ? project.category[0] : project.category}
-                </span>
-                <h3 className="text-xl md:text-2xl font-bold uppercase tracking-wider px-6 text-center text-white">
-                  {project.title}
-                </h3>
-                {project.isVideo ? (
-                  <div className="mt-4 px-5 py-2 rounded-full bg-white text-black font-semibold text-xs md:text-sm uppercase tracking-wider flex items-center gap-2 shadow-lg">
-                    <svg className="w-3.5 h-3.5 fill-black" viewBox="0 0 24 24">
-                      <path d="M8 5v14l11-7z" />
-                    </svg>
-                    Watch Video
+          <AnimatePresence mode="popLayout">
+            {visible.map((project, index) => {
+              const isDrawerCard = index >= INITIAL_COUNT;
+              // Stagger delay is relative to each card's position within its
+              // own reveal group, not its absolute index — so newly-added
+              // card #7 (index 6) gets delay 0, not 6 * STAGGER_STEP.
+              const staggerIndex = isDrawerCard ? index - INITIAL_COUNT : index;
+
+              return (
+                <motion.div
+                  key={project.id}
+                  layout={!reduced}
+                  variants={isDrawerCard ? drawerCardVariants : cardVariants}
+                  initial={reduced ? 'visible' : 'hidden'}
+                  animate="visible"
+                  exit={isDrawerCard ? 'exit' : undefined}
+                  {...(!isDrawerCard && {
+                    whileInView: 'visible',
+                    viewport: { once: true, margin: '-100px' },
+                  })}
+                  transition={{ delay: reduced ? 0 : staggerIndex * STAGGER_STEP }}
+                  onClick={() => setSelectedProject(project)}
+                  data-cursor="project"
+                  className="group relative aspect-[5/3] overflow-hidden rounded-xl cursor-pointer bg-[#111]"
+                >
+                  {/* Thumbnail */}
+                  <Image
+                    src={project.imageUrl}
+                    alt={project.title}
+                    fill
+                    sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                    quality={80}
+                    loading={index < INITIAL_COUNT ? 'eager' : 'lazy'}
+                    priority={index < 3}
+                    className="object-cover transition-transform duration-400 ease-out group-hover:scale-110"
+                  />
+                  {/* Hover overlay */}
+                  <div className="absolute inset-0 bg-black/60 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10 pointer-events-none">
+                    <span className="text-xs uppercase tracking-[0.3em] mb-2 text-white/60">
+                      {Array.isArray(project.category) ? project.category[0] : project.category}
+                    </span>
+                    <h3 className="text-xl md:text-2xl font-bold uppercase tracking-wider px-6 text-center text-white">
+                      {project.title}
+                    </h3>
+                    {project.isVideo ? (
+                      <div className="mt-4 px-5 py-2 rounded-full bg-white text-black font-semibold text-xs md:text-sm uppercase tracking-wider flex items-center gap-2 shadow-lg">
+                        <svg className="w-3.5 h-3.5 fill-black" viewBox="0 0 24 24">
+                          <path d="M8 5v14l11-7z" />
+                        </svg>
+                        Watch Video
+                      </div>
+                    ) : project.projectUrl ? (
+                      <div className="mt-4 px-5 py-2 rounded-full bg-white text-black font-semibold text-xs md:text-sm uppercase tracking-wider flex items-center gap-2 shadow-lg">
+                        <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                          <polyline points="15 3 21 3 21 9"></polyline>
+                          <line x1="10" y1="14" x2="21" y2="3"></line>
+                        </svg>
+                        View Project
+                      </div>
+                    ) : (
+                      <div className="mt-4 px-5 py-2 rounded-full bg-white text-black font-semibold text-xs md:text-sm uppercase tracking-wider flex items-center gap-2 shadow-lg">
+                        <svg className="w-3.5 h-3.5 fill-black" viewBox="0 0 24 24">
+                          <path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/>
+                        </svg>
+                        View Image
+                      </div>
+                    )}
                   </div>
-                ) : project.projectUrl ? (
-                  <div className="mt-4 px-5 py-2 rounded-full bg-white text-black font-semibold text-xs md:text-sm uppercase tracking-wider flex items-center gap-2 shadow-lg">
-                    <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
-                      <polyline points="15 3 21 3 21 9"></polyline>
-                      <line x1="10" y1="14" x2="21" y2="3"></line>
-                    </svg>
-                    View Project
-                  </div>
-                ) : (
-                  <div className="mt-4 px-5 py-2 rounded-full bg-white text-black font-semibold text-xs md:text-sm uppercase tracking-wider flex items-center gap-2 shadow-lg">
-                    <svg className="w-3.5 h-3.5 fill-black" viewBox="0 0 24 24">
-                      <path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/>
-                    </svg>
-                    View Image
-                  </div>
-                )}
-              </div>
-              {/* Top-right badge (video play icon or web external link icon) */}
-              {project.isVideo ? (
-                <div className="absolute top-3 right-3 z-10 w-8 h-8 rounded-full bg-black/50 border border-white/20 backdrop-blur-sm flex items-center justify-center pointer-events-none">
-                  <svg className="w-3.5 h-3.5 text-white ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>
-                </div>
-              ) : project.projectUrl ? (
-                <div className="absolute top-3 right-3 z-10 w-8 h-8 rounded-full bg-black/50 border border-white/20 backdrop-blur-sm flex items-center justify-center pointer-events-none">
-                  <svg className="w-3.5 h-3.5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
-                    <polyline points="15 3 21 3 21 9"></polyline>
-                    <line x1="10" y1="14" x2="21" y2="3"></line>
-                  </svg>
-                </div>
-              ) : null}
-            </motion.div>
-          ))}
+                  {/* Top-right badge (video play icon or web external link icon) */}
+                  {project.isVideo ? (
+                    <div className="absolute top-3 right-3 z-10 w-8 h-8 rounded-full bg-black/50 border border-white/20 backdrop-blur-sm flex items-center justify-center pointer-events-none">
+                      <svg className="w-3.5 h-3.5 text-white ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>
+                    </div>
+                  ) : project.projectUrl ? (
+                    <div className="absolute top-3 right-3 z-10 w-8 h-8 rounded-full bg-black/50 border border-white/20 backdrop-blur-sm flex items-center justify-center pointer-events-none">
+                      <svg className="w-3.5 h-3.5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                        <polyline points="15 3 21 3 21 9"></polyline>
+                        <line x1="10" y1="14" x2="21" y2="3"></line>
+                      </svg>
+                    </div>
+                  ) : null}
+                </motion.div>
+              );
+            })}
+          </AnimatePresence>
           {filtered.length === 0 && (
             <div className="col-span-full flex justify-center py-24 text-mist font-bold">No projects found.</div>
           )}
-        </div>
+        </motion.div>
 
         {/* Explore More / View Less */}
         <div className="flex justify-center pt-4 gap-4">
@@ -322,11 +396,11 @@ export default function LatestWorkGallery() {
       {/* Lightbox Modal */}
       <AnimatePresence>
         {selectedProject && (
-          <div 
+          <div
             className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-12"
           >
             {/* Backdrop */}
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
@@ -334,9 +408,9 @@ export default function LatestWorkGallery() {
               className="absolute inset-0 bg-black/80 backdrop-blur-xl cursor-zoom-out"
               onClick={() => setSelectedProject(null)}
             />
-            
+
             {/* Modal Content */}
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, scale: 0.9, filter: 'blur(20px)' }}
               animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
               exit={{ opacity: 0, scale: 0.95, filter: 'blur(10px)' }}
@@ -345,7 +419,7 @@ export default function LatestWorkGallery() {
             >
               <div className="bg-[#111] rounded-2xl overflow-hidden shadow-2xl relative w-full flex flex-col border border-white/10">
                 {/* Responsive Close Button inside wrapper */}
-                <button 
+                <button
                   onClick={() => setSelectedProject(null)}
                   className="absolute top-4 right-4 z-50 text-white/80 hover:text-white bg-black/60 backdrop-blur-md rounded-full p-2 border border-white/15 shadow-lg transition-all hover:scale-105 cursor-pointer"
                   aria-label="Close modal"
