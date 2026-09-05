@@ -31,16 +31,13 @@ function LatestWorkHeading() {
 
 const CATEGORIES = [
   'All',
-  'Architecture Visualization',
-  '3D Product',
-  '3D Product Configurator',
-  '3D Animation',
-  'Interactive Web Experience',
-  'VR Development',
-  'Interactive Real-Time',
-  'Web Development',
-  'Marketing & Sales',
-  'Drone Animation',
+  'Animations',
+  'Web',
+  'Configurator',
+  'VR',
+  '360 Tour',
+  'Branding & Advertisement',
+  'Interior & Construction',
 ] as const;
 
 type CategoryType = (typeof CATEGORIES)[number];
@@ -56,7 +53,7 @@ type Project = {
 };
 
 // ── YouTube video helper ───────────────────────────────────────────────────
-function yt(id: string, title: string, category: CategoryType | CategoryType[] = '3D Animation'): Project {
+function yt(id: string, title: string, category: CategoryType | CategoryType[] = 'Animations'): Project {
   return {
     id,
     title,
@@ -67,7 +64,7 @@ function yt(id: string, title: string, category: CategoryType | CategoryType[] =
   };
 }
 
-function yt_drone(id: string, title: string, category: CategoryType | CategoryType[] = 'Drone Animation'): Project {
+function yt_drone(id: string, title: string, category: CategoryType | CategoryType[] = ['Animations', '360 Tour']): Project {
   return {
     id,
     title,
@@ -83,7 +80,7 @@ function imgProject(
   id: string,
   title: string,
   path: string,
-  category: CategoryType | CategoryType[] = 'Architecture Visualization'
+  category: CategoryType | CategoryType[] = 'Interior & Construction'
 ): Project {
   return {
     id,
@@ -100,7 +97,7 @@ function webProject(
   title: string,
   path: string,
   projectUrl: string,
-  category: CategoryType | CategoryType[] = ['Web Development', 'Interactive Web Experience']
+  category: CategoryType | CategoryType[] = 'Web'
 ): Project {
   return {
     id,
@@ -113,29 +110,29 @@ function webProject(
 }
 
 const ALL_PROJECTS: Project[] = [
-  webProject('web-ce', 'CE and Builders', '/images/ce-and-builders.webp', 'https://ceandbuilders.com/'),
-  webProject('web-nayyer', 'Nayyer Builders', '/images/nayyer-builder.webp', 'https://nayyerbuilders.com/'),
-  webProject('web-kurta', 'Kurta Dukan', '/images/kurta-Dukan.webp', 'https://www.kurtadukan.com/', ['Web Development', 'Interactive Web Experience', 'Marketing & Sales']),
-  webProject('web-leather', 'Leather Crafted', '/images/leather-crafted.webp', 'https://leather-crafted.com/', ['Web Development', 'Interactive Web Experience', 'Marketing & Sales']),
-  yt('QM7FBByPTX8', 'I Handle The Heat', '3D Animation'),
-  yt('SXNb1vR_snw', 'NS Arcade | 3D Animation', ['3D Animation', 'Architecture Visualization']),
-  yt('Jq_njk26M3E', 'Commtel | 3D Design & Animation', ['3D Animation', '3D Product']),
-  yt('7JT-j8gz5uU', 'Luxury Watch 3D animation', ['3D Animation', '3D Product']),
-  yt_drone('7wRGPltVun4', 'Jaguar Builder', ['Drone Animation', 'Architecture Visualization']),
-  yt_drone('YvvRPa5zVAM', 'Ahsan Town Project', ['Drone Animation', 'Architecture Visualization']),
-  yt_drone('NJgPMovdV2Y', 'Al Jannat Farmhouse', ['Drone Animation', 'Architecture Visualization']),
-  yt('QhWmY9lXlZY', 'Modern Apartment Interior Design', 'Architecture Visualization'),
-  yt('oQnWA-22Bf4', 'Governor House – Conference Room', 'Architecture Visualization'),
-  yt('9JFPZnPXQ1Y', 'Call Center Interior 3D', 'Architecture Visualization'),
-  yt('WKOskq3aIQQ', 'Mumtaz Residency', 'Architecture Visualization'),
-  yt('m2FYElEVclc', 'Nexgen Heights', 'Architecture Visualization'),
-  imgProject('img-car', 'Car Configurator', '/portfolio/car-configurator.jpg', ['3D Product Configurator', 'Interactive Real-Time', '3D Product']),
-  imgProject('img-commtel', 'Commtel Project', '/portfolio/commtel.jpg', ['Interactive Real-Time', '3D Product', 'VR Development']),
-  imgProject('img-exterior', 'Exterior House', '/portfolio/exterior-house.jpg', 'Architecture Visualization'),
-  imgProject('img-governor', 'Governor House Render', '/portfolio/governor-house.jpg', 'Architecture Visualization'),
-  imgProject('img-ivf', 'IVF Academy', '/portfolio/IVF.png', 'Architecture Visualization'),
-  imgProject('img-arcade', 'NS Arcade', '/portfolio/ns-arcade.jpg', 'Architecture Visualization'),
-  imgProject('img-watch', 'Luxury Watch 3D', '/portfolio/watch.png', ['3D Product', '3D Animation']),
+  webProject('web-ce', 'CE and Builders', '/images/ce-and-builders.webp', 'https://ceandbuilders.com/', ['Web', 'Interior & Construction']),
+  webProject('web-nayyer', 'Nayyer Builders', '/images/nayyer-builder.webp', 'https://nayyerbuilders.com/', ['Web', 'Interior & Construction']),
+  webProject('web-kurta', 'Kurta Dukan', '/images/kurta-Dukan.webp', 'https://www.kurtadukan.com/', ['Web', 'Branding & Advertisement']),
+  webProject('web-leather', 'Leather Crafted', '/images/leather-crafted.webp', 'https://leather-crafted.com/', ['Web', 'Branding & Advertisement']),
+  yt('QM7FBByPTX8', 'I Handle The Heat', ['Animations', 'Branding & Advertisement']),
+  yt('SXNb1vR_snw', 'NS Arcade | 3D Animation', ['Animations', 'Interior & Construction']),
+  yt('Jq_njk26M3E', 'Commtel | 3D Design & Animation', ['Animations', 'Branding & Advertisement']),
+  yt('7JT-j8gz5uU', 'Luxury Watch 3D animation', ['Animations', 'Branding & Advertisement']),
+  yt_drone('7wRGPltVun4', 'Jaguar Builder', ['Animations', '360 Tour', 'Interior & Construction']),
+  yt_drone('YvvRPa5zVAM', 'Ahsan Town Project', ['Animations', '360 Tour', 'Interior & Construction']),
+  yt_drone('NJgPMovdV2Y', 'Al Jannat Farmhouse', ['Animations', '360 Tour', 'Interior & Construction']),
+  yt('QhWmY9lXlZY', 'Modern Apartment Interior Design', ['Interior & Construction', '360 Tour', 'Animations']),
+  yt('oQnWA-22Bf4', 'Governor House – Conference Room', ['Interior & Construction', '360 Tour', 'Animations']),
+  yt('9JFPZnPXQ1Y', 'Call Center Interior 3D', ['Interior & Construction', '360 Tour', 'Animations']),
+  yt('WKOskq3aIQQ', 'Mumtaz Residency', ['Interior & Construction', 'Animations']),
+  yt('m2FYElEVclc', 'Nexgen Heights', ['Interior & Construction', 'Animations']),
+  imgProject('img-car', 'Car Configurator', '/portfolio/car-configurator.jpg', ['Configurator', 'VR']),
+  imgProject('img-commtel', 'Commtel Project', '/portfolio/commtel.jpg', ['VR', '360 Tour', 'Branding & Advertisement']),
+  imgProject('img-exterior', 'Exterior House', '/portfolio/exterior-house.jpg', ['Interior & Construction', '360 Tour']),
+  imgProject('img-governor', 'Governor House Render', '/portfolio/governor-house.jpg', ['Interior & Construction', '360 Tour']),
+  imgProject('img-ivf', 'IVF Academy', '/portfolio/IVF.png', ['Interior & Construction', 'Branding & Advertisement']),
+  imgProject('img-arcade', 'NS Arcade', '/portfolio/ns-arcade.jpg', ['Interior & Construction', 'Branding & Advertisement']),
+  imgProject('img-watch', 'Luxury Watch 3D', '/portfolio/watch.png', ['Branding & Advertisement', 'Animations']),
 ];
 
 // Cards animate in once using whileInView on each card individually with index-based delay
