@@ -1,8 +1,8 @@
 'use client';
 
 import { ClientLogo } from '@/components/client-logos';
-import { useReducedMotion } from 'framer-motion';
 import { MARQUEE_ITEMS, PILL_BG_COLORS, logoVariantForBg, type MarqueeItem } from '@/lib/clients-data';
+import InfiniteMarquee from '@/components/ui/InfiniteMarquee';
 
 const PILL_BASE =
   'inline-flex shrink-0 items-center justify-center rounded-full h-[62px] min-w-[110px] px-4 mx-1.5 sm:h-[120px] sm:min-w-[160px] sm:px-8 sm:mx-3';
@@ -42,66 +42,30 @@ function MarqueePill({ item }: { item: MarqueeItem }) {
   );
 }
 
-function MarqueeSequence({ items }: { items: MarqueeItem[] }) {
-  let labelCount = 0;
-  const filteredItems = items.filter((item) => {
-    if (item.type === 'label') {
-      labelCount++;
-      return labelCount <= 2;
-    }
-    return true;
-  });
-
-  return (
-    <div className="flex shrink-0 items-center">
-      {filteredItems.map((item, index) => (
-        <MarqueePill
-          key={`${item.type}-${item.type === 'client' ? item.id : item.name}-${index}`}
-          item={item}
-        />
-      ))}
-    </div>
-  );
-}
-
 export default function ClientMarquee() {
-  const reducedMotion = useReducedMotion() ?? false;
+  const pillElements = MARQUEE_ITEMS.map((item, index) => (
+    <MarqueePill
+      key={`${item.type}-${item.type === 'client' ? item.id : item.name}-${index}`}
+      item={item}
+    />
+  ));
 
   return (
     <section
       aria-label="Our clients"
-      className="w-full overflow-hidden bg-transparent pt-2 pb-8 md:pt-4 md:pb-4"
+      className="relative w-full overflow-hidden bg-transparent pt-2 pb-8 md:pt-3 md:pb-3"
     >
-      <style jsx>{`
-        @keyframes marquee-scroll {
-          0% {
-            transform: translate3d(0, 0, 0);
-          }
-          100% {
-            transform: translate3d(-50%, 0, 0);
-          }
-        }
-        .animate-marquee-css {
-          animation: marquee-scroll 35s linear infinite;
-        }
-        .animate-marquee-css:hover {
-          animation-play-state: paused;
-        }
-      `}</style>
-      <div className="w-full overflow-hidden select-none">
-        <div
-          className={`flex w-max will-change-transform ${
-            reducedMotion ? '' : 'animate-marquee-css'
-          }`}
-          style={{
-            contentVisibility: 'auto',
-            contain: 'layout paint style',
-          }}
-        >
-          <MarqueeSequence items={MARQUEE_ITEMS} />
-          <MarqueeSequence items={MARQUEE_ITEMS} />
-        </div>
-      </div>
+      {/* Side Fade Masks */}
+      <div className="pointer-events-none absolute left-0 top-0 bottom-0 w-10 md:w-28 z-10 bg-gradient-to-r from-background via-background/80 to-transparent" />
+      <div className="pointer-events-none absolute right-0 top-0 bottom-0 w-10 md:w-28 z-10 bg-gradient-to-l from-background via-background/80 to-transparent" />
+
+      <InfiniteMarquee
+        items={pillElements}
+        speed={1.5}
+        gap={0}
+        pauseOnHover={true}
+        direction="left"
+      />
     </section>
   );
 }

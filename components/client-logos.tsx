@@ -1,24 +1,31 @@
 import Image from 'next/image';
 
-// Exact paths matching your public/ folder filenames
+// Exact paths matching your public/clients-logo/ folder filenames
 const CLIENT_LOGO_PATHS = {
   ahsan_associates: '/clients-logo/ahsan-associates.webp',
   ahsan_town: '/clients-logo/ahsan-town.webp',
-  ashaab: '/clients-logo/Ashaab_Logo_Final-03-removebg-preview.webp',
-  ce_and_builders: '/clients-logo/CE AND BUILDERS-2.webp',
-  commtel: '/clients-logo/COMMTEL-removebg-preview.webp',
+  ashaab: '/clients-logo/ashaab.webp',
+  ce_and_builders: '/clients-logo/CE AND BUILDERS.webp',
+  commtel: '/clients-logo/commtel.webp',
   dha_city: '/clients-logo/dha-city.webp',
-  ivf_academy: '/clients-logo/IVF ACADEMY USA.webp',
-  khalifa: '/clients-logo/KHALIFA-removebg-preview.webp',
-  lakhani: '/clients-logo/LAKHANI PROPERTIES.webp',
-  nayyer: '/clients-logo/Nayyer-Logo-FF-01-(1)-01-22.webp',
-  stadium_view: '/clients-logo/Stadium View Residencia_Upper Case Logo-02.webp',
+  ivf_academy: '/clients-logo/IVF-ACADEMY-USA.webp',
+  jaguar: '/clients-logo/jaguar.webp',
+  khalifa: '/clients-logo/khalifa.webp',
+  lakhani: '/clients-logo/LAKHANI-PROPERTIES.webp',
+  mumtaz: '/clients-logo/mumtaz.webp',
+  nayyer: '/clients-logo/nayyer.webp',
+  nexgen_heights: '/clients-logo/nexgen-heights.webp',
+  nr_interior: '/clients-logo/nr-interior.webp',
+  ns_arcade: '/clients-logo/ns-arcade.png',
+  safari_village: '/clients-logo/safari_village.webp',
+  ss_enterprises: '/clients-logo/ss-enterprises.webp',
+  stadium_view: '/clients-logo/stadium-view.webp',
 } as const;
 
 export type ClientLogoId = keyof typeof CLIENT_LOGO_PATHS;
 
 // Optical weight scales visually calibrated from your asset preview:
-const SCALES: Record<ClientLogoId, number> = {
+const SCALES: Partial<Record<ClientLogoId, number>> = {
   // 🔴 Very Small / High Padding (Need Major Boost)
   stadium_view: 1.5,
   ashaab: 1.5,
@@ -37,6 +44,15 @@ const SCALES: Record<ClientLogoId, number> = {
   // 🔵 Bold / Tall Logos (Baseline Standard Scale)
   ahsan_associates: 1,
   ce_and_builders: 1,
+
+  // 🟣 Additional / Newly Added Logos
+  jaguar: 1,
+  mumtaz: 1,
+  nexgen_heights: 1,
+  nr_interior: 1,
+  ns_arcade: 1,
+  safari_village: 1,
+  ss_enterprises: 1,
 };
 
 export function ClientLogo({

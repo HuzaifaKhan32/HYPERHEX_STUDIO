@@ -102,6 +102,10 @@ function MobileMenu({ isOpen, onClose }: { isOpen: boolean; onClose: () => void 
                       fill
                       sizes="36px"
                       quality={90}
+                      // This copy of the logo is inside the mobile drawer, which is
+                      // only mounted once the menu is opened by the user (not on
+                      // initial page load), so it does not need `priority` — it's
+                      // never part of the first paint / LCP.
                       className="object-contain"
                     />
                   </div>
@@ -184,7 +188,15 @@ export default function Navbar() {
   const { scrollY } = useScroll();
 
   useMotionValueEvent(scrollY, 'change', (latest) => {
-    setScrolled(latest > 48);
+    // Hysteresis: once scrolled-state is on, require scrolling back up past
+    // a lower threshold (24px) before turning off, and vice versa (48px to
+    // turn on). Without this dead zone, hovering right around a single
+    // fixed threshold (e.g. 48px) during normal scrolling repeatedly flips
+    // `scrolled` on/off, re-triggering the background/border/shadow
+    // transition many times in quick succession — that rapid re-triggering
+    // is what reads as stutter, independent of how cheap any single
+    // transition is.
+    setScrolled((prev) => (prev ? latest > 24 : latest > 48));
     // Close menu when user scrolls past threshold
     if (latest > 80 && menuOpen) setMenuOpen(false);
   });
@@ -223,10 +235,21 @@ export default function Navbar() {
       >
         <motion.div
           transition={{ duration: 0.35, ease: [0.4, 0, 0.2, 1] }}
-          className={`flex w-full max-w-[1280px] xl:max-w-[1400px] 2xl:max-w-none items-center justify-between px-2 py-2 md:py-3 transition-all duration-350 ${
+          // Previously `transition-all`, which tells the browser to transition
+          // every animatable property that changes between the two class
+          // states below — including `box-shadow` and `backdrop-filter`.
+          // Both are expensive to animate because the browser has to
+          // recompute the blur/shadow render on every frame of the
+          // transition rather than doing a cheap compositor-only pass, which
+          // is what produced the sluggish "background coming in bad" feeling
+          // on scroll. Scoping the transition to only `background-color` and
+          // `border-color` keeps those two properties smooth while letting
+          // shadow/blur/radius apply immediately — visually the end state is
+          // identical, but the animated portion of the change is now cheap.
+          className={`flex w-full max-w-[1280px] xl:max-w-[1400px] 2xl:max-w-none items-center justify-between px-2 py-2 md:py-3 rounded-xl transition-[background-color,border-color] duration-350 ease-out ${
             scrolled
-              ? 'bg-surface rounded-xl border-2 border-accent shadow-[0_6px_0_0_rgba(21,182,232,1)] backdrop-blur-md'
-              : 'bg-transparent rounded-xl'
+              ? 'bg-surface border-2 border-accent shadow-[0_6px_0_0_rgba(21,182,232,1)] backdrop-blur-md'
+              : 'bg-transparent border-2 border-transparent'
           }`}
         >
 
@@ -248,6 +271,15 @@ export default function Navbar() {
                 fill
                 sizes="56px"
                 quality={90}
+                // This is the always-visible navbar logo, present in the
+                // very first paint of every page. Without `priority`,
+                // next/image lazy-loads it like any other below-the-fold
+                // image, so it competes on equal footing with everything
+                // else on the page for network priority — which is why it
+                // was visibly slow to appear. `priority` tells Next.js to
+                // preload it and skip lazy-loading, matching how it's
+                // actually used (always-visible, LCP-relevant).
+                priority
                 className="object-cover rounded-full"
               />
             </Link>

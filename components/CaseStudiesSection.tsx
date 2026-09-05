@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { motion, useReducedMotion } from 'framer-motion';
 import { MAIN_CASE_STUDIES, SUB_CASE_STUDIES, type CaseStudy } from '@/lib/case-studies-data';
 import StaggeredHeading from '@/components/ui/StaggeredHeading';
+import InfiniteMarquee from '@/components/ui/InfiniteMarquee';
 
 const CaseStudyModal = dynamic(() => import('./CaseStudyModal'), { ssr: false });
 
@@ -113,7 +114,7 @@ function FeaturedHeading() {
           Case Studies
         </span>
       </div>
-      
+
       <h2 className="flex flex-col text-4xl font-extrabold tracking-tight md:text-6xl lg:text-7xl 2xl:text-8xl">
         <span className="text-[#161d1e]">Featured</span>
         <span className="bg-gradient-to-b from-[#15b6e8] to-transparent bg-clip-text text-transparent">Case Studies</span>
@@ -130,10 +131,8 @@ export default function CaseStudiesSection() {
   const mainItems = MAIN_CASE_STUDIES;
   const subItems = SUB_CASE_STUDIES;
   const mainN = mainItems.length;
-  const subN = subItems.length;
 
   const mainSlider = useInfiniteSlider(5000, mainN);
-  const subSlider = useInfiniteSlider(5000, subN);
 
   const [selected, setSelected] = useState<CaseStudy | null>(null);
 
@@ -142,7 +141,7 @@ export default function CaseStudiesSection() {
   }, []);
 
   // Compute responsive card widths and track offsets cleanly based on measured container dimensions
-  const vw = containerWidth || (typeof window !== 'undefined' ? window.innerWidth : 1200);
+  const vw = containerWidth || 1200;
 
   // Main Card Dimensions
   const mainCardW = useMemo(() => {
@@ -160,28 +159,10 @@ export default function CaseStudiesSection() {
   const mainStep = mainCardW;
   const mainTx = vw / 2 - mainCardW / 2 - mainSlider.idx * mainStep;
 
-  // Sub Card Dimensions
-  const subCardW = useMemo(() => {
-    if (vw < 640) return vw * 0.70;
-    if (vw < 768) return vw * 0.48;
-    if (vw < 1024) return vw * 0.42;
-    if (vw < 1280) return vw * 0.32;
-    if (vw < 1536) return vw * 0.24;
-    return vw * 0.20;
-  }, [vw]);
-
-  const subCardH = useMemo(() => subCardW / (16 / 9), [subCardW]);
-  const subStep = subCardW + SUB_GAP;
-  const subTx = vw / 2 - subCardW / 2 - subSlider.idx * subStep;
-
   // Sliding Window: Render ONLY 5 virtual slides around current active index (2 on left, active, 2 on right)
   const mainVirtualIndices = useMemo(() => {
     return [mainSlider.idx - 2, mainSlider.idx - 1, mainSlider.idx, mainSlider.idx + 1, mainSlider.idx + 2];
   }, [mainSlider.idx]);
-
-  const subVirtualIndices = useMemo(() => {
-    return [subSlider.idx - 2, subSlider.idx - 1, subSlider.idx, subSlider.idx + 1, subSlider.idx + 2];
-  }, [subSlider.idx]);
 
   return (
     <section
@@ -225,6 +206,16 @@ export default function CaseStudiesSection() {
               const isCenter = vIndex === mainSlider.idx;
               const distanceFromCenter = Math.abs(vIndex - mainSlider.idx);
               const isFar = distanceFromCenter >= 2;
+              // Side cards (not center, not far) get the blurred/dimmed treatment.
+              // Previously this used BOTH `filter: blur()` on the image AND a
+              // `backdrop-blur` overlay div on top of it — visually redundant
+              // (backdrop-blur on top of an already-blurred image adds no
+              // visible extra blur) but it doubled paint cost on exactly the
+              // two elements that are also mid-transition during every slide
+              // change. The image-level blur alone produces the same look for
+              // a fraction of the compositor work, so the overlay div is
+              // dropped and only a plain dimming layer remains.
+              const isSide = !isCenter && !isFar;
 
               return (
                 <div
@@ -246,6 +237,11 @@ export default function CaseStudiesSection() {
                       opacity: isCenter ? 1 : Math.max(0.4, 1 - distanceFromCenter * 0.3),
                     }}
                     transition={{ duration: 0.5, ease: [0.25, 1, 0.5, 1] }}
+                    // will-change only while this card is actually mid-transition
+                    // (side cards during a slide change); left off center/far
+                    // cards at rest so the browser isn't holding extra
+                    // compositor layers open for elements that aren't animating.
+                    style={isSide ? { willChange: 'transform, opacity' } : undefined}
                     data-cursor="project"
                     className="relative w-full h-full rounded-2xl overflow-hidden cursor-pointer bg-surface-bright shadow-2xl origin-center select-none"
                     onClick={() => setSelected(study)}
@@ -262,12 +258,15 @@ export default function CaseStudiesSection() {
                       onDragStart={(e) => e.preventDefault()}
                       style={{ userSelect: 'none', WebkitUserDrag: 'none' } as React.CSSProperties}
                       className={`object-cover transition-all duration-500 ease-out group-hover:scale-105 pointer-events-none select-none ${
-                        !isCenter && !isFar ? 'filter blur-[2px] brightness-75' : ''
+                        isSide ? 'filter blur-[2px] brightness-75' : ''
                       }`}
                     />
 
-                    {!isCenter && !isFar && (
-                      <div className="absolute inset-0 bg-black/30 backdrop-blur-[2px] transition-all duration-500 pointer-events-none" />
+                    {/* Dimming layer for side cards — plain opacity, no backdrop-blur.
+                        The image itself already carries the blur above, so this
+                        just needs to darken, not blur again. */}
+                    {isSide && (
+                      <div className="absolute inset-0 bg-black/30 pointer-events-none" />
                     )}
 
                     {!isCenter && isFar && (
@@ -336,115 +335,56 @@ export default function CaseStudiesSection() {
         </div>
 
         {/* SUB SLIDER */}
-        <div
-          className="relative w-full my-1 select-none overflow-hidden py-2"
-          style={{ height: subCardH + 16 }}
-          onMouseEnter={() => subSlider.pauseTimer()}
-          onMouseLeave={() => subSlider.resetTimer()}
-        >
-          <motion.div
-            className="absolute top-2 left-0 h-full will-change-transform"
-            animate={{ x: subTx }}
-            transition={{ duration: 0.5, ease: [0.25, 1, 0.5, 1] }}
-          >
-            {subVirtualIndices.map((vIndex) => {
-              const itemIdx = ((vIndex % subN) + subN) % subN;
-              const study = subItems[itemIdx];
-              const isCenter = vIndex === subSlider.idx;
-              const distanceFromCenter = Math.abs(vIndex - subSlider.idx);
-              const isFar = distanceFromCenter >= 2;
+        <div className="relative w-full my-6 select-none overflow-hidden">
+          {/* Side Fade Masks */}
+          <div className="pointer-events-none absolute left-0 top-0 bottom-0 w-8 md:w-20 z-20 bg-gradient-to-r from-surface via-surface/80 to-transparent" />
+          <div className="pointer-events-none absolute right-0 top-0 bottom-0 w-8 md:w-20 z-20 bg-gradient-to-l from-surface via-surface/80 to-transparent" />
 
-              return (
-                <div
-                  key={`sub-v-${vIndex}`}
-                  onClick={() => setSelected(study)}
-                  onContextMenu={(e) => e.preventDefault()}
-                  style={{
-                    position: 'absolute',
-                    left: `${vIndex * subStep}px`,
-                    width: `${subCardW}px`,
-                    height: `${subCardH}px`,
-                    contentVisibility: isFar ? 'auto' : undefined,
-                    contain: isFar ? 'layout paint style' : undefined,
-                  }}
-                  className={`shrink-0 group cursor-pointer overflow-hidden rounded-xl border bg-surface-bright shadow-lg transition-all duration-500 select-none ${
-                    isCenter
-                      ? 'border-[var(--color-accent)]/80 opacity-100'
-                      : 'border-white/10 opacity-75'
-                  }`}
-                  data-cursor="project"
-                >
-                  <div className="relative w-full h-full overflow-hidden select-none">
-                    <Image
-                      src={study.thumbnail}
-                      alt={study.title}
-                      fill
-                      sizes="(max-width: 640px) 70vw, (max-width: 768px) 48vw, (max-width: 1024px) 42vw, 32vw"
-                      quality={80}
-                      loading={isCenter ? 'eager' : 'lazy'}
-                      priority={isCenter}
-                      draggable={false}
-                      onDragStart={(e) => e.preventDefault()}
-                      style={{ userSelect: 'none', WebkitUserDrag: 'none' } as React.CSSProperties}
-                      className={`object-cover transition-all duration-500 ease-out group-hover:scale-105 pointer-events-none select-none ${
-                        !isCenter && !isFar ? 'filter blur-[1.5px] brightness-75' : ''
-                      }`}
-                    />
+          <InfiniteMarquee
+            speed={1.5}
+            gap={SUB_GAP}
+            pauseOnHover={true}
+            items={[...subItems, ...subItems].map((study, idx) => (
+              <div
+                key={`sub-${idx}`}
+                onClick={() => setSelected(study)}
+                className="w-[70vw] sm:w-[48vw] md:w-[42vw] lg:w-[32vw] xl:w-[24vw] 2xl:w-[20vw] aspect-[16/9] shrink-0 group cursor-pointer overflow-hidden rounded-xl border bg-surface-bright shadow-lg transition-all duration-500 hover:border-[var(--color-accent)]/80 border-white/10"
+                data-cursor="project"
+              >
+                <div className="relative w-full h-full overflow-hidden select-none">
+                  <Image
+                    src={study.thumbnail}
+                    alt={study.title}
+                    fill
+                    sizes="(max-width: 640px) 70vw, (max-width: 768px) 48vw, (max-width: 1024px) 42vw, 32vw"
+                    quality={80}
+                    loading="lazy"
+                    draggable={false}
+                    onDragStart={(e) => e.preventDefault()}
+                    style={{ userSelect: 'none', WebkitUserDrag: 'none' } as React.CSSProperties}
+                    className="object-cover transition-transform duration-500 ease-out group-hover:scale-105 pointer-events-none select-none"
+                  />
 
-                    {!isCenter && !isFar && (
-                      <div className="absolute inset-0 bg-black/30 backdrop-blur-[1px] transition-all duration-300 pointer-events-none" />
-                    )}
-
-                    {!isCenter && isFar && (
-                      <div className="absolute inset-0 bg-black/40 pointer-events-none" />
-                    )}
-
-                    {study.isVideo && (
-                      <div className="absolute top-3 right-3 z-10 w-7 h-7 rounded-full bg-black/50 border border-white/20 flex items-center justify-center pointer-events-none group-hover:opacity-0 transition-opacity duration-300">
-                        <svg className="w-3 h-3 text-white ml-0.5" fill="currentColor" viewBox="0 0 24 24">
-                          <path d="M8 5v14l11-7z" />
-                        </svg>
-                      </div>
-                    )}
-
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex flex-col justify-end p-4 transition-opacity duration-300 group-hover:opacity-0 pointer-events-none">
-                      <span className="text-[10px] font-bold uppercase tracking-widest text-[var(--color-accent)] mb-0.5">
-                        {study.category}
-                      </span>
-                      <h4 className="font-bold text-sm md:text-base text-white uppercase tracking-wide leading-tight line-clamp-1">
-                        {study.title}
-                      </h4>
+                  {study.isVideo && (
+                    <div className="absolute top-3 right-3 z-10 w-7 h-7 rounded-full bg-black/50 border border-white/20 flex items-center justify-center pointer-events-none group-hover:opacity-0 transition-opacity duration-300">
+                      <svg className="w-3 h-3 text-white ml-0.5" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M8 5v14l11-7z" />
+                      </svg>
                     </div>
+                  )}
 
-                    <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center p-4 z-20 pointer-events-none">
-                      <span className="text-[9px] md:text-[10px] uppercase tracking-[0.2em] mb-1 text-white/70">
-                        {study.category}
-                      </span>
-                      <p className="text-xs md:text-sm font-bold uppercase tracking-wide text-center text-white leading-tight">
-                        {study.title}
-                      </p>
-                    </div>
+                  <div className="absolute inset-0 bg-black/35 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center p-4 z-20 pointer-events-none">
+                    <span className="text-[9px] md:text-[10px] uppercase tracking-[0.2em] mb-1 text-white/70">
+                      {study.category}
+                    </span>
+                    <p className="text-xs md:text-sm font-bold uppercase tracking-wide text-center text-white leading-tight">
+                      {study.title}
+                    </p>
                   </div>
                 </div>
-              );
-            })}
-          </motion.div>
-        </div>
-
-        {/* Indicator Bullets */}
-        <div className="flex justify-center gap-3 mt-2">
-          {subItems.map((_, idx) => (
-            <button
-              key={`dot-${idx}`}
-              onClick={() => subSlider.goTo(idx)}
-              className={`transition-all duration-500 rounded-full h-2 ${
-                subSlider.activeBullet === idx
-                  ? 'w-8 bg-[var(--color-accent)]'
-                  : 'w-2 bg-on-surface/20 hover:bg-on-surface/50'
-              }`}
-              aria-label={`Slide ${idx + 1}`}
-            />
-          ))}
+              </div>
+            ))}
+          />
         </div>
       </motion.div>
 

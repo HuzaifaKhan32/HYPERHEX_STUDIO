@@ -253,7 +253,7 @@ export default function AboutUsSection() {
                                     </span>
                                     <span className="h-3 w-px bg-[#bac9cc]" />
                                     <span className="text-xs text-[#3b494c]">
-                                        CEO of HyperHex
+                                        Founder
                                     </span>
                                 </div>
                             </div>

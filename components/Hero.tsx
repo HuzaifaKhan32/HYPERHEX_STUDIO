@@ -65,11 +65,11 @@ export default function Hero() {
   };
 
   return (
-    <div className="relative w-full bg-background px-5 pb-4 sm:px-8 lg:px-12 2xl:px-16">
+    <div className="relative w-full bg-background px-0 pb-4 md:px-5 sm:px-8 lg:px-12 2xl:px-16">
       <motion.div
         ref={frameRef}
         style={reduced ? undefined : { scale, opacity }}
-        className="relative mx-auto w-full max-w-[1280px] xl:max-w-[1400px] 2xl:max-w-none origin-top overflow-hidden rounded-[2rem] border border-outline-variant/30 aspect-[1312/568] min-h-[280px]"
+        className="relative mx-auto w-full max-w-[1280px] xl:max-w-[1400px] 2xl:max-w-none origin-top overflow-hidden rounded-none md:rounded-[2rem] border-x-0 md:border border-outline-variant/30 aspect-[1312/568] min-h-[340px] md:min-h-[280px]"
       >
         <ImageCarousel images={carouselImages} onFirstReady={handleFirstReady} />
 
@@ -87,7 +87,7 @@ export default function Hero() {
             }}
             initial={reduced ? 'visible' : 'hidden'}
             animate={isReady ? 'visible' : 'hidden'}
-            className="absolute top-5 right-5 sm:top-8 sm:right-8 lg:top-10 lg:right-10 2xl:top-14 2xl:right-14 z-20 flex flex-col items-end pointer-events-auto"
+            className="absolute top-16 right-5 sm:top-8 lg:top-10 lg:right-10 2xl:top-14 2xl:right-14 z-20 flex flex-col items-end pointer-events-auto"
           >
             <motion.div
               animate={reduced ? undefined : floatReverseAnimation}

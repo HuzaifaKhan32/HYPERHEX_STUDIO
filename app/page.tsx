@@ -24,7 +24,7 @@ export default function Home() {
     <div className="min-h-screen bg-background">
       <ScrollProgress />
       <Navbar />
-      <main className="w-full pt-24 md:pt-28">
+      <main className="w-full pt-0 md:pt-28">
         <Hero />
         <ClientMarquee />
         <AboutUs />
