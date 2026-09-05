@@ -68,7 +68,11 @@ export default function ImageCarousel({ images, onFirstReady }: ImageCarouselPro
               >
                 {image.type === 'video' ? (
                   <div className="relative w-full h-full">
-                    {/* Cinematic poster focus overlay */}
+                    {/* Cinematic poster focus overlay — purely decorative
+                        blur-in polish. It is NOT what prevents the blank
+                        frame (see the video's own `poster` attribute below
+                        for that); this can safely fade in/out on its own
+                        timing without ever risking a blank video underneath. */}
                     <AnimatePresence>
                       {!isVideoPlaying && image.poster && (
                         <motion.div
@@ -99,6 +103,19 @@ export default function ImageCarousel({ images, onFirstReady }: ImageCarouselPro
                         }
                       }}
                       src={image.src}
+                      // Native `poster` attribute — this is what actually
+                      // prevents the blank/black frame. A <video> with no
+                      // poster of its own renders as a black rectangle the
+                      // instant it mounts, before the first frame is
+                      // decoded — regardless of any overlay div stacked on
+                      // top of it in the DOM, since that overlay is a
+                      // separate element racing against the video's own
+                      // paint rather than part of it. Setting `poster` here
+                      // means the browser paints this image as part of the
+                      // video element itself with no timing race at all:
+                      // it's there on the very first paint, on both initial
+                      // load and every subsequent slide/video change.
+                      poster={image.poster}
                       autoPlay
                       muted
                       playsInline

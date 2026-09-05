@@ -1,6 +1,6 @@
 'use client';
 
-import { motion, useReducedMotion, Variants } from 'framer-motion';
+import { motion, Variants } from 'framer-motion';
 import Image from 'next/image';
 import { useState, useRef, useCallback } from 'react';
 import { Globe, Share2, MessageSquare, ExternalLink } from 'lucide-react';
@@ -185,7 +185,6 @@ function FooterLink({ href, children }: { href: string; children: string }) {
 
 export default function Footer() {
   const [isHoveringText, setIsHoveringText] = useState(false);
-  const reduced = useReducedMotion();
 
   // Ref-based mouse position — avoids React re-renders on every mousemove
   const glowRef = useRef<HTMLDivElement>(null);
@@ -231,7 +230,7 @@ export default function Footer() {
           {/* Brand Visual Card */}
           <motion.div
             variants={reveal}
-            initial={reduced ? 'visible' : 'hidden'}
+            initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: '-60px' }}
             className="flex max-w-xs flex-col gap-6"
@@ -284,7 +283,7 @@ export default function Footer() {
               </span>
               <motion.ul
                 variants={listVariants}
-                initial={reduced ? 'visible' : 'hidden'}
+                initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true, margin: '-40px' }}
                 className="flex flex-col gap-3"
@@ -304,7 +303,7 @@ export default function Footer() {
               </span>
               <motion.ul
                 variants={listVariants}
-                initial={reduced ? 'visible' : 'hidden'}
+                initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true, margin: '-40px' }}
                 className="flex flex-col gap-3"

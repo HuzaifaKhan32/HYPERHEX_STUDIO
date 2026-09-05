@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { motion, useMotionValue, useSpring, useReducedMotion, AnimatePresence } from 'framer-motion';
+import { motion, useMotionValue, useSpring, AnimatePresence } from 'framer-motion';
 
 type CursorType = 'default' | 'text' | 'button' | 'project' | 'drag' | 'hidden';
 
@@ -19,7 +19,6 @@ const MORPH_SPRING = {
 };
 
 export default function CustomCursor() {
-  const reducedMotion = useReducedMotion();
   const [cursorType, setCursorType] = useState<CursorType>('default');
   const [isTouchDevice, setIsTouchDevice] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
@@ -35,8 +34,6 @@ export default function CustomCursor() {
   const springY = useSpring(rawY, POSITION_SPRING);
 
   useEffect(() => {
-    if (reducedMotion) return;
-
     const isCoarse = window.matchMedia('(pointer: coarse)').matches;
     if (isCoarse) {
       setIsTouchDevice(true);
@@ -119,9 +116,9 @@ export default function CustomCursor() {
       document.removeEventListener('mouseleave', handlePointerLeave);
       document.removeEventListener('mouseenter', handlePointerEnter);
     };
-  }, [rawX, rawY, reducedMotion]);
+  }, [rawX, rawY]);
 
-  if (reducedMotion || isTouchDevice) {
+  if (isTouchDevice) {
     return null;
   }
 

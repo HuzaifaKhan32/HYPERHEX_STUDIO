@@ -3,7 +3,7 @@
 import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
-import { motion, useReducedMotion } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { MAIN_CASE_STUDIES, SUB_CASE_STUDIES, type CaseStudy } from '@/lib/case-studies-data';
 import StaggeredHeading from '@/components/ui/StaggeredHeading';
 import InfiniteMarquee from '@/components/ui/InfiniteMarquee';
@@ -126,7 +126,6 @@ function FeaturedHeading() {
 export default function CaseStudiesSection() {
   const sectionRef = useRef<HTMLElement>(null);
   const containerWidth = useContainerWidth(sectionRef);
-  const reduced = useReducedMotion();
 
   const mainItems = MAIN_CASE_STUDIES;
   const subItems = SUB_CASE_STUDIES;
@@ -167,7 +166,7 @@ export default function CaseStudiesSection() {
   return (
     <section
       ref={sectionRef}
-      className="relative w-full bg-surface py-16 md:py-24 overflow-hidden font-[family-name:var(--font-dm-sans)] text-on-surface select-none"
+      className="relative w-full bg-surface py-10 md:py-16 overflow-hidden font-[family-name:var(--font-dm-sans)] text-on-surface select-none"
       id="case-studies"
       onContextMenu={(e) => e.preventDefault()}
     >
@@ -176,9 +175,9 @@ export default function CaseStudiesSection() {
       </div>
 
       <motion.div
-        initial={reduced ? 'visible' : 'hidden'}
+        initial="hidden"
         whileInView="visible"
-        viewport={{ once: true, margin: '-20px' }}
+        viewport={{ once: true, margin: '-100px' }}
         variants={{
           hidden: { opacity: 0, y: 28 },
           visible: {
@@ -206,15 +205,6 @@ export default function CaseStudiesSection() {
               const isCenter = vIndex === mainSlider.idx;
               const distanceFromCenter = Math.abs(vIndex - mainSlider.idx);
               const isFar = distanceFromCenter >= 2;
-              // Side cards (not center, not far) get the blurred/dimmed treatment.
-              // Previously this used BOTH `filter: blur()` on the image AND a
-              // `backdrop-blur` overlay div on top of it — visually redundant
-              // (backdrop-blur on top of an already-blurred image adds no
-              // visible extra blur) but it doubled paint cost on exactly the
-              // two elements that are also mid-transition during every slide
-              // change. The image-level blur alone produces the same look for
-              // a fraction of the compositor work, so the overlay div is
-              // dropped and only a plain dimming layer remains.
               const isSide = !isCenter && !isFar;
 
               return (
@@ -237,10 +227,6 @@ export default function CaseStudiesSection() {
                       opacity: isCenter ? 1 : Math.max(0.4, 1 - distanceFromCenter * 0.3),
                     }}
                     transition={{ duration: 0.5, ease: [0.25, 1, 0.5, 1] }}
-                    // will-change only while this card is actually mid-transition
-                    // (side cards during a slide change); left off center/far
-                    // cards at rest so the browser isn't holding extra
-                    // compositor layers open for elements that aren't animating.
                     style={isSide ? { willChange: 'transform, opacity' } : undefined}
                     data-cursor="project"
                     className="relative w-full h-full rounded-2xl overflow-hidden cursor-pointer bg-surface-bright shadow-2xl origin-center select-none"
@@ -262,9 +248,6 @@ export default function CaseStudiesSection() {
                       }`}
                     />
 
-                    {/* Dimming layer for side cards — plain opacity, no backdrop-blur.
-                        The image itself already carries the blur above, so this
-                        just needs to darken, not blur again. */}
                     {isSide && (
                       <div className="absolute inset-0 bg-black/30 pointer-events-none" />
                     )}

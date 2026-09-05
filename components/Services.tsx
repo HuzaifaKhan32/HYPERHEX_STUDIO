@@ -1,16 +1,13 @@
 'use client';
 
-import { useReducedMotion } from 'framer-motion';
 import ServicesCarousel from './ServicesCarousel';
 import ServicesHeading from './ServicesHeading';
 
 export default function Services() {
-  const reducedMotion = useReducedMotion() ?? false;
-
   return (
     <section
       id="services"
-      className="relative w-full overflow-hidden bg-surface py-16 md:py-32 px-5 lg:px-16 2xl:px-24 2xl:py-40"
+      className="relative w-full overflow-hidden bg-surface py-10 md:py-16 px-5 lg:px-16 2xl:px-24 2xl:py-25"
     >
       <div className="relative z-10 mx-auto flex w-full max-w-[1280px] xl:max-w-[1400px] 2xl:max-w-none flex-col">
         <div className="relative z-20 shrink-0 flex flex-col items-start gap-3 text-left">
@@ -18,7 +15,7 @@ export default function Services() {
         </div>
 
         <div className="relative z-0 mt-12 md:mt-16 lg:mt-20">
-          <ServicesCarousel reducedMotion={reducedMotion} />
+          <ServicesCarousel />
         </div>
       </div>
     </section>

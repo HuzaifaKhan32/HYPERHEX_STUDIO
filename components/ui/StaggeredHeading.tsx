@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { motion, useReducedMotion, type Variants } from 'framer-motion';
+import { motion, type Variants } from 'framer-motion';
 
 export interface StaggeredWordItem {
   text: string;
@@ -50,8 +50,6 @@ export default function StaggeredHeading({
   viewportMargin = '-40px',
   dataCursor = 'text',
 }: StaggeredHeadingProps) {
-  const reduced = useReducedMotion();
-
   const containerVariants: Variants = {
     hidden: {},
     visible: {
@@ -82,8 +80,8 @@ export default function StaggeredHeading({
   return (
     <motion.h2
       data-cursor={dataCursor}
-      variants={reduced ? undefined : containerVariants}
-      initial={reduced ? 'visible' : 'hidden'}
+      variants={containerVariants}
+      initial="hidden"
       whileInView="visible"
       viewport={{ once: true, margin: viewportMargin }}
       className={`font-[family-name:var(--font-zalando-expanded)] font-black uppercase tracking-[-0.04em] ${className}`}
@@ -100,18 +98,6 @@ export default function StaggeredHeading({
               const text = isObj ? wordItem.text : wordItem;
               const wordClass = isObj ? wordItem.className ?? '' : '';
               const wordColor = isObj ? wordItem.color : undefined;
-
-              if (reduced) {
-                return (
-                  <span
-                    key={`w-${lineIdx}-${wordIdx}`}
-                    className={`inline-block mr-[0.25em] last:mr-0 ${wordClass}`}
-                    style={wordColor ? { color: wordColor } : undefined}
-                  >
-                    {text}
-                  </span>
-                );
-              }
 
               return (
                 <motion.span

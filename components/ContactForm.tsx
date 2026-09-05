@@ -1,6 +1,6 @@
 'use client';
 
-import { motion, useReducedMotion } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { useState, useRef } from 'react';
 import Button3D from './Button3D';
 import DotGridBackground from './DotGridBackground';
@@ -100,7 +100,6 @@ export default function ContactForm() {
   const [phone, setPhone] = useState('');
   const [message, setMessage] = useState('');
   const panelRef = useRef<HTMLDivElement>(null);
-  const reduced = useReducedMotion();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -112,7 +111,7 @@ export default function ContactForm() {
       <motion.div
         ref={panelRef}
         variants={containerVariants}
-        initial={reduced ? 'visible' : 'hidden'}
+        initial="hidden"
         whileInView="visible"
         viewport={{ once: true, amount: 0.15 }}
         className="relative mx-auto w-full max-w-[1280px] xl:max-w-[1400px] 2xl:max-w-none overflow-hidden rounded-[2.5rem] shadow-2xl"
@@ -131,7 +130,7 @@ export default function ContactForm() {
           {/* Form Card — below content on mobile, left on desktop */}
           <motion.div
             variants={leftColVariants}
-            whileHover={reduced ? undefined : { y: -6 }}
+            whileHover={{ y: -6 }}
             className="relative order-2 w-full md:order-1 md:w-[45%]"
           >
             {/* White Card with Faceted Corner */}

@@ -37,6 +37,26 @@ const PAKISTAN_CITIES = [
     { name: 'Karachi', top: '18%', left: '34%' }, // bottom-left  — wide south base
 ];
 
+// Shared reveal variants for this section's header + the two right-column
+// cards. Only opacity/y are animated (compositor-friendly). This section
+// previously had no entrance animation at all on these elements — they just
+// appeared fully rendered on scroll with no reveal.
+const revealVariants = {
+    hidden: { opacity: 0, y: 32 },
+    visible: {
+        opacity: 1,
+        y: 0,
+        transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] },
+    },
+};
+
+// Header uses a staggered container so the badge and heading lines reveal
+// in sequence rather than as one flat block.
+const headerContainerVariants = {
+    hidden: {},
+    visible: { transition: { staggerChildren: 0.12, delayChildren: 0.05 } },
+};
+
 export default function AboutUsSection() {
     const skeuomorphicCardStyle = {
         backgroundColor: 'rgb(244, 244, 245)',
@@ -61,29 +81,42 @@ export default function AboutUsSection() {
         <section className="w-full bg-[#f4fafd] text-[#161d1e] antialiased" id="about">
             <div className="mx-auto flex max-w-[1280px] 2xl:max-w-[1600px] flex-col gap-8 px-5 py-16 lg:px-16 2xl:py-24">
 
-                {/* Header Section */}
-                <div className="flex flex-col gap-3">
-                    <div className="inline-flex w-fit items-center gap-2 rounded-full border border-[#bac9cc] bg-white px-4 py-2 shadow-sm transition-transform hover:-translate-y-0.5">
+                {/* Header Section — reveals badge then heading lines in sequence */}
+                <motion.div
+                    className="flex flex-col gap-3"
+                    variants={headerContainerVariants}
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true, margin: '-100px' }}
+                >
+                    <motion.div
+                        variants={revealVariants}
+                        className="inline-flex w-fit items-center gap-2 rounded-full border border-[#bac9cc] bg-white px-4 py-2 shadow-sm transition-transform hover:-translate-y-0.5"
+                    >
                         <span className="h-2 w-2 animate-pulse rounded-full bg-[#15b6e8]" />
                         <span className="text-xs font-semibold tracking-wide text-[#3b494c]">
                             About HyperHex
                         </span>
-                    </div>
+                    </motion.div>
 
                     <h2 className="flex flex-col text-4xl font-extrabold tracking-tight md:text-6xl lg:text-7xl 2xl:text-8xl">
-                        <span>Next-Gen 3D</span>
-                        <span className="bg-gradient-to-b from-[#15b6e8] to-transparent bg-clip-text text-transparent">
+                        <motion.span variants={revealVariants}>Next-Gen 3D</motion.span>
+                        <motion.span variants={revealVariants} className="bg-gradient-to-b from-[#15b6e8] to-transparent bg-clip-text text-transparent">
                             Crafting Spatial Digital Experiences
-                        </span>
+                        </motion.span>
                     </h2>
-                </div>
+                </motion.div>
 
                 {/* Main Content Grid */}
                 <div className="grid grid-cols-1 items-stretch gap-6 lg:grid-cols-12">
 
                     {/* Left Column: Hero Dark Card */}
-                    <div
+                    <motion.div
                         ref={cardRef}
+                        variants={revealVariants}
+                        initial="hidden"
+                        whileInView="visible"
+                        viewport={{ once: true, margin: '-100px' }}
                         className="relative flex h-full min-h-[500px] 2xl:min-h-[640px] flex-col overflow-hidden rounded-[32px] bg-[#0d0f12] shadow-[0_20px_50px_rgba(0,0,0,0.3)] lg:col-span-7"
                     >
 
@@ -185,13 +218,18 @@ export default function AboutUsSection() {
                             </div>
                         </motion.div>
 
-                    </div>
+                    </motion.div>
 
                     {/* Right Column: Stacked Metric Cards with Skeuomorphic Shadows */}
                     <div className="flex flex-col gap-6 lg:col-span-5">
 
                         {/* Trust Metric Card */}
-                        <div
+                        <motion.div
+                            variants={revealVariants}
+                            initial="hidden"
+                            whileInView="visible"
+                            viewport={{ once: true, margin: '-100px' }}
+                            transition={{ delay: 0.1 }}
                             className="relative flex min-h-[240px] 2xl:min-h-[300px] flex-col justify-between overflow-hidden p-8 2xl:p-10 transition-all duration-200"
                             style={skeuomorphicCardStyle}
                         >
@@ -222,10 +260,15 @@ export default function AboutUsSection() {
                             <div className="pointer-events-none absolute right-4 bottom-2 select-none text-[110px] 2xl:text-[140px] font-black leading-none text-[#bac9cc]/40">
                                 <Counter from={19} to={120} />+
                             </div>
-                        </div>
+                        </motion.div>
 
                         {/* Testimonial Card */}
-                        <div
+                        <motion.div
+                            variants={revealVariants}
+                            initial="hidden"
+                            whileInView="visible"
+                            viewport={{ once: true, margin: '-100px' }}
+                            transition={{ delay: 0.2 }}
                             className="flex min-h-[240px] 2xl:min-h-[300px] items-center gap-6 p-8 2xl:p-10 transition-all duration-200"
                             style={skeuomorphicCardStyle}
                         >
@@ -257,7 +300,7 @@ export default function AboutUsSection() {
                                     </span>
                                 </div>
                             </div>
-                        </div>
+                        </motion.div>
 
                     </div>
                 </div>

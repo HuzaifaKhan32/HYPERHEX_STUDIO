@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useMemo } from 'react';
-import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import Button3D from './Button3D';
 import StaggeredHeading from '@/components/ui/StaggeredHeading';
@@ -9,21 +9,45 @@ import StaggeredHeading from '@/components/ui/StaggeredHeading';
 const BLACK = '#161d1e';
 const ACCENT = '#15b6e8';
 
+// Heading reveal: badge, then "Latest", then "Work" — staggered so the block
+// reads as a sequence rather than a flat fade.
+const headingContainerVariants = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.1, delayChildren: 0.05 } },
+};
+const headingItemVariants = {
+  hidden: { opacity: 0, y: 28 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] },
+  },
+};
+
 function LatestWorkHeading() {
   return (
-    <div className="flex flex-col gap-3 select-none">
-      <div className="inline-flex w-fit items-center gap-2 rounded-full border border-[#bac9cc] bg-white px-4 py-2 shadow-sm transition-transform hover:-translate-y-0.5">
+    <motion.div
+      className="flex flex-col gap-3 select-none"
+      variants={headingContainerVariants}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, margin: '-100px' }}
+    >
+      <motion.div
+        variants={headingItemVariants}
+        className="inline-flex w-fit items-center gap-2 rounded-full border border-[#bac9cc] bg-white px-4 py-2 shadow-sm transition-transform hover:-translate-y-0.5"
+      >
         <span className="h-2 w-2 animate-pulse rounded-full bg-[#15b6e8]" />
         <span className="text-xs font-semibold tracking-wide text-[#3b494c]">
           Latest Work
         </span>
-      </div>
+      </motion.div>
 
       <h2 className="flex flex-col text-4xl font-extrabold tracking-tight md:text-6xl lg:text-7xl 2xl:text-8xl">
-        <span className="text-[#161d1e]">Latest</span>
-        <span className="bg-gradient-to-b from-[#15b6e8] to-transparent bg-clip-text text-transparent">Work</span>
+        <motion.span variants={headingItemVariants} className="text-[#161d1e]">Latest</motion.span>
+        <motion.span variants={headingItemVariants} className="bg-gradient-to-b from-[#15b6e8] to-transparent bg-clip-text text-transparent">Work</motion.span>
       </h2>
-    </div>
+    </motion.div>
   );
 }
 
@@ -135,9 +159,7 @@ const ALL_PROJECTS: Project[] = [
 ];
 
 // Base grid-reveal variants used for the initial whileInView entrance. Only
-// opacity/y are animated (compositor-friendly). Increased travel distance
-// (36px, up from 24px) and slightly longer duration (0.6s) so the motion is
-// actually perceptible rather than reading as a quick fade.
+// opacity/y are animated (compositor-friendly).
 const cardVariants = {
   hidden: { opacity: 0, y: 36 },
   visible: {
@@ -151,10 +173,9 @@ const cardVariants = {
 };
 
 // Separate variants for cards entering/leaving via "Explore More" / "View
-// Less" — a slightly larger, snappier rise since this is a direct response
-// to a click rather than a scroll-triggered reveal, and needs an explicit
-// `exit` so AnimatePresence can animate cards out on "View Less" instead of
-// them just disappearing.
+// Less" — these mount on click, not on scroll, so they use `animate`
+// instead of `whileInView` (see note on the element below for why the two
+// must never be combined on the same card).
 const drawerCardVariants = {
   hidden: { opacity: 0, y: 40, scale: 0.96 },
   visible: {
@@ -179,16 +200,12 @@ const drawerCardVariants = {
 
 const INITIAL_COUNT = 6;
 const PAGE_SIZE = 6;
-// Per-card stagger delay, in seconds, for both the initial reveal and the
-// drawer-style load-more/less. Kept as one constant so both interactions
-// feel consistent.
 const STAGGER_STEP = 0.08;
 
 export default function LatestWorkGallery() {
   const [activeCategory, setActiveCategory] = useState('All');
   const [visibleCount, setVisibleCount] = useState(INITIAL_COUNT);
   const [selectedProject, setSelectedProject] = useState<typeof ALL_PROJECTS[number] | null>(null);
-  const reduced = useReducedMotion();
 
   const filtered = useMemo(
     () =>
@@ -229,14 +246,20 @@ export default function LatestWorkGallery() {
   }, [selectedProject]);
 
   return (
-    <section id="works" className="flex flex-col w-full bg-surface text-on-surface relative overflow-hidden font-[family-name:var(--font-dm-sans)] pb-8">
-      <div className="max-w-[1280px] xl:max-w-[1400px] 2xl:max-w-none w-full mx-auto px-5 lg:px-16 2xl:px-24 pt-16 md:pt-32 2xl:pt-40 pb-8 flex flex-col gap-12 relative z-10">
+    <section id="works" className="flex flex-col w-full bg-surface text-on-surface relative overflow-hidden font-[family-name:var(--font-dm-sans)] pb-6">
+      <div className="max-w-[1280px] xl:max-w-[1400px] 2xl:max-w-none w-full mx-auto px-5 lg:px-16 2xl:px-24 pt-16 md:pt-16 2xl:pt-20 pb-8 flex flex-col gap-12 relative z-10">
 
         {/* Header */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-8 pb-8 border-b border-outline-variant/30">
           <div className="flex flex-col gap-6">
             <LatestWorkHeading />
-            <div className="flex flex-wrap items-center gap-2.5 sm:gap-3 font-bold text-sm">
+            <motion.div
+              className="flex flex-wrap items-center gap-2.5 sm:gap-3 font-bold text-sm"
+              variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.05, delayChildren: 0.3 } } }}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: '-100px' }}
+            >
               {CATEGORIES.map((category) => {
                 const isActive = activeCategory === category;
                 return (
@@ -245,9 +268,12 @@ export default function LatestWorkGallery() {
                     type="button"
                     onClick={() => handleCategory(category)}
                     aria-pressed={isActive}
+                    variants={{
+                      hidden: { opacity: 0, y: 16 },
+                      visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: [0.16, 1, 0.3, 1] } },
+                    }}
                     whileHover={{ y: -2 }}
                     whileTap={{ y: 1, scale: 0.97 }}
-                    transition={{ duration: 0.15, ease: [0.4, 0, 0.2, 1] }}
                     className={`flex items-center justify-center px-5 py-2.5 bg-surface-bright rounded-xl border-2 font-bold text-xs sm:text-sm uppercase tracking-wider cursor-pointer transition-[color,border-color,box-shadow] duration-150 ${
                       isActive
                         ? 'border-accent text-accent shadow-[0_4px_0_0_rgba(21,182,232,1)]'
@@ -258,49 +284,46 @@ export default function LatestWorkGallery() {
                   </motion.button>
                 );
               })}
-            </div>
+            </motion.div>
           </div>
         </div>
 
         {/* Main Gallery Grid.
-            Two distinct animation regimes share this grid:
-            - Switching category remounts the whole set (key={activeCategory})
-              and every visible card plays its scroll-triggered whileInView
-              entrance, staggered by index — this is a genuinely new list, so
-              replaying the full reveal is correct here.
-            - Clicking "Explore More"/"View Less" does NOT change
-              activeCategory, so the grid itself is not remounted. Only the
-              cards beyond INITIAL_COUNT mount/unmount, and each carries a
-              stable key={project.id}, so AnimatePresence can animate exactly
-              those cards in (drawerCardVariants.hidden -> visible) or out
-              (visible -> exit) without touching the already-visible first
-              batch. */}
+            Two distinct animation regimes share this grid — and critically,
+            NEVER both on the same card:
+            - Category switch remounts the whole set (key={activeCategory}),
+              every visible card plays its scroll-triggered `whileInView`
+              entrance, staggered by index.
+            - "Explore More"/"View Less" does NOT remount the grid. Only
+              cards beyond INITIAL_COUNT mount/unmount, and they use
+              `animate` (mount-triggered) instead of `whileInView`, so their
+              stagger delay actually fires instead of being resolved
+              together with a conflicting trigger on the same element —
+              that conflict (both `animate` and `whileInView` present at
+              once) is what caused every card to previously snap to visible
+              immediately regardless of its intended delay. */}
         <motion.div
           key={activeCategory}
-          layout={!reduced}
+          layout
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
         >
           <AnimatePresence mode="popLayout">
             {visible.map((project, index) => {
               const isDrawerCard = index >= INITIAL_COUNT;
-              // Stagger delay is relative to each card's position within its
-              // own reveal group, not its absolute index — so newly-added
-              // card #7 (index 6) gets delay 0, not 6 * STAGGER_STEP.
               const staggerIndex = isDrawerCard ? index - INITIAL_COUNT : index;
 
               return (
                 <motion.div
                   key={project.id}
-                  layout={!reduced}
+                  layout
                   variants={isDrawerCard ? drawerCardVariants : cardVariants}
-                  initial={reduced ? 'visible' : 'hidden'}
-                  animate="visible"
+                  initial="hidden"
                   exit={isDrawerCard ? 'exit' : undefined}
-                  {...(!isDrawerCard && {
-                    whileInView: 'visible',
-                    viewport: { once: true, margin: '-100px' },
-                  })}
-                  transition={{ delay: reduced ? 0 : staggerIndex * STAGGER_STEP }}
+                  transition={{ delay: staggerIndex * STAGGER_STEP }}
+                  // Mutually exclusive triggers — see comment above the grid.
+                  {...(isDrawerCard
+                    ? { animate: 'visible' }
+                    : { whileInView: 'visible', viewport: { once: true, margin: '-100px' } })}
                   onClick={() => setSelectedProject(project)}
                   data-cursor="project"
                   className="group relative aspect-[5/3] overflow-hidden rounded-xl cursor-pointer bg-[#111]"
