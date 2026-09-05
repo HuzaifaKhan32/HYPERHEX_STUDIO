@@ -53,7 +53,7 @@ export default function ClientMarquee() {
   return (
     <section
       aria-label="Our clients"
-      className="relative w-full overflow-hidden bg-transparent pt-2 pb-8 md:pt-3 md:pb-3"
+      className="relative w-full overflow-hidden bg-black pt-2 pb-8 md:pt-3 md:pb-3"
     >
       {/* Side Fade Masks */}
       <div className="pointer-events-none absolute left-0 top-0 bottom-0 w-10 md:w-28 z-10 bg-gradient-to-r from-background via-background/80 to-transparent" />
