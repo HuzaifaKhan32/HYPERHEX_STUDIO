@@ -238,14 +238,13 @@ export default function CaseStudiesSection() {
                       fill
                       sizes="(max-width: 640px) 80vw, (max-width: 768px) 60vw, (max-width: 1280px) 65vw, 48vw"
                       quality={80}
-                      loading={isCenter ? 'eager' : 'lazy'}
-                      priority={isCenter}
+                      {...(!(isCenter || distanceFromCenter <= 1) && { loading: 'lazy' })}
+                      priority={isCenter || distanceFromCenter <= 1}
                       draggable={false}
                       onDragStart={(e) => e.preventDefault()}
                       style={{ userSelect: 'none', WebkitUserDrag: 'none' } as React.CSSProperties}
-                      className={`object-cover transition-all duration-500 ease-out group-hover:scale-105 pointer-events-none select-none ${
-                        isSide ? 'filter blur-[2px] brightness-75' : ''
-                      }`}
+                      className={`object-cover transition-all duration-500 ease-out group-hover:scale-105 pointer-events-none select-none ${isSide ? 'filter blur-[2px] brightness-75' : ''
+                        }`}
                     />
 
                     {isSide && (

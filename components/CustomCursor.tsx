@@ -78,6 +78,12 @@ export default function CustomCursor() {
           }
         } else if (target.closest('.service-card, [data-project]')) {
           nextType = 'project';
+        } else if (target.closest('footer')) {
+          if (target.closest('button, a, [role="button"], .cursor-pointer')) {
+            nextType = 'button';
+          } else {
+            nextType = 'default';
+          }
         } else if (target.closest('[aria-label="Our clients"], .cursor-grab')) {
           nextType = 'drag';
         } else if (target.closest('h1, h2, h3')) {

@@ -16,11 +16,42 @@ interface ImageCarouselProps {
   onFirstReady?: () => void;
 }
 
+// FIXED: Preload first 3 slides on component mount
+function usePreloadImages(images: CarouselMedia[], count: number = 3) {
+  useEffect(() => {
+    for (let i = 0; i < Math.min(count, images.length); i++) {
+      const media = images[i];
+      if (media.type === 'video') {
+        // Preload poster for video
+        if (media.poster) {
+          const link = document.createElement('link');
+          link.rel = 'preload';
+          link.as = 'image';
+          link.href = media.poster;
+          (link as any).fetchPriority = 'high';
+          document.head.appendChild(link);
+        }
+      } else {
+        // Preload image
+        const link = document.createElement('link');
+        link.rel = 'preload';
+        link.as = 'image';
+        link.href = media.src;
+        (link as any).fetchPriority = 'high';
+        document.head.appendChild(link);
+      }
+    }
+  }, [images]);
+}
+
 export default function ImageCarousel({ images, onFirstReady }: ImageCarouselProps) {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isVideoPlaying, setIsVideoPlaying] = useState(false);
   const [hasNotified, setHasNotified] = useState(false);
   const videoRef = useRef<HTMLVideoElement | null>(null);
+
+  // FIXED: Preload first 3 carousel slides
+  usePreloadImages(images, 3);
 
   const nextSlide = useCallback(() => {
     setCurrentSlide((prev) => (prev + 1) % images.length);
