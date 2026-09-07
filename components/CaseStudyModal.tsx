@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useCallback } from 'react';
+import React, { useEffect, useCallback, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import type { CaseStudy } from '@/lib/case-studies-data';
@@ -11,6 +11,7 @@ interface CaseStudyModalProps {
 }
 
 export default function CaseStudyModal({ caseStudy, onClose }: CaseStudyModalProps) {
+  const [iframeError, setIframeError] = useState(false);
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
@@ -24,6 +25,7 @@ export default function CaseStudyModal({ caseStudy, onClose }: CaseStudyModalPro
     if (caseStudy) {
       document.body.style.overflow = 'hidden';
       window.addEventListener('keydown', handleKeyDown);
+      setIframeError(false);
     } else {
       document.body.style.overflow = '';
     }
@@ -90,15 +92,33 @@ export default function CaseStudyModal({ caseStudy, onClose }: CaseStudyModalPro
               {/* Media Player: Mounts YouTube iframe only when modal is open */}
               {caseStudy.isVideo ? (
                 <div className="relative w-full aspect-video bg-black">
-                  <iframe
-                    src={caseStudy.embedUrl}
-                    title={caseStudy.title}
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                    loading="lazy"
-                    className="absolute inset-0 w-full h-full"
-                    style={{ border: 'none' }}
-                  />
+                  {iframeError ? (
+                    <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 bg-black p-8 text-white">
+                      <svg className="w-16 h-16 text-white/60" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                      </svg>
+                      <p className="text-center text-sm">Unable to load video. Please try opening it directly on YouTube.</p>
+                      <a
+                        href={`https://www.youtube.com/watch?v=${caseStudy.embedUrl?.split('/embed/')[1]?.split('?')[0]}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="mt-2 px-6 py-2 bg-[#ff0000] hover:bg-[#cc0000] text-white rounded-lg font-semibold text-sm transition-colors"
+                      >
+                        Open in YouTube
+                      </a>
+                    </div>
+                  ) : (
+                    <iframe
+                      src={caseStudy.embedUrl}
+                      title={caseStudy.title}
+                      allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                      loading="lazy"
+                      onError={() => setIframeError(true)}
+                      className="absolute inset-0 w-full h-full"
+                      style={{ border: 'none' }}
+                    />
+                  )}
                 </div>
               ) : (
                 <div className="relative w-full aspect-video overflow-hidden bg-black flex items-center justify-center select-none">

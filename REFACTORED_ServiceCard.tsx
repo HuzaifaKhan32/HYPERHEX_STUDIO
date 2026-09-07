@@ -90,7 +90,7 @@ export default function ServiceCard({
             predictable animations. No manual style manipulation; no cleanup risks. */}
         <motion.div
           initial={direction !== null ? TRANSLATE_VARIANTS[direction] : INITIAL_VARIANTS[0]}
-          animate={direction !== null ? INITIAL_VARIANTS[0] : { x: 0, y: '-101%' }}
+          animate={direction !== null ? INITIAL_VARIANTS[0] : (direction !== null ? TRANSLATE_VARIANTS[direction] : { x: 0, y: '-101%' })}
           transition={{ duration: 0.35, ease: [0.4, 0, 0.2, 1] }}
           className={`absolute inset-0 z-10 flex flex-col justify-between p-8 text-left ${isCyanPanel ? 'bg-primary-container text-ink' : 'bg-ink text-white'
             }`}

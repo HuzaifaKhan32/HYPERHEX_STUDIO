@@ -7,11 +7,15 @@ import InfiniteMarquee from '@/components/ui/InfiniteMarquee';
 const PILL_BASE =
   'inline-flex shrink-0 items-center justify-center rounded-full h-[62px] min-w-[110px] px-4 mx-1.5 sm:h-[120px] sm:min-w-[160px] sm:px-8 sm:mx-3';
 
+// Off-black surface color — pure #000 avoids per design best practice.
+// Centralized here so the section bg and the fade masks can never drift apart.
+const MARQUEE_BG = '#0a0a0a';
+
 function MarqueePill({ item }: { item: MarqueeItem }) {
   if (item.type === 'label') {
     return (
       <span
-        className={`${PILL_BASE} font-[family-name:var(--font-jetbrains)] text-[10px] sm:text-base font-medium tracking-[0.12em] text-black uppercase px-4 sm:px-14`}
+        className={`${PILL_BASE} font-[family-name:var(--font-jetbrains)] text-[10px] sm:text-base font-medium tracking-[0.12em] text-white uppercase px-4 sm:px-14`}
       >
         {item.name}
       </span>
@@ -53,11 +57,22 @@ export default function ClientMarquee() {
   return (
     <section
       aria-label="Our clients"
-      className="relative w-full overflow-hidden bg-black pt-2 pb-8 md:pt-3 md:pb-3"
+      className="relative w-full overflow-hidden pt-2 pb-8 md:pt-3 md:pb-3"
+      style={{ backgroundColor: MARQUEE_BG }}
     >
-      {/* Side Fade Masks */}
-      <div className="pointer-events-none absolute left-0 top-0 bottom-0 w-10 md:w-28 z-10 bg-gradient-to-r from-background via-background/80 to-transparent" />
-      <div className="pointer-events-none absolute right-0 top-0 bottom-0 w-10 md:w-28 z-10 bg-gradient-to-l from-background via-background/80 to-transparent" />
+      {/* Side Fade Masks — same off-black as the section, guaranteed to match */}
+      <div
+        className="pointer-events-none absolute left-0 top-0 bottom-0 w-10 md:w-28 z-10"
+        style={{
+          background: `linear-gradient(to right, ${MARQUEE_BG} 0%, ${MARQUEE_BG} 40%, transparent 100%)`,
+        }}
+      />
+      <div
+        className="pointer-events-none absolute right-0 top-0 bottom-0 w-10 md:w-28 z-10"
+        style={{
+          background: `linear-gradient(to left, ${MARQUEE_BG} 0%, ${MARQUEE_BG} 40%, transparent 100%)`,
+        }}
+      />
 
       <InfiniteMarquee
         items={pillElements}

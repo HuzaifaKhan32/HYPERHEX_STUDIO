@@ -103,6 +103,11 @@ export default function ContactForm() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    // TODO: Implement actual form submission logic
+    // - Add API endpoint for form processing
+    // - Add loading state during submission
+    // - Add success/error toast notifications
+    // - Add form validation feedback
     console.log({ email, phone, message });
   };
 

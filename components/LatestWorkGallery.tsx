@@ -68,6 +68,7 @@ type CategoryType = (typeof CATEGORIES)[number];
 type Project = {
   id: string;
   title: string;
+  brand: string;
   category: CategoryType | CategoryType[];
   imageUrl: string;
   embedUrl?: string;
@@ -76,24 +77,37 @@ type Project = {
 };
 
 // ── YouTube video helper ───────────────────────────────────────────────────
-function yt(id: string, title: string, category: CategoryType | CategoryType[] = 'Animations'): Project {
+function yt(
+  id: string,
+  title: string,
+  category: CategoryType | CategoryType[] = 'Animations',
+  imageUrl?: string,
+  brand?: string
+): Project {
   return {
     id,
     title,
+    brand: brand || title.split('|')[0].trim().split('–')[0].trim(),
     category,
-    imageUrl: `/images/case-studies/${id}.webp`,
-    embedUrl: `https://www.youtube.com/embed/${id}?autoplay=1&rel=0`,
+    imageUrl: imageUrl || `/images/case-studies/${id}.webp`,
+    embedUrl: `https://www.youtube.com/embed/${id}?rel=0`,
     isVideo: true,
   };
 }
 
-function yt_drone(id: string, title: string, category: CategoryType | CategoryType[] = ['Animations', '360 Tour']): Project {
+function yt_drone(
+  id: string,
+  title: string,
+  category: CategoryType | CategoryType[] = ['Animations', '360 Tour'],
+  brand?: string
+): Project {
   return {
     id,
     title,
+    brand: brand || title.split('|')[0].trim().split('–')[0].trim(),
     category,
     imageUrl: `/images/case-studies/${id}.webp`,
-    embedUrl: `https://www.youtube.com/embed/${id}?autoplay=1&rel=0`,
+    embedUrl: `https://www.youtube.com/embed/${id}?rel=0`,
     isVideo: true,
   };
 }
@@ -103,11 +117,13 @@ function imgProject(
   id: string,
   title: string,
   path: string,
-  category: CategoryType | CategoryType[] = 'Interior & Construction'
+  category: CategoryType | CategoryType[] = 'Interior & Construction',
+  brand?: string
 ): Project {
   return {
     id,
     title,
+    brand: brand || title.split('|')[0].trim().split('–')[0].trim(),
     category,
     imageUrl: path,
     isVideo: false,
@@ -120,11 +136,13 @@ function webProject(
   title: string,
   path: string,
   projectUrl: string,
-  category: CategoryType | CategoryType[] = 'Web'
+  category: CategoryType | CategoryType[] = 'Web',
+  brand?: string
 ): Project {
   return {
     id,
     title,
+    brand: brand || title,
     category,
     imageUrl: path,
     projectUrl,
@@ -132,30 +150,32 @@ function webProject(
   };
 }
 
+// Project data moved outside component to prevent recreation on every render
 const ALL_PROJECTS: Project[] = [
-  webProject('web-ce', 'CE and Builders', '/images/ce-and-builders.webp', 'https://ceandbuilders.com/', ['Web', 'Interior & Construction']),
-  webProject('web-nayyer', 'Nayyer Builders', '/images/nayyer-builder.webp', 'https://nayyerbuilders.com/', ['Web', 'Interior & Construction']),
-  webProject('web-kurta', 'Kurta Dukan', '/images/kurta-Dukan.webp', 'https://www.kurtadukan.com/', ['Web', 'Branding & Advertisement']),
-  webProject('web-leather', 'Leather Crafted', '/images/leather-crafted.webp', 'https://leather-crafted.com/', ['Web', 'Branding & Advertisement']),
-  yt('QM7FBByPTX8', 'I Handle The Heat', ['Animations', 'Branding & Advertisement']),
-  yt('SXNb1vR_snw', 'NS Arcade | 3D Animation', ['Animations', 'Interior & Construction']),
-  yt('Jq_njk26M3E', 'Commtel | 3D Design & Animation', ['Animations', 'Branding & Advertisement']),
-  yt('7JT-j8gz5uU', 'Luxury Watch 3D animation', ['Animations', 'Branding & Advertisement']),
-  yt_drone('7wRGPltVun4', 'Jaguar Builder', ['Animations', '360 Tour', 'Interior & Construction']),
-  yt_drone('YvvRPa5zVAM', 'Ahsan Town Project', ['Animations', '360 Tour', 'Interior & Construction']),
-  yt_drone('NJgPMovdV2Y', 'Al Jannat Farmhouse', ['Animations', '360 Tour', 'Interior & Construction']),
-  yt('QhWmY9lXlZY', 'Modern Apartment Interior Design', ['Interior & Construction', '360 Tour', 'Animations']),
-  yt('oQnWA-22Bf4', 'Governor House – Conference Room', ['Interior & Construction', '360 Tour', 'Animations']),
-  yt('9JFPZnPXQ1Y', 'Call Center Interior 3D', ['Interior & Construction', '360 Tour', 'Animations']),
-  yt('WKOskq3aIQQ', 'Mumtaz Residency', ['Interior & Construction', 'Animations']),
-  yt('m2FYElEVclc', 'Nexgen Heights', ['Interior & Construction', 'Animations']),
-  imgProject('img-car', 'Car Configurator', '/portfolio/car-configurator.jpg', ['Configurator', 'VR']),
-  imgProject('img-commtel', 'Commtel Project', '/portfolio/commtel.jpg', ['VR', '360 Tour', 'Branding & Advertisement']),
-  imgProject('img-exterior', 'Exterior House', '/portfolio/exterior-house.jpg', ['Interior & Construction', '360 Tour']),
-  imgProject('img-governor', 'Governor House Render', '/portfolio/governor-house.jpg', ['Interior & Construction', '360 Tour']),
-  imgProject('img-ivf', 'IVF Academy', '/portfolio/IVF.png', ['Interior & Construction', 'Branding & Advertisement']),
-  imgProject('img-arcade', 'NS Arcade', '/portfolio/ns-arcade.jpg', ['Interior & Construction', 'Branding & Advertisement']),
-  imgProject('img-watch', 'Luxury Watch 3D', '/portfolio/watch.png', ['Branding & Advertisement', 'Animations']),
+  webProject('web-ce', 'CE and Builders', '/images/ce-and-builders.webp', 'https://ceandbuilders.com/', ['Web', 'Interior & Construction'], 'CE and Builders'),
+  webProject('web-nayyer', 'Nayyer Builders', '/images/nayyer-builder.webp', 'https://nayyerbuilders.com/', ['Web', 'Interior & Construction'], 'Nayyer Builders'),
+  webProject('web-kurta', 'Kurta Dukan', '/images/kurta-Dukan.webp', 'https://www.kurtadukan.com/', ['Web', 'Branding & Advertisement'], 'Kurta Dukan'),
+  webProject('web-leather', 'Leather Crafted', '/images/leather-crafted.webp', 'https://leather-crafted.com/', ['Web', 'Branding & Advertisement'], 'Leather Crafted'),
+  yt('QM7FBByPTX8', 'I Handle The Heat', ['Animations', 'Branding & Advertisement'], undefined, 'I Handle The Heat'),
+  yt('SXNb1vR_snw', 'NS Arcade | 3D Animation', ['Animations', 'Interior & Construction'], undefined, 'NS Arcade'),
+  yt('Jq_njk26M3E', 'Commtel | 3D Design & Animation', ['Animations', 'Branding & Advertisement'], undefined, 'Commtel'),
+  yt('7JT-j8gz5uU', 'Luxury Watch 3D animation', ['Animations', 'Branding & Advertisement'], undefined, 'Luxury Watch'),
+  yt('8-daQ4f573M', 'VR Experience', 'VR', '/images/case-studies/vr-latest-work.webp', 'VR Experience'),
+  yt_drone('7wRGPltVun4', 'Jaguar Builder', ['Animations', '360 Tour', 'Interior & Construction'], 'Jaguar'),
+  yt_drone('YvvRPa5zVAM', 'Ahsan Town Project', ['Animations', '360 Tour', 'Interior & Construction'], 'Ahsan Town'),
+  yt_drone('NJgPMovdV2Y', 'Al Jannat Farmhouse', ['Animations', '360 Tour', 'Interior & Construction'], 'Al Jannat'),
+  yt('QhWmY9lXlZY', 'Modern Apartment Interior Design', ['Interior & Construction', '360 Tour', 'Animations'], undefined, 'Modern Apartment'),
+  yt('oQnWA-22Bf4', 'Governor House – Conference Room', ['Interior & Construction', '360 Tour', 'Animations'], undefined, 'Governor House'),
+  yt('9JFPZnPXQ1Y', 'Call Center Interior 3D', ['Interior & Construction', '360 Tour', 'Animations'], undefined, 'Call Center'),
+  yt('WKOskq3aIQQ', 'Mumtaz Residency', ['Interior & Construction', 'Animations'], undefined, 'Mumtaz Residency'),
+  yt('m2FYElEVclc', 'Nexgen Heights', ['Interior & Construction', 'Animations'], undefined, 'Nexgen Heights'),
+  imgProject('img-car', 'Car Configurator', '/portfolio/car-configurator.jpg', ['Configurator'], 'Car Configurator'),
+  imgProject('img-commtel', 'Commtel Project', '/portfolio/commtel.jpg', ['VR', '360 Tour', 'Branding & Advertisement'], 'Commtel'),
+  imgProject('img-exterior', 'Exterior House', '/portfolio/exterior-house.jpg', ['Interior & Construction', '360 Tour'], 'Exterior House'),
+  imgProject('img-governor', 'Governor House Render', '/portfolio/governor-house.jpg', ['Interior & Construction', '360 Tour'], 'Governor House'),
+  imgProject('img-ivf', 'IVF Academy', '/portfolio/IVF.png', ['Interior & Construction', 'Branding & Advertisement'], 'IVF Academy'),
+  imgProject('img-arcade', 'NS Arcade', '/portfolio/ns-arcade.jpg', ['Interior & Construction', 'Branding & Advertisement'], 'NS Arcade'),
+  imgProject('img-watch', 'Luxury Watch 3D', '/portfolio/watch.png', ['Branding & Advertisement', 'Animations'], 'Luxury Watch'),
 ];
 
 // Base grid-reveal variants used for the initial whileInView entrance. Only
@@ -204,10 +224,13 @@ const STAGGER_STEP = 0.08;
 
 export default function LatestWorkGallery() {
   const [activeCategory, setActiveCategory] = useState('All');
+  const [activeBrand, setActiveBrand] = useState('All');
   const [visibleCount, setVisibleCount] = useState(INITIAL_COUNT);
   const [selectedProject, setSelectedProject] = useState<typeof ALL_PROJECTS[number] | null>(null);
+  const [iframeError, setIframeError] = useState(false);
 
-  const filtered = useMemo(
+  // 1. Projects matching active parent category
+  const categoryProjects = useMemo(
     () =>
       ALL_PROJECTS.filter((p) => {
         if (activeCategory === 'All') return true;
@@ -218,6 +241,20 @@ export default function LatestWorkGallery() {
       }),
     [activeCategory]
   );
+
+  // 2. Dynamic sub-filter brands derived strictly from available projects under active parent category
+  const availableBrands = useMemo(() => {
+    const brands = Array.from(new Set(categoryProjects.map((p) => p.brand))).sort();
+    return ['All', ...brands];
+  }, [categoryProjects]);
+
+  // 3. Final filtered list matching both active category AND selected brand sub-filter
+  const filtered = useMemo(() => {
+    return categoryProjects.filter((p) => {
+      if (activeBrand === 'All') return true;
+      return p.brand === activeBrand;
+    });
+  }, [categoryProjects, activeBrand]);
 
   const visible = filtered.slice(0, visibleCount);
   const hasMore = visibleCount < filtered.length;
@@ -233,12 +270,19 @@ export default function LatestWorkGallery() {
 
   const handleCategory = (cat: string) => {
     setActiveCategory(cat);
+    setActiveBrand('All');
+    setVisibleCount(INITIAL_COUNT);
+  };
+
+  const handleBrand = (brand: string) => {
+    setActiveBrand(brand);
     setVisibleCount(INITIAL_COUNT);
   };
 
   useEffect(() => {
     if (selectedProject) {
       document.body.style.overflow = 'hidden';
+      setIframeError(false);
     } else {
       document.body.style.overflow = 'unset';
     }
@@ -253,57 +297,84 @@ export default function LatestWorkGallery() {
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-8 pb-8 border-b border-outline-variant/30">
           <div className="flex flex-col gap-6">
             <LatestWorkHeading />
-            <motion.div
-              className="flex flex-wrap items-center gap-2.5 sm:gap-3 font-bold text-sm"
-              variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.05, delayChildren: 0.3 } } }}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: '-100px' }}
-            >
-              {CATEGORIES.map((category) => {
-                const isActive = activeCategory === category;
-                return (
-                  <motion.button
-                    key={category}
-                    type="button"
-                    onClick={() => handleCategory(category)}
-                    aria-pressed={isActive}
-                    variants={{
-                      hidden: { opacity: 0, y: 16 },
-                      visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: [0.16, 1, 0.3, 1] } },
-                    }}
-                    whileHover={{ y: -2 }}
-                    whileTap={{ y: 1, scale: 0.97 }}
-                    className={`flex items-center justify-center px-5 py-2.5 bg-surface-bright rounded-xl border-2 font-bold text-xs sm:text-sm uppercase tracking-wider cursor-pointer transition-[color,border-color,box-shadow] duration-150 ${
-                      isActive
-                        ? 'border-accent text-accent shadow-[0_4px_0_0_rgba(21,182,232,1)]'
-                        : 'border-outline-variant/30 text-on-surface shadow-[0_4px_0_0_var(--color-outline-variant)] hover:border-accent hover:text-accent hover:shadow-[0_4px_0_0_rgba(21,182,232,1)]'
-                    }`}
+            <div className="flex flex-col gap-3">
+              {/* Parent Category Filters */}
+              <motion.div
+                className="flex flex-wrap items-center gap-2.5 sm:gap-3 font-bold text-sm"
+                variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.05, delayChildren: 0.3 } } }}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, margin: '-100px' }}
+              >
+                {CATEGORIES.map((category) => {
+                  const isActive = activeCategory === category;
+                  return (
+                    <motion.button
+                      key={category}
+                      type="button"
+                      onClick={() => handleCategory(category)}
+                      aria-pressed={isActive}
+                      variants={{
+                        hidden: { opacity: 0, y: 16 },
+                        visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: [0.16, 1, 0.3, 1] } },
+                      }}
+                      whileHover={{ y: -2 }}
+                      whileTap={{ y: 1, scale: 0.97 }}
+                      className={`flex items-center justify-center px-5 py-2.5 bg-surface-bright rounded-xl border-2 font-bold text-xs sm:text-sm uppercase tracking-wider cursor-pointer transition-[color,border-color,box-shadow] duration-150 ${
+                        isActive
+                          ? 'border-accent text-accent shadow-[0_4px_0_0_rgba(21,182,232,1)]'
+                          : 'border-outline-variant/30 text-on-surface shadow-[0_4px_0_0_var(--color-outline-variant)] hover:border-accent hover:text-accent hover:shadow-[0_4px_0_0_rgba(21,182,232,1)]'
+                      }`}
+                    >
+                      {category}
+                    </motion.button>
+                  );
+                })}
+              </motion.div>
+
+              {/* Sub Filters (Brand Names attached to the selected Parent Filter) */}
+              <AnimatePresence mode="wait">
+                {availableBrands.length > 1 && (
+                  <motion.div
+                    key={activeCategory}
+                    initial={{ opacity: 0, y: -8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -8 }}
+                    transition={{ duration: 0.25 }}
+                    className="flex flex-wrap items-center gap-2 pt-3"
                   >
-                    {category}
-                  </motion.button>
-                );
-              })}
-            </motion.div>
+                    <span className="text-xs font-bold uppercase tracking-wider text-on-surface/50 mr-1 flex items-center gap-1.5">
+                      <span className="h-2 w-2 rounded-full bg-[#15b6e8]" />
+                      Brand:
+                    </span>
+                    {availableBrands.map((brand) => {
+                      const isBrandActive = activeBrand === brand;
+                      return (
+                        <button
+                          key={brand}
+                          type="button"
+                          onClick={() => handleBrand(brand)}
+                          aria-pressed={isBrandActive}
+                          className={`px-3.5 py-1.5 rounded-lg text-xs font-bold tracking-wide transition-all cursor-pointer ${
+                            isBrandActive
+                              ? 'bg-[#15b6e8] text-black font-extrabold shadow-[0_2px_10px_rgba(21,182,232,0.4)]'
+                              : 'bg-surface-bright/80 border border-outline-variant/30 text-on-surface/75 hover:text-on-surface hover:border-accent/60 hover:bg-surface-bright'
+                          }`}
+                        >
+                          {brand === 'All' ? 'All Brands' : brand}
+                        </button>
+                      );
+                    })}
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
           </div>
         </div>
 
-        {/* Main Gallery Grid.
-            Two distinct animation regimes share this grid — and critically,
-            NEVER both on the same card:
-            - Category switch remounts the whole set (key={activeCategory}),
-              every visible card plays its scroll-triggered `whileInView`
-              entrance, staggered by index.
-            - "Explore More"/"View Less" does NOT remount the grid. Only
-              cards beyond INITIAL_COUNT mount/unmount, and they use
-              `animate` (mount-triggered) instead of `whileInView`, so their
-              stagger delay actually fires instead of being resolved
-              together with a conflicting trigger on the same element —
-              that conflict (both `animate` and `whileInView` present at
-              once) is what caused every card to previously snap to visible
-              immediately regardless of its intended delay. */}
+        {/* Main Gallery Grid */}
         <motion.div
-          key={activeCategory}
+          key={`${activeCategory}-${activeBrand}`}
           layout
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
         >
@@ -336,7 +407,7 @@ export default function LatestWorkGallery() {
                     sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                     quality={80}
                     loading={index < INITIAL_COUNT ? 'eager' : 'lazy'}
-                    priority={index < 3}
+                    priority={index < INITIAL_COUNT}
                     className="object-cover transition-transform duration-400 ease-out group-hover:scale-110"
                   />
                   {/* Hover overlay */}
@@ -455,21 +526,42 @@ export default function LatestWorkGallery() {
 
                 {selectedProject.isVideo ? (
                   <div className="relative w-full aspect-video">
-                    <iframe
-                      src={selectedProject.embedUrl}
-                      title={selectedProject.title}
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                      allowFullScreen
-                      className="absolute inset-0 w-full h-full"
-                      style={{ border: 'none' }}
-                    />
+                    {iframeError ? (
+                      <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 bg-black p-8 text-white">
+                        <svg className="w-16 h-16 text-white/60" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                        </svg>
+                        <p className="text-center text-sm">Unable to load video. Please try opening it directly on YouTube.</p>
+                        <a
+                          href={`https://www.youtube.com/watch?v=${selectedProject.embedUrl?.split('/embed/')[1]?.split('?')[0]}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="mt-2 px-6 py-2 bg-[#ff0000] hover:bg-[#cc0000] text-white rounded-lg font-semibold text-sm transition-colors"
+                        >
+                          Open in YouTube
+                        </a>
+                      </div>
+                    ) : (
+                      <iframe
+                        src={selectedProject.embedUrl}
+                        title={selectedProject.title}
+                        allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                        onError={() => setIframeError(true)}
+                        className="absolute inset-0 w-full h-full"
+                        style={{ border: 'none' }}
+                      />
+                    )}
                   </div>
                 ) : (
                   <div className="relative w-full overflow-y-auto max-h-[60vh] flex items-center justify-center bg-black">
-                    <img
+                    <Image
                       src={selectedProject.imageUrl}
                       alt={selectedProject.title}
-                      className="w-full h-auto max-h-[60vh] object-contain mx-auto"
+                      fill
+                      sizes="(max-width: 1024px) 100vw, 896px"
+                      className="object-contain"
+                      priority
                     />
                   </div>
                 )}

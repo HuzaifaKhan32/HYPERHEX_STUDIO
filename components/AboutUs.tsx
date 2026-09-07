@@ -277,7 +277,7 @@ export default function AboutUsSection() {
                                     src="/logo/hunain.webp"
                                     alt="Hunain Soomro - CEO of HyperHex Studio"
                                     fill
-                                    sizes="200px"
+                                    sizes="(max-width: 768px) 120px, (max-width: 1536px) 160px, 200px"
                                     className="object-cover"
                                 />
                                 <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/20 to-transparent" />

@@ -103,23 +103,11 @@ export default function ImageCarousel({ images, onFirstReady }: ImageCarouselPro
                         }
                       }}
                       src={image.src}
-                      // Native `poster` attribute — this is what actually
-                      // prevents the blank/black frame. A <video> with no
-                      // poster of its own renders as a black rectangle the
-                      // instant it mounts, before the first frame is
-                      // decoded — regardless of any overlay div stacked on
-                      // top of it in the DOM, since that overlay is a
-                      // separate element racing against the video's own
-                      // paint rather than part of it. Setting `poster` here
-                      // means the browser paints this image as part of the
-                      // video element itself with no timing race at all:
-                      // it's there on the very first paint, on both initial
-                      // load and every subsequent slide/video change.
                       poster={image.poster}
                       autoPlay
                       muted
                       playsInline
-                      preload="auto"
+                      preload={index === 0 ? 'auto' : 'none'}
                       onEnded={nextSlide}
                       onPlaying={() => {
                         setIsVideoPlaying(true);

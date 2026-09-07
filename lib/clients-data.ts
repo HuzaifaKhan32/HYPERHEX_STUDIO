@@ -50,12 +50,31 @@ const CLIENTS: { id: ClientLogoId; name: string }[] = [
   { id: 'stadium_view', name: 'Stadium View Residencia' },
 ];
 
+// Deterministic pseudo-random generator (Mulberry32) for SSR-safe shuffling
+function pseudoRandom(seed: number) {
+  let t = (seed += 0x6d2b79f5);
+  t = Math.imul(t ^ (t >>> 15), t | 1);
+  t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+  return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+}
+
+export function seededShuffle<T>(array: T[], seed = 7): T[] {
+  const shuffled = [...array];
+  let s = seed;
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(pseudoRandom(s++) * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled;
+}
+
 export function buildMarqueeSequence(): MarqueeItem[] {
   const items: MarqueeItem[] = [];
-  const halfLength = Math.ceil(CLIENTS.length / 2);
+  const shuffledClients = seededShuffle(CLIENTS, 7);
+  const halfLength = Math.ceil(shuffledClients.length / 2);
 
   // First half of client logos
-  CLIENTS.slice(0, halfLength).forEach((client, index) => {
+  shuffledClients.slice(0, halfLength).forEach((client, index) => {
     items.push({
       type: 'client',
       id: client.id,
@@ -68,7 +87,7 @@ export function buildMarqueeSequence(): MarqueeItem[] {
   items.push({ type: 'label', name: 'Our Clients' });
 
   // Second half of client logos
-  CLIENTS.slice(halfLength).forEach((client, index) => {
+  shuffledClients.slice(halfLength).forEach((client, index) => {
     items.push({
       type: 'client',
       id: client.id,

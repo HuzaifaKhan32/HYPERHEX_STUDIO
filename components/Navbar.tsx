@@ -5,7 +5,6 @@ import { motion, AnimatePresence, useMotionValueEvent, useScroll } from 'framer-
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Button3D from './Button3D';
-// import { ThemeToggle } from './ThemeToggle';
 
 // ── Animated hamburger → X ─────────────────────────────────────────────────
 function HamburgerIcon({ isOpen, scrolled }: { isOpen: boolean; scrolled: boolean }) {
@@ -398,11 +397,6 @@ export default function Navbar() {
 
           {/* ── Right side ── */}
           <div className="flex items-center gap-4">
-            {/* Theme Toggle — desktop only */}
-            {/* <div className="hidden md:flex">
-              <ThemeToggle />
-            </div> */}
-
             {/* Contact — desktop only */}
             <div className="hidden md:flex">
               <Button3D href="#contact">

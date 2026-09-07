@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { useState, type ReactNode } from 'react';
+import { type ReactNode, useState } from 'react';
 
 const ARROW_PATHS = {
   'up-right': 'M7 17L17 7M17 7H8M17 7V16',
@@ -110,7 +110,7 @@ export default function Button3D({
 
         {/* Icon Puck — FIXED: Rolling Arrow Icon using Framer Motion */}
         <div
-          className="relative flex h-8 w-8 shrink-0 items-center justify-center overflow-hidden rounded-[100px] text-[#15b6e8] 2xl:h-10 2xl:w-10"
+          className="relative flex h-8 w-8 shrink-0 items-center justify-center overflow-hidden rounded-[100px] text-[#15b6e8]"
           style={{
             backgroundColor: 'rgb(255, 255, 255)',
             boxShadow: 'rgba(255, 255, 255, 0.3) 0px 4px 6px 0px',

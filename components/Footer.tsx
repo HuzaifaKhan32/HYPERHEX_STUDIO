@@ -245,7 +245,7 @@ export default function Footer() {
                   src="/images/image-3.jpg"
                   alt="HyperHex Studio Visual"
                   fill
-                  sizes="280px"
+                  sizes="(max-width: 768px) 280px, 280px"
                   quality={90}
                   className="object-cover"
                 />

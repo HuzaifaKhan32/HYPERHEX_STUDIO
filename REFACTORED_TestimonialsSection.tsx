@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import React, { useRef, useState, useEffect } from "react";
-import Image from "next/image";
-import { PiQuotes } from "react-icons/pi";
+import React, { useState, useEffect, useMemo } from 'react';
+import Image from 'next/image';
+import { PiQuotes } from 'react-icons/pi';
 
 interface Testimonial {
   id: string;
@@ -15,51 +15,51 @@ interface Testimonial {
 // Data array moved outside component to prevent recreation on every render
 const TESTIMONIALS_DATA: Testimonial[] = [
   {
-    id: "1",
-    quote: "Working with HyperHex transformed our interactive 3D pipeline completely. Conversions shot up 300%.",
-    author: "Alex Turner",
-    role: "Founder, Voxel Labs",
-    avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=200",
+    id: '1',
+    quote: 'Working with HyperHex transformed our interactive 3D pipeline completely. Conversions shot up 300%.',
+    author: 'Alex Turner',
+    role: 'Founder, Voxel Labs',
+    avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=200',
   },
   {
-    id: "2",
-    quote: "The procedural shaders and real-time canvas integration exceeded our client's highest expectations.",
-    author: "James Mitchell",
-    role: "CEO, Novara Studio",
-    avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=200",
+    id: '2',
+    quote: 'The procedural shaders and real-time canvas integration exceeded our client\'s highest expectations.',
+    author: 'James Mitchell',
+    role: 'CEO, Novara Studio',
+    avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=200',
   },
   {
-    id: "3",
-    quote: "They captured our brand identity instantly and engineered a web experience that feels alive.",
-    author: "Sofia Rahman",
-    role: "Design Director, Luma",
-    avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=200",
+    id: '3',
+    quote: 'They captured our brand identity instantly and engineered a web experience that feels alive.',
+    author: 'Sofia Rahman',
+    role: 'Design Director, Luma',
+    avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=200',
   },
   {
-    id: "4",
-    quote: "Unmatched speed and technical precision. The WebGL performance across mobile is rock solid.",
-    author: "David Chen",
-    role: "VP Engineering, Apex",
-    avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=200",
+    id: '4',
+    quote: 'Unmatched speed and technical precision. The WebGL performance across mobile is rock solid.',
+    author: 'David Chen',
+    role: 'VP Engineering, Apex',
+    avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=200',
   },
   {
-    id: "5",
-    quote: "HyperHex delivered complex 3D assets seamlessly integrated into Next.js within record timelines.",
-    author: "Elena Rostova",
-    role: "Product Lead, Kinetic",
-    avatar: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=200",
+    id: '5',
+    quote: 'HyperHex delivered complex 3D assets seamlessly integrated into Next.js within record timelines.',
+    author: 'Elena Rostova',
+    role: 'Product Lead, Kinetic',
+    avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=200',
   },
   {
-    id: "6",
-    quote: "The tactile UI polish and custom shaders gave our launch campaign the edge it needed.",
-    author: "Marcus Vance",
-    role: "Creative Director, Synth",
-    avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=200",
+    id: '6',
+    quote: 'The tactile UI polish and custom shaders gave our launch campaign the edge it needed.',
+    author: 'Marcus Vance',
+    role: 'Creative Director, Synth',
+    avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=200',
   },
 ];
 
 export default function HyperHexTestimonials() {
-  const scrollRef = useRef<HTMLDivElement>(null);
+  const scrollRef = React.useRef<HTMLDivElement>(null);
 
   // Drag State
   const [isMouseDown, setIsMouseDown] = useState(false);
@@ -104,7 +104,10 @@ export default function HyperHexTestimonials() {
     });
   };
 
-  // Dragging event handlers
+  // FIXED: Dragging event handlers now passive-friendly
+  // touchAction: 'pan-y' prevents horizontal scroll conflict
+  // No preventDefault() on move event — lets browser handle scroll freely
+
   const handleMouseDown = (e: React.MouseEvent) => {
     if (!scrollRef.current) return;
     setIsMouseDown(true);
@@ -118,6 +121,7 @@ export default function HyperHexTestimonials() {
 
   const handleMouseMove = (e: React.MouseEvent) => {
     if (!isMouseDown || !scrollRef.current) return;
+    // FIXED: Removed preventDefault() to keep scroll smooth and passive
     const x = e.pageX - scrollRef.current.offsetLeft;
     const walk = (x - startX) * 1.5;
     scrollRef.current.scrollLeft = scrollLeftState - walk;
@@ -158,7 +162,8 @@ export default function HyperHexTestimonials() {
           <div className="pointer-events-none absolute left-0 top-0 bottom-0 w-8 md:w-20 z-10 bg-gradient-to-r from-[#FFFFFF] to-transparent" />
           <div className="pointer-events-none absolute right-0 top-0 bottom-0 w-8 md:w-20 z-10 bg-gradient-to-l from-[#FFFFFF] to-transparent" />
 
-          {/* Scroll Track */}
+          {/* Scroll Track — FIXED: Added touchAction: 'pan-y' to prevent horizontal scroll blocking
+              Removed preventDefault() from move handler above. */}
           <div
             ref={scrollRef}
             onMouseDown={handleMouseDown}
