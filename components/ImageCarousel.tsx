@@ -96,6 +96,7 @@ export default function ImageCarousel({ images, onFirstReady }: ImageCarouselPro
                 exit={{ opacity: 0, scale: 1.02 }}
                 transition={{ duration: 1.1, ease: [0.4, 0, 0.2, 1] }}
                 className="absolute inset-0 h-full w-full"
+                style={{ willChange: 'transform, opacity' }}
               >
                 {image.type === 'video' ? (
                   <div className="relative w-full h-full">
@@ -112,6 +113,7 @@ export default function ImageCarousel({ images, onFirstReady }: ImageCarouselPro
                           exit={{ opacity: 0, scale: 0.98, filter: 'blur(4px)' }}
                           transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
                           className="absolute inset-0 h-full w-full z-10 pointer-events-none"
+                          style={{ willChange: 'transform, opacity, filter' }}
                         >
                           <Image
                             src={image.poster}
@@ -197,6 +199,7 @@ export default function ImageCarousel({ images, onFirstReady }: ImageCarouselPro
             style={{
               backgroundColor: index === currentSlide ? 'var(--color-accent)' : undefined,
               boxShadow: index === currentSlide ? '0 0 10px rgba(21,182,232,0.6)' : undefined,
+              willChange: 'width',
             }}
             animate={{ width: index === currentSlide ? 48 : 32 }}
             transition={{ duration: 0.3 }}

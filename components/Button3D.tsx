@@ -91,7 +91,7 @@ export default function Button3D({
         {/* FIXED: Rolling Text Mask — Now uses Framer Motion for consistency
             Instead of CSS transitions, animate prop with Framer Motion
             ensures predictable timing, proper cleanup, and interruptibility. */}
-        <motion.div className="relative overflow-hidden py-0.5">
+        <motion.div className="relative overflow-hidden py-0.5" style={{ willChange: 'transform' }}>
           <motion.div
             animate={{ y: isHovered ? '-100%' : 0 }}
             transition={{ duration: 0.5, ease: 'easeInOut' }}
@@ -115,6 +115,7 @@ export default function Button3D({
             backgroundColor: 'rgb(255, 255, 255)',
             boxShadow: 'rgba(255, 255, 255, 0.3) 0px 4px 6px 0px',
             opacity: 1,
+            willChange: 'transform',
           }}
         >
           <motion.div

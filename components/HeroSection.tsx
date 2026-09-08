@@ -43,7 +43,7 @@ export default function HeroSection() {
           </div>
 
           {/* BOTTOM-RIGHT: About + CTA - Static HTML, renders immediately */}
-          <div className="absolute bottom-5 right-5 sm:bottom-8 sm:right-8 lg:bottom-10 lg:right-10 2xl:top-14 2xl:right-14 z-20 flex flex-col items-end gap-4 text-right sm:gap-5 pointer-events-auto">
+          <div className="absolute bottom-5 right-5 sm:bottom-8 sm:right-8 lg:bottom-10 lg:right-10 2xl:bottom-14 2xl:right-14 z-20 flex flex-col items-end gap-4 text-right sm:gap-5 pointer-events-auto">
             <div
               data-cursor="text"
               className="flex flex-col items-end gap-2"

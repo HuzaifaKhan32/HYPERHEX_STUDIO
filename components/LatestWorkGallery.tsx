@@ -170,12 +170,17 @@ const ALL_PROJECTS: Project[] = [
   yt('WKOskq3aIQQ', 'Mumtaz Residency', ['Interior & Construction', 'Animations'], undefined, 'Mumtaz Residency'),
   yt('m2FYElEVclc', 'Nexgen Heights', ['Interior & Construction', 'Animations'], undefined, 'Nexgen Heights'),
   imgProject('img-car', 'Car Configurator', '/portfolio/car-configurator.jpg', ['Configurator'], 'Car Configurator'),
-  imgProject('img-commtel', 'Commtel Project', '/portfolio/commtel.jpg', ['VR', '360 Tour', 'Branding & Advertisement'], 'Commtel'),
-  imgProject('img-exterior', 'Exterior House', '/portfolio/exterior-house.jpg', ['Interior & Construction', '360 Tour'], 'Exterior House'),
-  imgProject('img-governor', 'Governor House Render', '/portfolio/governor-house.jpg', ['Interior & Construction', '360 Tour'], 'Governor House'),
-  imgProject('img-ivf', 'IVF Academy', '/portfolio/IVF.png', ['Interior & Construction', 'Branding & Advertisement'], 'IVF Academy'),
-  imgProject('img-arcade', 'NS Arcade', '/portfolio/ns-arcade.jpg', ['Interior & Construction', 'Branding & Advertisement'], 'NS Arcade'),
-  imgProject('img-watch', 'Luxury Watch 3D', '/portfolio/watch.png', ['Branding & Advertisement', 'Animations'], 'Luxury Watch'),
+  imgProject('img-commtel', 'Commtel Project', '/portfolio/commtel.jpg', ['Visualization'], 'Commtel'),
+  imgProject('img-exterior', 'Exterior House', '/portfolio/exterior-house.jpg', ['Visualization'], 'Exterior House'),
+  imgProject('img-governor', 'Governor House Render', '/portfolio/governor-house.jpg', ['Visualization'], 'Governor House'),
+  imgProject('img-ivf', 'IVF Academy', '/portfolio/IVF.png', ['Visualization'], 'IVF Academy'),
+  imgProject('img-arcade', 'NS Arcade', '/portfolio/ns-arcade.jpg', ['Visualization'], 'NS Arcade'),
+  imgProject('img-watch', 'Luxury Watch 3D', '/portfolio/watch.png', ['Visualization'], 'Luxury Watch'),
+  imgProject('img-washroom', 'Luxury Washroom', '/portfolio/washroom.webp', ['Visualization'], 'Luxury Washroom'),
+  imgProject('img-bedroom', 'Luxury Washroom', '/portfolio/bedroom.webp', ['Visualization'], 'Luxury Washroom'),
+  imgProject('img-living', 'Luxury Washroom', '/portfolio/kitchen.webp', ['Visualization'], 'Luxury Kitchen'),
+  imgProject('img-outer', 'Luxury Lounge', '/portfolio/lounge.webp', ['Visualization'], 'Luxury Lounge'),
+  imgProject('img-pool', 'Luxury Swimming Pool', '/portfolio/swimming-pool.webp', ['Visualization'], 'Luxury Swimming Pool'),
 ];
 
 // Base grid-reveal variants used for the initial whileInView entrance. Only
@@ -221,6 +226,100 @@ const drawerCardVariants = {
 const INITIAL_COUNT = 6;
 const PAGE_SIZE = 6;
 const STAGGER_STEP = 0.08;
+
+// Memoized card component to prevent unnecessary re-renders
+const ProjectCard = React.memo(({
+  project,
+  index,
+  isDrawerCard,
+  staggerIndex,
+  onClick
+}: {
+  project: Project;
+  index: number;
+  isDrawerCard: boolean;
+  staggerIndex: number;
+  onClick: () => void;
+}) => {
+  return (
+    <motion.div
+      layout
+      variants={isDrawerCard ? drawerCardVariants : cardVariants}
+      initial="hidden"
+      exit={isDrawerCard ? 'exit' : undefined}
+      transition={{ delay: staggerIndex * STAGGER_STEP }}
+      style={{ willChange: isDrawerCard ? 'transform, opacity' : undefined }}
+      // Mutually exclusive triggers
+      {...(isDrawerCard
+        ? { animate: 'visible' }
+        : { whileInView: 'visible', viewport: { once: true, margin: '-100px' } })}
+      onClick={onClick}
+      data-cursor="project"
+      className="group relative aspect-[5/3] overflow-hidden rounded-xl cursor-pointer bg-[#111]"
+    >
+      {/* Thumbnail */}
+      <Image
+        src={project.imageUrl}
+        alt={project.title}
+        fill
+        sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+        quality={80}
+        loading={index < INITIAL_COUNT ? 'eager' : 'lazy'}
+        priority={index < INITIAL_COUNT}
+        className="object-cover transition-transform duration-400 ease-out group-hover:scale-110"
+      />
+      {/* Hover overlay */}
+      <div className="absolute inset-0 bg-black/60 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10 pointer-events-none">
+        <span className="text-xs uppercase tracking-[0.3em] mb-2 text-white/60">
+          {Array.isArray(project.category) ? project.category[0] : project.category}
+        </span>
+        <h3 className="text-xl md:text-2xl font-bold uppercase tracking-wider px-6 text-center text-white">
+          {project.title}
+        </h3>
+        {project.isVideo ? (
+          <div className="mt-4 px-5 py-2 rounded-full bg-white text-black font-semibold text-xs md:text-sm uppercase tracking-wider flex items-center gap-2 shadow-lg">
+            <svg className="w-3.5 h-3.5 fill-black" viewBox="0 0 24 24">
+              <path d="M8 5v14l11-7z" />
+            </svg>
+            Watch Video
+          </div>
+        ) : project.projectUrl ? (
+          <div className="mt-4 px-5 py-2 rounded-full bg-white text-black font-semibold text-xs md:text-sm uppercase tracking-wider flex items-center gap-2 shadow-lg">
+            <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+              <polyline points="15 3 21 3 21 9"></polyline>
+              <line x1="10" y1="14" x2="21" y2="3"></line>
+            </svg>
+            View Project
+          </div>
+        ) : (
+          <div className="mt-4 px-5 py-2 rounded-full bg-white text-black font-semibold text-xs md:text-sm uppercase tracking-wider flex items-center gap-2 shadow-lg">
+            <svg className="w-3.5 h-3.5 fill-black" viewBox="0 0 24 24">
+              <path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/>
+            </svg>
+            View Image
+          </div>
+        )}
+      </div>
+      {/* Top-right badge (video play icon or web external link icon) */}
+      {project.isVideo ? (
+        <div className="absolute top-3 right-3 z-10 w-8 h-8 rounded-full bg-black/50 border border-white/20 backdrop-blur-sm flex items-center justify-center pointer-events-none">
+          <svg className="w-3.5 h-3.5 text-white ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>
+        </div>
+      ) : project.projectUrl ? (
+        <div className="absolute top-3 right-3 z-10 w-8 h-8 rounded-full bg-black/50 border border-white/20 backdrop-blur-sm flex items-center justify-center pointer-events-none">
+          <svg className="w-3.5 h-3.5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+            <polyline points="15 3 21 3 21 9"></polyline>
+            <line x1="10" y1="14" x2="21" y2="3"></line>
+          </svg>
+        </div>
+      ) : null}
+    </motion.div>
+  );
+});
+
+ProjectCard.displayName = 'ProjectCard';
 
 export default function LatestWorkGallery() {
   const [activeCategory, setActiveCategory] = useState('All');
@@ -326,80 +425,14 @@ export default function LatestWorkGallery() {
               const staggerIndex = isDrawerCard ? index - INITIAL_COUNT : index;
 
               return (
-                <motion.div
+                <ProjectCard
                   key={project.id}
-                  layout
-                  variants={isDrawerCard ? drawerCardVariants : cardVariants}
-                  initial="hidden"
-                  exit={isDrawerCard ? 'exit' : undefined}
-                  transition={{ delay: staggerIndex * STAGGER_STEP }}
-                  // Mutually exclusive triggers — see comment above the grid.
-                  {...(isDrawerCard
-                    ? { animate: 'visible' }
-                    : { whileInView: 'visible', viewport: { once: true, margin: '-100px' } })}
+                  project={project}
+                  index={index}
+                  isDrawerCard={isDrawerCard}
+                  staggerIndex={staggerIndex}
                   onClick={() => setSelectedProject(project)}
-                  data-cursor="project"
-                  className="group relative aspect-[5/3] overflow-hidden rounded-xl cursor-pointer bg-[#111]"
-                >
-                  {/* Thumbnail */}
-                  <Image
-                    src={project.imageUrl}
-                    alt={project.title}
-                    fill
-                    sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                    quality={80}
-                    loading={index < INITIAL_COUNT ? 'eager' : 'lazy'}
-                    priority={index < INITIAL_COUNT}
-                    className="object-cover transition-transform duration-400 ease-out group-hover:scale-110"
-                  />
-                  {/* Hover overlay */}
-                  <div className="absolute inset-0 bg-black/60 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10 pointer-events-none">
-                    <span className="text-xs uppercase tracking-[0.3em] mb-2 text-white/60">
-                      {Array.isArray(project.category) ? project.category[0] : project.category}
-                    </span>
-                    <h3 className="text-xl md:text-2xl font-bold uppercase tracking-wider px-6 text-center text-white">
-                      {project.title}
-                    </h3>
-                    {project.isVideo ? (
-                      <div className="mt-4 px-5 py-2 rounded-full bg-white text-black font-semibold text-xs md:text-sm uppercase tracking-wider flex items-center gap-2 shadow-lg">
-                        <svg className="w-3.5 h-3.5 fill-black" viewBox="0 0 24 24">
-                          <path d="M8 5v14l11-7z" />
-                        </svg>
-                        Watch Video
-                      </div>
-                    ) : project.projectUrl ? (
-                      <div className="mt-4 px-5 py-2 rounded-full bg-white text-black font-semibold text-xs md:text-sm uppercase tracking-wider flex items-center gap-2 shadow-lg">
-                        <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                          <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
-                          <polyline points="15 3 21 3 21 9"></polyline>
-                          <line x1="10" y1="14" x2="21" y2="3"></line>
-                        </svg>
-                        View Project
-                      </div>
-                    ) : (
-                      <div className="mt-4 px-5 py-2 rounded-full bg-white text-black font-semibold text-xs md:text-sm uppercase tracking-wider flex items-center gap-2 shadow-lg">
-                        <svg className="w-3.5 h-3.5 fill-black" viewBox="0 0 24 24">
-                          <path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/>
-                        </svg>
-                        View Image
-                      </div>
-                    )}
-                  </div>
-                  {/* Top-right badge (video play icon or web external link icon) */}
-                  {project.isVideo ? (
-                    <div className="absolute top-3 right-3 z-10 w-8 h-8 rounded-full bg-black/50 border border-white/20 backdrop-blur-sm flex items-center justify-center pointer-events-none">
-                      <svg className="w-3.5 h-3.5 text-white ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>
-                    </div>
-                  ) : project.projectUrl ? (
-                    <div className="absolute top-3 right-3 z-10 w-8 h-8 rounded-full bg-black/50 border border-white/20 backdrop-blur-sm flex items-center justify-center pointer-events-none">
-                      <svg className="w-3.5 h-3.5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
-                        <polyline points="15 3 21 3 21 9"></polyline>
-                        <line x1="10" y1="14" x2="21" y2="3"></line>
-                      </svg>
-                    </div>
-                  ) : null}
-                </motion.div>
+                />
               );
             })}
           </AnimatePresence>

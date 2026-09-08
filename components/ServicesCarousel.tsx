@@ -30,10 +30,10 @@ function getSlideVisualState(
 // Restored: Fills out the last page perfectly by looping back to the start of the array
 function getInfiniteGridPages<T>(array: T[], pageSize: number = 6): T[][] {
   if (!array.length) return [];
-  
+
   const totalPages = Math.ceil(array.length / pageSize);
   const totalItemsNeeded = totalPages * pageSize;
-  
+
   const repeatedArray: T[] = [];
   for (let i = 0; i < totalItemsNeeded; i++) {
     repeatedArray.push(array[i % array.length]);

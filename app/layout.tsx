@@ -7,6 +7,8 @@ const dmSans = DM_Sans({
   variable: "--font-dm-sans",
   subsets: ["latin"],
   weight: ["400", "500", "600", "700", "800", "900"],
+  display: 'swap',
+  preload: true,
 });
 
 export const metadata: Metadata = {
@@ -27,12 +29,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {/* Preload first hero carousel slide (fastest possible LCP) */}
         <link rel="preload" href="/media/hero-loop-4-thumbnail.webp" as="image" fetchPriority="high" />
 
-        {/* ADDED: Preload client logos for faster marquee rendering */}
-        <link rel="preload" href="/logos/client-1.svg" as="image" />
-        <link rel="preload" href="/logos/client-2.svg" as="image" />
-        <link rel="preload" href="/logos/client-3.svg" as="image" />
-        <link rel="preload" href="/logos/client-4.svg" as="image" />
-        <link rel="preload" href="/logos/client-5.svg" as="image" />
+        {/* Preload critical fonts */}
+        <link
+          rel="preload"
+          href="https://fonts.gstatic.com/s/dmsans/v15/rP2tp2ywxg089UriI5-g4vlH9VoD8CmcqZG40F9JadbnoEwAopxRR232VQ.woff2"
+          as="font"
+          type="font/woff2"
+          crossOrigin="anonymous"
+        />
 
         {/* DNS prefetch for video assets */}
         <link rel="dns-prefetch" href="https://www.youtube.com" />

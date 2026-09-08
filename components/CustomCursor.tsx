@@ -35,6 +35,7 @@ export default function CustomCursor() {
 
   useEffect(() => {
     const isCoarse = window.matchMedia('(pointer: coarse)').matches;
+
     if (isCoarse) {
       setIsTouchDevice(true);
       return;
@@ -43,20 +44,29 @@ export default function CustomCursor() {
     // Enable custom cursor styles across the page
     document.documentElement.classList.add('custom-cursor-active');
 
+    // Use requestAnimationFrame to throttle pointer tracking
+    let rafId: number | null = null;
+
     const handlePointerMove = (e: PointerEvent) => {
       if (e.pointerType === 'touch') {
         setIsTouchDevice(true);
         return;
       }
 
-      rawX.set(e.clientX);
-      rawY.set(e.clientY);
+      if (rafId !== null) return;
 
-      // Only trigger re-render when transitioning from hidden to visible
-      if (!isVisibleRef.current) {
-        isVisibleRef.current = true;
-        setIsVisible(true);
-      }
+      rafId = requestAnimationFrame(() => {
+        rawX.set(e.clientX);
+        rawY.set(e.clientY);
+
+        // Only trigger re-render when transitioning from hidden to visible
+        if (!isVisibleRef.current) {
+          isVisibleRef.current = true;
+          setIsVisible(true);
+        }
+
+        rafId = null;
+      });
     };
 
     const handlePointerOver = (e: PointerEvent) => {
@@ -121,6 +131,9 @@ export default function CustomCursor() {
       document.removeEventListener('pointerover', handlePointerOver);
       document.removeEventListener('mouseleave', handlePointerLeave);
       document.removeEventListener('mouseenter', handlePointerEnter);
+      if (rafId !== null) {
+        cancelAnimationFrame(rafId);
+      }
     };
   }, [rawX, rawY]);
 
@@ -168,6 +181,7 @@ export default function CustomCursor() {
         x: springX,
         y: springY,
         mixBlendMode: isPill ? 'normal' : 'difference',
+        willChange: 'transform',
       }}
     >
       <motion.div
@@ -181,6 +195,7 @@ export default function CustomCursor() {
         }}
         transition={MORPH_SPRING}
         className="relative flex items-center justify-center"
+        style={{ willChange: 'width, height, opacity, transform' }}
       >
         {/* Morphing Project / Drag Labels */}
         <AnimatePresence mode="wait">

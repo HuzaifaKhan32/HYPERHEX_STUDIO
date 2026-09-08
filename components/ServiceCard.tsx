@@ -94,6 +94,7 @@ export default function ServiceCard({
           transition={{ duration: 0.35, ease: [0.4, 0, 0.2, 1] }}
           className={`absolute inset-0 z-10 flex flex-col justify-between p-8 text-left ${isCyanPanel ? 'bg-primary-container text-ink' : 'bg-ink text-white'
             }`}
+          style={{ willChange: 'transform' }}
         >
           <div
             className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-full ${isCyanPanel ? 'bg-ink/10 text-ink' : 'bg-white/10 text-white'
