@@ -27,6 +27,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {/* Preload first hero carousel slide (fastest possible LCP) */}
         <link rel="preload" href="/media/hero-loop-4-thumbnail.webp" as="image" fetchPriority="high" />
 
+        {/* ADDED: Preload client logos for faster marquee rendering */}
+        <link rel="preload" href="/logos/client-1.svg" as="image" />
+        <link rel="preload" href="/logos/client-2.svg" as="image" />
+        <link rel="preload" href="/logos/client-3.svg" as="image" />
+        <link rel="preload" href="/logos/client-4.svg" as="image" />
+        <link rel="preload" href="/logos/client-5.svg" as="image" />
+
         {/* DNS prefetch for video assets */}
         <link rel="dns-prefetch" href="https://www.youtube.com" />
       </head>

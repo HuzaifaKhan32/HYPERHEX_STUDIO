@@ -1,14 +1,14 @@
 import dynamic from 'next/dynamic';
-import Navbar from '@/components/Navbar';
-import Hero from '@/components/Hero';
+import NavbarServer from '@/components/NavbarServer';
+import HeroSection from '@/components/HeroSection';
 import ClientMarquee from '@/components/ClientMarquee';
 import Services from '@/components/Services';
 import LatestWorkGallery from '@/components/LatestWorkGallery';
 import ContactForm from '@/components/ContactForm';
-import Footer from '@/components/Footer';
+import FooterServer from '@/components/FooterServer';
 import ScrollProgress from '@/components/ScrollProgress';
-import AboutUs from '@/components/AboutUs';
-import TestimonialsSection from '@/components/TestimonialsSection';
+import AboutUsServer from '@/components/AboutUsServer';
+import TestimonialsServer from '@/components/TestimonialsServer';
 
 // Lazy-load CaseStudiesSection to reduce initial bundle size and avoid blocking critical path
 const CaseStudiesSection = dynamic(() => import('@/components/CaseStudiesSection'), {
@@ -23,18 +23,18 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-background">
       <ScrollProgress />
-      <Navbar />
+      <NavbarServer />
       <main className="w-full pt-0 md:pt-28">
-        <Hero />
+        <HeroSection />
         <ClientMarquee />
-        <AboutUs />
+        <AboutUsServer />
         <CaseStudiesSection />
         <Services />
         <LatestWorkGallery />
-        <TestimonialsSection />
+        <TestimonialsServer />
         <ContactForm />
       </main>
-      <Footer />
+      <FooterServer />
     </div>
   );
 }

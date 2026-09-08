@@ -57,8 +57,13 @@ export default function ClientMarquee() {
   return (
     <section
       aria-label="Our clients"
-      className="relative w-full overflow-hidden pt-2 pb-8 md:pt-3 md:pb-3 border-t border-b border-[#15b6e8]"
-      style={{ backgroundColor: MARQUEE_BG }}
+      className="relative w-full overflow-hidden pt-2 pb-8 md:pt-3 md:pb-3"
+      style={{
+        backgroundColor: MARQUEE_BG,
+        borderTop: '3px solid #15b6e8',
+        borderBottom: '3px solid #15b6e8',
+        boxShadow: '0 0 20px rgba(21, 182, 232, 0.3) inset, 0 0 20px rgba(21, 182, 232, 0.2)'
+      }}
     >
       {/* Side Fade Masks — same off-black as the section, guaranteed to match */}
       <div

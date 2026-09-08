@@ -224,13 +224,12 @@ const STAGGER_STEP = 0.08;
 
 export default function LatestWorkGallery() {
   const [activeCategory, setActiveCategory] = useState('All');
-  const [activeBrand, setActiveBrand] = useState('All');
   const [visibleCount, setVisibleCount] = useState(INITIAL_COUNT);
   const [selectedProject, setSelectedProject] = useState<typeof ALL_PROJECTS[number] | null>(null);
   const [iframeError, setIframeError] = useState(false);
 
-  // 1. Projects matching active parent category
-  const categoryProjects = useMemo(
+  // Projects matching active category
+  const filtered = useMemo(
     () =>
       ALL_PROJECTS.filter((p) => {
         if (activeCategory === 'All') return true;
@@ -241,20 +240,6 @@ export default function LatestWorkGallery() {
       }),
     [activeCategory]
   );
-
-  // 2. Dynamic sub-filter brands derived strictly from available projects under active parent category
-  const availableBrands = useMemo(() => {
-    const brands = Array.from(new Set(categoryProjects.map((p) => p.brand))).sort();
-    return ['All', ...brands];
-  }, [categoryProjects]);
-
-  // 3. Final filtered list matching both active category AND selected brand sub-filter
-  const filtered = useMemo(() => {
-    return categoryProjects.filter((p) => {
-      if (activeBrand === 'All') return true;
-      return p.brand === activeBrand;
-    });
-  }, [categoryProjects, activeBrand]);
 
   const visible = filtered.slice(0, visibleCount);
   const hasMore = visibleCount < filtered.length;
@@ -270,12 +255,6 @@ export default function LatestWorkGallery() {
 
   const handleCategory = (cat: string) => {
     setActiveCategory(cat);
-    setActiveBrand('All');
-    setVisibleCount(INITIAL_COUNT);
-  };
-
-  const handleBrand = (brand: string) => {
-    setActiveBrand(brand);
     setVisibleCount(INITIAL_COUNT);
   };
 
@@ -331,50 +310,13 @@ export default function LatestWorkGallery() {
                   );
                 })}
               </motion.div>
-
-              {/* Sub Filters (Brand Names attached to the selected Parent Filter) */}
-              <AnimatePresence mode="wait">
-                {availableBrands.length > 1 && (
-                  <motion.div
-                    key={activeCategory}
-                    initial={{ opacity: 0, y: -8 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -8 }}
-                    transition={{ duration: 0.25 }}
-                    className="flex flex-wrap items-center gap-2 pt-3"
-                  >
-                    <span className="text-xs font-bold uppercase tracking-wider text-on-surface/50 mr-1 flex items-center gap-1.5">
-                      <span className="h-2 w-2 rounded-full bg-[#15b6e8]" />
-                      Brand:
-                    </span>
-                    {availableBrands.map((brand) => {
-                      const isBrandActive = activeBrand === brand;
-                      return (
-                        <button
-                          key={brand}
-                          type="button"
-                          onClick={() => handleBrand(brand)}
-                          aria-pressed={isBrandActive}
-                          className={`px-3.5 py-1.5 rounded-lg text-xs font-bold tracking-wide transition-all cursor-pointer ${
-                            isBrandActive
-                              ? 'bg-[#15b6e8] text-black font-extrabold shadow-[0_2px_10px_rgba(21,182,232,0.4)]'
-                              : 'bg-surface-bright/80 border border-outline-variant/30 text-on-surface/75 hover:text-on-surface hover:border-accent/60 hover:bg-surface-bright'
-                          }`}
-                        >
-                          {brand === 'All' ? 'All Brands' : brand}
-                        </button>
-                      );
-                    })}
-                  </motion.div>
-                )}
-              </AnimatePresence>
             </div>
           </div>
         </div>
 
         {/* Main Gallery Grid */}
         <motion.div
-          key={`${activeCategory}-${activeBrand}`}
+          key={activeCategory}
           layout
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
         >
