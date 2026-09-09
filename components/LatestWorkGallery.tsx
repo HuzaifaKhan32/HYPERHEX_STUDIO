@@ -74,6 +74,7 @@ type Project = {
   embedUrl?: string;
   projectUrl?: string;
   isVideo: boolean;
+  gallery?: string[]; // Array of images for carousel modal
 };
 
 // ── YouTube video helper ───────────────────────────────────────────────────
@@ -118,7 +119,8 @@ function imgProject(
   title: string,
   path: string,
   category: CategoryType | CategoryType[] = 'Interior & Construction',
-  brand?: string
+  brand?: string,
+  gallery?: string[]
 ): Project {
   return {
     id,
@@ -127,6 +129,7 @@ function imgProject(
     category,
     imageUrl: path,
     isVideo: false,
+    gallery,
   };
 }
 
@@ -181,6 +184,19 @@ const ALL_PROJECTS: Project[] = [
   imgProject('img-living', 'Luxury Washroom', '/portfolio/kitchen.webp', ['Visualization'], 'Luxury Kitchen'),
   imgProject('img-outer', 'Luxury Lounge', '/portfolio/lounge.webp', ['Visualization'], 'Luxury Lounge'),
   imgProject('img-pool', 'Luxury Swimming Pool', '/portfolio/swimming-pool.webp', ['Visualization'], 'Luxury Swimming Pool'),
+  imgProject(
+    'img-dha-suffa',
+    'DHA Suffa University',
+    '/portfolio/dha-suffa-4.webp',
+    ['Visualization', 'Interior & Construction'],
+    'DHA Suffa University',
+    [
+      '/portfolio/dha-suffa.webp',
+      '/portfolio/dha-suffa-2.webp',
+      '/portfolio/dha-suffa-3.webp',
+      '/portfolio/dha-suffa-4.webp',
+    ]
+  ),
 ];
 
 // Base grid-reveal variants used for the initial whileInView entrance. Only
@@ -326,6 +342,7 @@ export default function LatestWorkGallery() {
   const [visibleCount, setVisibleCount] = useState(INITIAL_COUNT);
   const [selectedProject, setSelectedProject] = useState<typeof ALL_PROJECTS[number] | null>(null);
   const [iframeError, setIframeError] = useState(false);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   // Projects matching active category
   const filtered = useMemo(
@@ -357,10 +374,21 @@ export default function LatestWorkGallery() {
     setVisibleCount(INITIAL_COUNT);
   };
 
+  const handlePrevImage = () => {
+    if (!selectedProject?.gallery) return;
+    setCurrentImageIndex((prev) => (prev === 0 ? selectedProject.gallery!.length - 1 : prev - 1));
+  };
+
+  const handleNextImage = () => {
+    if (!selectedProject?.gallery) return;
+    setCurrentImageIndex((prev) => (prev === selectedProject.gallery!.length - 1 ? 0 : prev + 1));
+  };
+
   useEffect(() => {
     if (selectedProject) {
       document.body.style.overflow = 'hidden';
       setIframeError(false);
+      setCurrentImageIndex(0); // Reset to first image when opening modal
     } else {
       document.body.style.overflow = 'unset';
     }
@@ -528,8 +556,61 @@ export default function LatestWorkGallery() {
                       />
                     )}
                   </div>
+                ) : selectedProject.gallery ? (
+                  <div className="relative w-full h-[60vh] overflow-hidden flex items-center justify-center bg-black">
+                    <AnimatePresence mode="wait" initial={false}>
+                      <motion.div
+                        key={currentImageIndex}
+                        initial={{ opacity: 0, x: 100 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: -100 }}
+                        transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                        className="relative w-full h-full"
+                      >
+                        <Image
+                          src={selectedProject.gallery[currentImageIndex]}
+                          alt={`${selectedProject.title} - Image ${currentImageIndex + 1}`}
+                          fill
+                          sizes="(max-width: 1024px) 100vw, 896px"
+                          className="object-contain"
+                          priority
+                        />
+                      </motion.div>
+                    </AnimatePresence>
+
+                    {/* Navigation Buttons */}
+                    {selectedProject.gallery.length > 1 && (
+                      <>
+                        <button
+                          onClick={handlePrevImage}
+                          className="absolute left-4 top-1/2 -translate-y-1/2 z-20 text-white/80 hover:text-white bg-black/60 backdrop-blur-md rounded-full p-3 border border-white/15 shadow-lg transition-all hover:scale-110 active:scale-95 cursor-pointer"
+                          aria-label="Previous image"
+                        >
+                          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="m15 18-6-6 6-6"/>
+                          </svg>
+                        </button>
+                        <button
+                          onClick={handleNextImage}
+                          className="absolute right-4 top-1/2 -translate-y-1/2 z-20 text-white/80 hover:text-white bg-black/60 backdrop-blur-md rounded-full p-3 border border-white/15 shadow-lg transition-all hover:scale-110 active:scale-95 cursor-pointer"
+                          aria-label="Next image"
+                        >
+                          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="m9 18 6-6-6-6"/>
+                          </svg>
+                        </button>
+
+                        {/* Image Counter */}
+                        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 bg-black/60 backdrop-blur-md rounded-full px-4 py-2 border border-white/15 shadow-lg">
+                          <span className="text-white text-sm font-semibold">
+                            {currentImageIndex + 1} / {selectedProject.gallery.length}
+                          </span>
+                        </div>
+                      </>
+                    )}
+                  </div>
                 ) : (
-                  <div className="relative w-full overflow-y-auto max-h-[60vh] flex items-center justify-center bg-black">
+                  <div className="relative w-full h-[60vh] overflow-hidden flex items-center justify-center bg-black">
                     <Image
                       src={selectedProject.imageUrl}
                       alt={selectedProject.title}

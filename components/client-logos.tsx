@@ -20,6 +20,7 @@ const CLIENT_LOGO_PATHS = {
   ns_arcade: '/clients-logo/ns-arcade.png',
   safari_village: '/clients-logo/safari_village.webp',
   stadium_view: '/clients-logo/stadium-view.webp',
+  atowak: '/clients-logo/atowak.webp',
 } as const;
 
 export type ClientLogoId = keyof typeof CLIENT_LOGO_PATHS;

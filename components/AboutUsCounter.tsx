@@ -4,7 +4,7 @@
 import { useEffect, useRef } from 'react';
 import { useInView, animate } from 'framer-motion';
 
-export default function AboutUsCounter({ from = 19, to = 120 }: { from?: number; to?: number }) {
+export default function AboutUsCounter({ from = 19, to = 55 }: { from?: number; to?: number }) {
   const nodeRef = useRef<HTMLSpanElement>(null);
   const isInView = useInView(nodeRef, { once: true, margin: '-50px' });
 
