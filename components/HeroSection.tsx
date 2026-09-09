@@ -6,8 +6,8 @@ import Button3D from './Button3D';
 
 export default function HeroSection() {
   return (
-    <div className="relative w-full bg-background px-0 pb-4 md:px-5 sm:px-8 lg:px-12 2xl:px-16">
-      <div className="relative mx-auto w-full max-w-[1280px] xl:max-w-[1400px] 2xl:max-w-none origin-top overflow-hidden rounded-none md:rounded-[2rem] border-x-0 md:border border-outline-variant/30 aspect-[1312/568] min-h-[340px] md:min-h-[280px]">
+    <div className="relative w-full lg:py-6 bg-background px-3 pb-4 md:px-5 sm:px-8 lg:px-12 2xl:px-16">
+      <div className="relative mx-auto w-full max-w-[1280px] xl:max-w-[1400px] 2xl:max-w-none origin-top overflow-hidden rounded-[1.5rem] md:rounded-[2rem] border border-outline-variant/30 aspect-[9/16] sm:aspect-[4/3] md:aspect-[16/9] lg:aspect-[1312/568] min-h-[600px] sm:min-h-[500px] md:min-h-[400px]">
 
         {/* POSTER: Fast thumbnail loads immediately (before video) */}
         <div className="absolute inset-0 bg-black">
@@ -25,7 +25,7 @@ export default function HeroSection() {
         <div className="absolute inset-0 z-10 w-full p-5 sm:p-8 lg:p-10 2xl:p-14 pointer-events-none">
 
           {/* TOP-RIGHT: Availability Badge - Static HTML, renders immediately */}
-          <div className="absolute top-16 right-5 sm:top-8 lg:top-10 lg:right-10 2xl:top-14 2xl:right-14 z-20 flex flex-col items-end pointer-events-auto">
+          <div className="absolute top-20 right-5 sm:top-8 lg:top-10 lg:right-10 2xl:top-14 2xl:right-14 z-20 flex flex-col items-end pointer-events-auto">
             <div className="flex flex-col items-end font-[family-name:var(--font-dm-sans)]">
               <span className="text-xs sm:text-sm" style={{ color: 'var(--color-mist)' }}>
                 We&apos;re available

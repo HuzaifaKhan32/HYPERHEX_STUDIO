@@ -37,9 +37,9 @@ export default function AboutUsHeaderAnimated() {
       </motion.div>
 
       <h2 className="flex flex-col text-4xl font-extrabold tracking-tight md:text-6xl lg:text-7xl 2xl:text-8xl">
-        <motion.span variants={revealVariants}>Next-Gen 3D</motion.span>
+        <motion.span variants={revealVariants}>Your Vision</motion.span>
         <motion.span variants={revealVariants} className="bg-gradient-to-b from-[#15b6e8] to-transparent bg-clip-text text-transparent">
-          Crafting Spatial Digital Experiences
+          In 3D Reality
         </motion.span>
       </h2>
     </motion.div>

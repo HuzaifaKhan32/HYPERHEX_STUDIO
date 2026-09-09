@@ -7,7 +7,7 @@ export default function Services() {
   return (
     <section
       id="services"
-      className="relative w-full overflow-hidden bg-surface py-10 md:py-16 px-5 lg:px-16 2xl:px-24 2xl:py-25"
+      className="relative w-full overflow-hidden bg-surface py-10 md:py-16 px-5 lg:px-16 2xl:px-24"
     >
       <div className="relative z-10 mx-auto flex w-full max-w-[1280px] xl:max-w-[1400px] 2xl:max-w-none flex-col">
         <div className="relative z-20 shrink-0 flex flex-col items-start gap-3 text-left">

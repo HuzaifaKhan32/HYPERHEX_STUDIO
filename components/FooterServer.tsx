@@ -96,7 +96,7 @@ export default function FooterServer() {
         />
 
         {/* Main content */}
-        <div className="relative z-10 mx-auto flex w-full max-w-[1400px] flex-col justify-between gap-16 px-5 pt-20 pb-16 lg:flex-row lg:px-16 lg:pt-32 lg:pb-24 xl:gap-24 2xl:px-24">
+        <div className="relative z-10 mx-auto flex w-full max-w-[1280px] xl:max-w-[1400px] 2xl:max-w-none flex-col justify-between gap-16 px-5 pt-20 pb-16 lg:flex-row lg:px-16 lg:pt-32 lg:pb-24 xl:gap-24 2xl:px-24">
 
           {/* Brand card */}
           <FooterBrandCard />
@@ -151,7 +151,7 @@ export default function FooterServer() {
         {/* Social media section */}
         <div className="relative z-10">
           <div className="relative z-10 w-full px-5 py-6 lg:px-16 2xl:px-24">
-            <div className="mx-auto flex max-w-[1400px] flex-col items-center overflow-hidden bg-[#EDECEC] rounded-[45px] px-6 pt-10 pb-12 sm:pt-12 sm:pb-16 shadow-xl">
+            <div className="mx-auto flex max-w-[1280px] xl:max-w-[1400px] 2xl:max-w-none flex-col items-center overflow-hidden bg-[#EDECEC] rounded-[45px] px-6 pt-10 pb-12 sm:pt-12 sm:pb-16 shadow-xl">
               <span className="mb-8 block text-center font-mono text-xs font-bold tracking-[0.2em] uppercase text-zinc-500">
                 Social Media
               </span>
@@ -177,7 +177,7 @@ export default function FooterServer() {
             <FooterInteractiveTitle />
 
             {/* Copyright bar */}
-            <div className="relative z-10 mx-auto mt-12 flex w-full max-w-[1400px] flex-col items-center justify-between gap-6 border-t border-white/10 pt-6 md:flex-row">
+            <div className="relative z-10 mx-auto mt-12 flex w-full max-w-[1280px] xl:max-w-[1400px] 2xl:max-w-none flex-col items-center justify-between gap-6 border-t border-white/10 pt-6 md:flex-row">
               <p className="text-sm font-medium text-zinc-400">
                 © 2026 HyperHex Studio. All Rights Reserved
               </p>

@@ -22,7 +22,7 @@ export default function AboutUsGlobeParallax() {
     offset: ['start end', 'end start'],
   });
 
-  const globeY = useTransform(scrollYProgress, [0, 0.5], ['82%', '59%']);
+  const globeY = useTransform(scrollYProgress, [0, 0.5], ['88%', '65%']);
 
   return (
     <div ref={cardRef} className="contents">

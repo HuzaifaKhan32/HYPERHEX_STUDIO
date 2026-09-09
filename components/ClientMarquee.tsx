@@ -5,7 +5,7 @@ import { MARQUEE_ITEMS, PILL_BG_COLORS, logoVariantForBg, type MarqueeItem } fro
 import InfiniteMarquee from '@/components/ui/InfiniteMarquee';
 
 const PILL_BASE =
-  'inline-flex shrink-0 items-center justify-center rounded-full h-[62px] min-w-[110px] px-4 mx-1.5 sm:h-[120px] sm:min-w-[160px] sm:px-8 sm:mx-3';
+  'inline-flex shrink-0 items-center justify-center rounded-full h-[62px] min-w-[110px] px-4 mx-0.5 sm:h-[120px] sm:min-w-[160px] sm:px-8 sm:mx-3';
 
 // White surface color per design specification.
 // Centralized here so the section bg and the fade masks can never drift apart.
@@ -57,12 +57,11 @@ export default function ClientMarquee() {
   return (
     <section
       aria-label="Our clients"
-      className="relative w-full overflow-hidden pt-2 pb-8 md:pt-3 md:pb-3"
+      className="relative w-full overflow-hidden pt-1 pb-4 md:py-6 lg:mt-16 px-0 lg:px-5 2xl:px-16"
       style={{
         backgroundColor: MARQUEE_BG,
         borderTop: '3px solid #15b6e8',
-        borderBottom: '3px solid #15b6e8',
-        boxShadow: '0 0 20px rgba(21, 182, 232, 0.3) inset, 0 0 20px rgba(21, 182, 232, 0.2)'
+        borderBottom: '3px solid #15b6e8'
       }}
     >
       {/* Side Fade Masks — same off-black as the section, guaranteed to match */}

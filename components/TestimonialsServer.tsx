@@ -51,10 +51,10 @@ const TESTIMONIALS_DATA = [
 export default function TestimonialsServer() {
   return (
     <section
-      className="w-full py-16 bg-[#FFFFFF] text-[#161d1e] overflow-hidden select-none"
+      className="w-full py-10 md:py-16 bg-[#FFFFFF] text-[#161d1e] overflow-hidden select-none"
       style={{ fontFamily: 'var(--font-zalando-expanded, sans-serif)' }}
     >
-      <div className="max-w-[1280px] mx-auto px-5 lg:px-16 flex flex-col">
+      <div className="max-w-[1280px] xl:max-w-[1400px] 2xl:max-w-none mx-auto px-5 lg:px-16 2xl:px-24 flex flex-col">
 
         {/* Header */}
         <div className="flex flex-col gap-3 mb-8">

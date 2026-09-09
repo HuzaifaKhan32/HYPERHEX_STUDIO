@@ -18,7 +18,7 @@ const skeuomorphicCardStyle = {
 export default function AboutUsServer() {
   return (
     <section className="w-full bg-[#f4fafd] text-[#161d1e] antialiased" id="about">
-      <div className="mx-auto flex max-w-[1280px] 2xl:max-w-[1600px] flex-col gap-8 px-5 py-16 lg:px-16 2xl:py-24">
+      <div className="mx-auto flex max-w-[1280px] xl:max-w-[1400px] 2xl:max-w-none flex-col gap-4 md:gap-8 px-5 py-10 md:py-16 lg:px-16 2xl:px-24">
 
         {/* Animated header */}
         <AboutUsHeaderAnimated />
@@ -27,7 +27,7 @@ export default function AboutUsServer() {
         <div className="grid grid-cols-1 items-stretch gap-6 lg:grid-cols-12">
 
           {/* Left: Hero dark card with globe */}
-          <AboutUsCardReveal className="relative flex h-full min-h-[500px] 2xl:min-h-[640px] flex-col overflow-hidden rounded-[32px] bg-[#0d0f12] shadow-[0_20px_50px_rgba(0,0,0,0.3)] lg:col-span-7">
+          <AboutUsCardReveal className="relative flex h-full min-h-[380px] md:min-h-[400px] lg:min-h-[450px] 2xl:min-h-[500px] flex-col overflow-hidden rounded-[32px] bg-[#0d0f12] shadow-[0_20px_50px_rgba(0,0,0,0.3)] lg:col-span-7">
 
             {/* Background texture */}
             <div className="absolute inset-0 pointer-events-none">
@@ -75,8 +75,8 @@ export default function AboutUsServer() {
               className="relative flex min-h-[240px] 2xl:min-h-[300px] flex-col justify-between overflow-hidden p-8 2xl:p-10 transition-all duration-200"
               style={skeuomorphicCardStyle}
             >
-              <p className="relative z-10 max-w-[85%] text-lg 2xl:text-xl font-medium leading-relaxed text-[#161d1e]">
-                Trusted by 120+ global clients — delivering photorealistic 3D visualization, interactive configurators &amp; real-time WebGL experiences.
+              <p className="relative z-10 text-base md:text-lg 2xl:text-xl font-medium leading-relaxed text-[#161d1e]">
+                Trusted by 55+ clients worldwide with premium 3D solutions.
               </p>
 
               <div className="relative z-10 mt-6 flex flex-col gap-2">
@@ -98,41 +98,40 @@ export default function AboutUsServer() {
                 </div>
               </div>
 
-              {/* Animated counter watermark */}
-              <div className="pointer-events-none absolute right-4 bottom-2 select-none text-[110px] 2xl:text-[140px] font-black leading-none text-[#bac9cc]/40">
-                <AboutUsCounter from={19} to={120} />+
+              {/* Animated counter watermark with gradient shading */}
+              <div className="pointer-events-none absolute right-2 bottom-2 select-none text-[90px] 2xl:text-[110px] font-black leading-none bg-gradient-to-b from-[#bac9cc]/50 via-[#bac9cc]/30 to-transparent bg-clip-text text-transparent">
+                <AboutUsCounter from={19} to={55} />+
               </div>
             </AboutUsCardReveal>
 
             {/* Testimonial card */}
             <AboutUsCardReveal
               delay={0.2}
-              className="flex min-h-[240px] 2xl:min-h-[300px] items-center gap-6 p-8 2xl:p-10 transition-all duration-200"
+              className="flex min-h-[240px] 2xl:min-h-[300px] flex-col md:flex-row items-start md:items-center text-left gap-6 p-8 2xl:p-10 transition-all duration-200"
               style={skeuomorphicCardStyle}
             >
-              <div className="relative min-h-[160px] 2xl:min-h-[200px] w-1/3 shrink-0 overflow-hidden rounded-2xl shadow-md">
+              <div className="relative w-32 h-48 md:w-36 md:h-52 2xl:w-40 2xl:h-56 shrink-0 overflow-hidden rounded-2xl shadow-md mx-auto md:mx-0">
                 <Image
                   src="/logo/hunain.webp"
                   alt="Hunain Soomro - CEO of HyperHex Studio"
                   fill
-                  sizes="(max-width: 768px) 120px, (max-width: 1536px) 160px, 200px"
+                  sizes="(max-width: 768px) 128px, (max-width: 1536px) 144px, 160px"
                   className="object-cover"
                 />
                 <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/20 to-transparent" />
               </div>
 
-              <div className="flex flex-col justify-center gap-3">
+              <div className="flex flex-col items-start gap-3">
                 <span className="inline-block text-4xl leading-none font-serif rotate-180 text-[#bac9cc]">
                   &ldquo;
                 </span>
-                <p className="-mt-3 text-base 2xl:text-lg font-medium leading-relaxed text-[#161d1e]">
+                <p className="-mt-3 text-sm md:text-base 2xl:text-lg font-bold leading-relaxed text-[#161d1e]">
                   High-end 3D visualization and spatial web design bridge the gap between imagination and reality.
                 </p>
-                <div className="flex items-center gap-2">
-                  <span className="text-xs font-bold text-[#161d1e]">
+                <div className="flex flex-col items-start gap-1">
+                  <span className="text-sm font-bold text-[#161d1e]">
                     Hunain Soomro
                   </span>
-                  <span className="h-3 w-px bg-[#bac9cc]" />
                   <span className="text-xs text-[#3b494c]">
                     Founder
                   </span>

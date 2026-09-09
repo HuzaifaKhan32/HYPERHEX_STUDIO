@@ -112,7 +112,7 @@ export default function ContactForm() {
   };
 
   return (
-    <section id="contact" className="w-full pt-8 md:pt-16 2xl:pt-20 pb-12 md:pb-24 px-5 lg:px-16 2xl:px-24 2xl:pb-32">
+    <section id="contact" className="w-full pt-8 md:pt-16 pb-12 md:pb-24 px-5 lg:px-16 2xl:px-24">
       <motion.div
         ref={panelRef}
         variants={containerVariants}
