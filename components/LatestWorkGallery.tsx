@@ -27,7 +27,7 @@ const headingItemVariants = {
 function LatestWorkHeading() {
   return (
     <motion.div
-      className="flex flex-col gap-3 select-none"
+      className="flex flex-col items-center text-center gap-3 select-none"
       variants={headingContainerVariants}
       initial="hidden"
       whileInView="visible"
@@ -43,7 +43,7 @@ function LatestWorkHeading() {
         </span>
       </motion.div>
 
-      <h2 className="flex flex-col text-4xl font-extrabold tracking-tight md:text-6xl lg:text-7xl 2xl:text-8xl">
+      <h2 className="flex flex-row gap-3 items-center text-5xl md:text-7xl lg:text-8xl 2xl:text-9xl font-black tracking-tight" style={{ fontFamily: 'var(--font-zalando-expanded, sans-serif)' }}>
         <motion.span variants={headingItemVariants} className="text-[#161d1e]">Latest</motion.span>
         <motion.span variants={headingItemVariants} className="bg-gradient-to-b from-[#15b6e8] to-transparent bg-clip-text text-transparent">Work</motion.span>
       </h2>
@@ -418,10 +418,10 @@ export default function LatestWorkGallery() {
       <div className="max-w-[1280px] xl:max-w-[1400px] 2xl:max-w-none w-full mx-auto px-5 lg:px-16 2xl:px-24 pt-16 md:pt-16 2xl:pt-20 pb-8 flex flex-col gap-12 relative z-10">
 
         {/* Header */}
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-8 pb-8 border-b border-outline-variant/30">
-          <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-8 pb-8 border-b border-outline-variant/30">
+          <div className="flex flex-col items-start gap-6 w-full">
             <LatestWorkHeading />
-            <div className="flex flex-col gap-3">
+            <div className="flex flex-col gap-3 w-full">
               {/* Parent Category Filters */}
               <motion.div
                 className="flex flex-wrap items-center gap-2.5 sm:gap-3 font-bold text-sm"

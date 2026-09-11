@@ -57,7 +57,7 @@ export default function ClientMarquee() {
   return (
     <section
       aria-label="Our clients"
-      className="relative w-full overflow-hidden pt-1 pb-4 md:py-6 lg:mt-16 px-0 lg:px-5 2xl:px-16"
+      className="relative w-full overflow-hidden pt-1 pb-4 md:py-6 lg:mt-25 px-0 lg:px-5 2xl:px-16"
       style={{
         backgroundColor: MARQUEE_BG,
         borderTop: '3px solid #15b6e8',

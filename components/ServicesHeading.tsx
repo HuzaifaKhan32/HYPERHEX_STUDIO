@@ -29,7 +29,7 @@ const itemVariants = {
 export default function ServicesHeading() {
   return (
     <motion.div
-      className="flex flex-col gap-3 select-none"
+      className="flex flex-col items-start gap-3 select-none w-full"
       variants={containerVariants}
       initial="hidden"
       whileInView="visible"
@@ -45,9 +45,9 @@ export default function ServicesHeading() {
         </span>
       </motion.div>
 
-      <h2 className="flex flex-col text-4xl font-extrabold tracking-tight md:text-6xl lg:text-7xl 2xl:text-8xl">
-        <motion.span variants={itemVariants} className="text-[#161d1e]">Pushing the</motion.span>
-        <motion.span variants={itemVariants} className="bg-gradient-to-b from-[#15b6e8] to-transparent bg-clip-text text-transparent">Boundaries</motion.span>
+      <h2 className="flex flex-col text-5xl md:text-7xl lg:text-8xl 2xl:text-9xl font-black tracking-tight" style={{ fontFamily: 'var(--font-zalando-expanded, sans-serif)' }}>
+        <motion.span variants={itemVariants} className="text-[#161d1e] tracking-wide">Pushing the</motion.span>
+        <motion.span variants={itemVariants} className="tracking-wider bg-gradient-to-b from-[#15b6e8] to-transparent bg-clip-text text-transparent">Boundaries</motion.span>
       </h2>
     </motion.div>
   );

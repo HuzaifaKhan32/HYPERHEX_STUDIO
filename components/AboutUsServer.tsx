@@ -18,7 +18,7 @@ const skeuomorphicCardStyle = {
 export default function AboutUsServer() {
   return (
     <section className="w-full bg-[#f4fafd] text-[#161d1e] antialiased" id="about">
-      <div className="mx-auto flex max-w-[1280px] xl:max-w-[1400px] 2xl:max-w-none flex-col gap-4 md:gap-8 px-5 py-10 md:py-16 lg:px-16 2xl:px-24">
+      <div className="mx-auto flex max-w-[1280px] 2xl:max-w-[1600px] flex-col gap-4 md:gap-8 px-5 py-10 md:py-16 lg:px-16 2xl:px-24">
 
         {/* Animated header */}
         <AboutUsHeaderAnimated />

@@ -57,7 +57,7 @@ export default function TestimonialsServer() {
       <div className="max-w-[1280px] xl:max-w-[1400px] 2xl:max-w-none mx-auto px-5 lg:px-16 2xl:px-24 flex flex-col">
 
         {/* Header */}
-        <div className="flex flex-col gap-3 mb-8">
+        <div className="flex flex-col items-center text-center gap-3 mb-8">
           <div className="inline-flex w-fit items-center gap-2 rounded-full border border-[#bac9cc] bg-white px-4 py-2 shadow-sm transition-transform hover:-translate-y-0.5">
             <span className="h-2 w-2 animate-pulse rounded-full bg-[#15b6e8]" />
             <span className="text-xs font-semibold tracking-wide text-[#3b494c]">
@@ -65,9 +65,9 @@ export default function TestimonialsServer() {
             </span>
           </div>
 
-          <h2 className="flex flex-col text-4xl font-extrabold tracking-tight md:text-6xl lg:text-7xl 2xl:text-8xl">
-            <span className="text-[#161d1e]">Don't Just Take</span>
-            <span className="bg-gradient-to-b from-[#15b6e8] to-transparent bg-clip-text text-transparent">Our Word</span>
+          <h2 className="flex flex-col items-center text-5xl md:text-7xl lg:text-8xl 2xl:text-9xl font-black tracking-tight">
+            <span className="text-[#161d1e] tracking-wide">Don't Just Take</span>
+            <span className="tracking-wider bg-gradient-to-b from-[#15b6e8] to-transparent bg-clip-text text-transparent">Our Word</span>
           </h2>
         </div>
 

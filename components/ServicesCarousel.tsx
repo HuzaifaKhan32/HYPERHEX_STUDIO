@@ -175,7 +175,7 @@ export default function ServicesCarousel() {
       </div>
 
       {/* DESKTOP: INDEPENDENT ANIMATED PAGES */}
-      <div 
+      <div
         className="hidden lg:flex flex-col gap-4 w-full pt-2"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
@@ -206,8 +206,8 @@ export default function ServicesCarousel() {
             type="button"
             onClick={scrollPrev}
             aria-label="Previous Page"
-            className="flex items-center justify-center w-12 h-12 bg-surface-bright rounded-xl border-2 border-outline-variant/30 text-on-surface 
-                       shadow-[0_4px_0_0_var(--color-outline-variant)] hover:border-accent hover:text-accent hover:shadow-[0_4px_0_0_rgba(21,182,232,1)] 
+            className="flex items-center justify-center w-12 h-12 bg-surface-bright rounded-xl border-2 border-outline-variant/30 text-on-surface
+                       shadow-[0_4px_0_0_var(--color-outline-variant)] hover:border-accent hover:text-accent hover:shadow-[0_4px_0_0_rgba(21,182,232,1)]
                        hover:-translate-y-0.5 active:shadow-[0_0px_0_0_rgba(21,182,232,1)] active:translate-y-1 transition-all duration-150"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
@@ -219,8 +219,8 @@ export default function ServicesCarousel() {
             type="button"
             onClick={scrollNext}
             aria-label="Next Page"
-            className="flex items-center justify-center w-12 h-12 bg-surface-bright rounded-xl border-2 border-outline-variant/30 text-on-surface 
-                       shadow-[0_4px_0_0_var(--color-outline-variant)] hover:border-accent hover:text-accent hover:shadow-[0_4px_0_0_rgba(21,182,232,1)] 
+            className="flex items-center justify-center w-12 h-12 bg-surface-bright rounded-xl border-2 border-outline-variant/30 text-on-surface
+                       shadow-[0_4px_0_0_var(--color-outline-variant)] hover:border-accent hover:text-accent hover:shadow-[0_4px_0_0_rgba(21,182,232,1)]
                        hover:-translate-y-0.5 active:shadow-[0_0px_0_0_rgba(21,182,232,1)] active:translate-y-1 transition-all duration-150"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">

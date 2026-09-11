@@ -107,7 +107,7 @@ function useInfiniteSlider(autoMs: number, n: number) {
 
 function FeaturedHeading() {
   return (
-    <div className="flex flex-col gap-3 mb-6 md:mb-8 select-none">
+    <div className="flex flex-col items-center text-center gap-3 mb-6 md:mb-8 select-none">
       <div className="inline-flex w-fit items-center gap-2 rounded-full border border-[#bac9cc] bg-white px-4 py-2 shadow-sm transition-transform hover:-translate-y-0.5">
         <span className="h-2 w-2 animate-pulse rounded-full bg-[#15b6e8]" />
         <span className="text-xs font-semibold tracking-wide text-[#3b494c]">
@@ -115,9 +115,9 @@ function FeaturedHeading() {
         </span>
       </div>
 
-      <h2 className="flex flex-col text-4xl font-extrabold tracking-tight md:text-6xl lg:text-7xl 2xl:text-8xl">
-        <span className="text-[#161d1e]">Featured</span>
-        <span className="bg-gradient-to-b from-[#15b6e8] to-transparent bg-clip-text text-transparent">Case Studies</span>
+      <h2 className="flex flex-col items-center text-5xl md:text-7xl lg:text-8xl 2xl:text-9xl font-black tracking-tight" style={{ fontFamily: 'var(--font-zalando-expanded, sans-serif)' }}>
+        <span className="text-[#161d1e] tracking-wide">Featured</span>
+        <span className="tracking-wider bg-gradient-to-b from-[#15b6e8] to-transparent bg-clip-text text-transparent">Case Studies</span>
       </h2>
     </div>
   );
@@ -323,14 +323,14 @@ export default function CaseStudiesSection() {
           <div className="pointer-events-none absolute right-0 top-0 bottom-0 w-8 md:w-20 z-20 bg-gradient-to-l from-surface via-surface/80 to-transparent" />
 
           <InfiniteMarquee
-            speed={1.5}
+            speed={1.2}
             gap={SUB_GAP}
             pauseOnHover={true}
             items={[...subItems, ...subItems].map((study, idx) => (
               <div
                 key={`sub-${idx}`}
                 onClick={() => setSelected(study)}
-                className="w-[70vw] sm:w-[48vw] md:w-[42vw] lg:w-[32vw] xl:w-[24vw] 2xl:w-[20vw] aspect-[16/9] shrink-0 group cursor-pointer overflow-hidden rounded-xl border bg-surface-bright shadow-lg transition-all duration-500 hover:border-[var(--color-accent)]/80 border-white/10"
+                className="w-[70vw] sm:w-[48vw] md:w-[42vw] lg:w-[33vw] xl:w-[29vw] 2xl:w-[25vw] aspect-[16/9] shrink-0 group cursor-pointer overflow-hidden rounded-xl border bg-surface-bright shadow-lg transition-all duration-500 hover:border-[var(--color-accent)]/80 border-white/10"
                 data-cursor="project"
               >
                 <div className="relative w-full h-full overflow-hidden select-none">

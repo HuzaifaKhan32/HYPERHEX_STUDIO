@@ -6,7 +6,7 @@ import Button3D from './Button3D';
 
 export default function HeroSection() {
   return (
-    <div className="relative w-full lg:py-6 bg-background px-3 pb-4 md:px-5 sm:px-8 lg:px-12 2xl:px-16">
+    <div className="relative w-full bg-background px-3 pb-4 md:px-5 sm:px-8 lg:px-12 2xl:px-16">
       <div className="relative mx-auto w-full max-w-[1280px] xl:max-w-[1400px] 2xl:max-w-none origin-top overflow-hidden rounded-[1.5rem] md:rounded-[2rem] border border-outline-variant/30 aspect-[9/16] sm:aspect-[4/3] md:aspect-[16/9] lg:aspect-[1312/568] min-h-[600px] sm:min-h-[500px] md:min-h-[400px]">
 
         {/* POSTER: Fast thumbnail loads immediately (before video) */}

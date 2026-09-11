@@ -20,7 +20,7 @@ const headerContainerVariants = {
 export default function AboutUsHeaderAnimated() {
   return (
     <motion.div
-      className="flex flex-col gap-3"
+      className="flex flex-col items-start gap-3"
       variants={headerContainerVariants}
       initial="hidden"
       whileInView="visible"
@@ -36,9 +36,9 @@ export default function AboutUsHeaderAnimated() {
         </span>
       </motion.div>
 
-      <h2 className="flex flex-col text-4xl font-extrabold tracking-tight md:text-6xl lg:text-7xl 2xl:text-8xl">
-        <motion.span variants={revealVariants}>Your Vision</motion.span>
-        <motion.span variants={revealVariants} className="bg-gradient-to-b from-[#15b6e8] to-transparent bg-clip-text text-transparent">
+      <h2 className="flex flex-col text-5xl md:text-7xl lg:text-8xl 2xl:text-9xl font-black tracking-tight" style={{ fontFamily: 'var(--font-zalando-expanded, sans-serif)' }}>
+        <motion.span variants={revealVariants} className="tracking-wide">Your Vision</motion.span>
+        <motion.span variants={revealVariants} className="tracking-wider bg-gradient-to-b from-[#15b6e8] to-transparent bg-clip-text text-transparent">
           In 3D Reality
         </motion.span>
       </h2>
