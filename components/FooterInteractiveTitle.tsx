@@ -26,11 +26,11 @@ export default function FooterInteractiveTitle() {
         onMouseLeave={() => setIsHoveringText(false)}
         onMouseMove={handleTextMouseMove}
       >
-        {/* Glow */}
+        {/* Glow - hidden on mobile screens */}
         <div
           ref={glowRef}
           aria-hidden="true"
-          className="pointer-events-none absolute"
+          className="pointer-events-none absolute hidden md:block"
           style={{
             width: '350px',
             height: '350px',

@@ -77,6 +77,8 @@ type Project = {
   projectUrl?: string;
   isVideo: boolean;
   gallery?: string[]; // Array of images for carousel modal
+  comingSoon?: boolean; // Flag for coming soon projects
+  objectFit?: 'cover' | 'contain'; // Custom object-fit for thumbnails that need it
 };
 
 // ── YouTube video helper ───────────────────────────────────────────────────
@@ -85,7 +87,8 @@ function yt(
   title: string,
   category: CategoryType | CategoryType[] = 'Animations',
   imageUrl?: string,
-  brand?: string
+  brand?: string,
+  objectFit?: 'cover' | 'contain'
 ): Project {
   return {
     id,
@@ -95,6 +98,7 @@ function yt(
     imageUrl: imageUrl || `/images/case-studies/${id}.webp`,
     embedUrl: `https://www.youtube.com/embed/${id}?rel=0`,
     isVideo: true,
+    objectFit,
   };
 }
 
@@ -102,7 +106,8 @@ function yt_drone(
   id: string,
   title: string,
   category: CategoryType | CategoryType[] = ['Drone', 'Animations', '360 Tour'],
-  brand?: string
+  brand?: string,
+  objectFit?: 'cover' | 'contain'
 ): Project {
   return {
     id,
@@ -112,6 +117,7 @@ function yt_drone(
     imageUrl: `/images/case-studies/${id}.webp`,
     embedUrl: `https://www.youtube.com/embed/${id}?rel=0`,
     isVideo: true,
+    objectFit,
   };
 }
 
@@ -122,7 +128,9 @@ function imgProject(
   path: string,
   category: CategoryType | CategoryType[] = 'Interior & Construction',
   brand?: string,
-  gallery?: string[]
+  gallery?: string[],
+  comingSoon?: boolean,
+  objectFit?: 'cover' | 'contain'
 ): Project {
   return {
     id,
@@ -132,6 +140,8 @@ function imgProject(
     imageUrl: path,
     isVideo: false,
     gallery,
+    comingSoon,
+    objectFit,
   };
 }
 
@@ -168,8 +178,8 @@ const ALL_PROJECTS: Project[] = [
   yt('SXNb1vR_snw', 'NS Arcade | 3D Animation', ['Animations'], undefined, 'NS Arcade'),
   yt('Jq_njk26M3E', 'Commtel | 3D Design & Animation', ['Animations'], undefined, 'Commtel'),
   yt('7JT-j8gz5uU', 'Luxury Watch 3D animation', ['Animations'], undefined, 'Luxury Watch'),
-  yt('8-daQ4f573M', 'VR Experience', 'VR', '/portfolio/VR.webp', 'VR Experience'),
-  yt_drone('7wRGPltVun4', 'Jaguar Builder', ['Drone'], 'Jaguar'),
+  yt('8-daQ4f573M', 'VR Experience', 'VR', '/portfolio/VR.webp', 'VR Experience', 'contain'),
+  yt_drone('7wRGPltVun4', 'Jaguar Builder', ['Drone'], 'Jaguar', 'contain'),
   yt_drone('YvvRPa5zVAM', 'Ahsan Town Project', ['Drone'], 'Ahsan Town'),
   yt_drone('NJgPMovdV2Y', 'Al Jannat Farmhouse', ['Drone'], 'Al Jannat'),
   yt('QhWmY9lXlZY', 'Modern Apartment Interior Design', ['Animations'], undefined, 'Modern Apartment'),
@@ -219,6 +229,8 @@ const ALL_PROJECTS: Project[] = [
       '/portfolio/dha-suffa-4.webp',
     ]
   ),
+  imgProject('img-esouth', 'E-South 360 Tour', '/portfolio/e-south.webp', '360 Tour', 'E-South', undefined, true),
+  imgProject('img-amna', 'Amna Ashraf 360 Tour', '/portfolio/amna-ashraf.webp', '360 Tour', 'Amna Ashraf', undefined, true),
 ];
 
 // Base grid-reveal variants used for the initial whileInView entrance. Only
@@ -301,10 +313,10 @@ const ProjectCard = React.memo(({
         alt={project.title}
         fill
         sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-        quality={75}
+        quality={90}
         loading={index < INITIAL_COUNT ? 'eager' : 'lazy'}
         priority={index < INITIAL_COUNT}
-        className="object-cover transition-transform duration-400 ease-out group-hover:scale-110"
+        className={`${project.objectFit === 'contain' ? 'object-contain' : 'object-cover'} object-center transition-transform duration-400 ease-out group-hover:scale-110`}
         unoptimized={false}
       />
       {/* Hover overlay */}
@@ -315,7 +327,15 @@ const ProjectCard = React.memo(({
         <h3 className="text-xl md:text-2xl font-bold uppercase tracking-wider px-6 text-center text-white">
           {project.title}
         </h3>
-        {project.isVideo ? (
+        {project.comingSoon ? (
+          <div className="mt-4 px-5 py-2 rounded-full bg-gradient-to-r from-accent to-accent-dim text-white font-semibold text-xs md:text-sm uppercase tracking-wider flex items-center gap-2 shadow-lg shadow-accent/30">
+            <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
+            Coming Soon
+          </div>
+        ) : project.isVideo ? (
           <div className="mt-4 px-5 py-2 rounded-full bg-white text-black font-semibold text-xs md:text-sm uppercase tracking-wider flex items-center gap-2 shadow-lg">
             <svg className="w-3.5 h-3.5 fill-black" viewBox="0 0 24 24">
               <path d="M8 5v14l11-7z" />
@@ -340,12 +360,24 @@ const ProjectCard = React.memo(({
           </div>
         )}
       </div>
+
+      {/* Top-left Coming Soon badge with pulse */}
+      {project.comingSoon && (
+        <div className="absolute top-3 left-3 z-10 flex items-center gap-2 px-3 py-1.5 rounded-full bg-gradient-to-r from-accent to-accent-dim backdrop-blur-sm border border-accent/30 shadow-lg shadow-accent/20 pointer-events-none">
+          <span className="relative flex h-2 w-2">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-2 w-2 bg-white"></span>
+          </span>
+          <span className="text-[10px] font-bold uppercase tracking-wider text-white">Coming Soon</span>
+        </div>
+      )}
+
       {/* Top-right badge (video play icon or web external link icon) */}
-      {project.isVideo ? (
+      {!project.comingSoon && project.isVideo ? (
         <div className="absolute top-3 right-3 z-10 w-8 h-8 rounded-full bg-black/50 border border-white/20 backdrop-blur-sm flex items-center justify-center pointer-events-none">
           <svg className="w-3.5 h-3.5 text-white ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>
         </div>
-      ) : project.projectUrl ? (
+      ) : !project.comingSoon && project.projectUrl ? (
         <div className="absolute top-3 right-3 z-10 w-8 h-8 rounded-full bg-black/50 border border-white/20 backdrop-blur-sm flex items-center justify-center pointer-events-none">
           <svg className="w-3.5 h-3.5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
             <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
