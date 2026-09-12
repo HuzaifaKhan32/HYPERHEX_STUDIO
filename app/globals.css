@@ -149,3 +149,19 @@ html.custom-cursor-active [contenteditable="true"] {
   cursor: auto !important;
 }
 
+/* Service Card Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .service-card,
+  .service-card * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* Disable hover transforms on touch devices */
+@media (hover: none) or (pointer: coarse) {
+  .service-card:hover {
+    transform: none !important;
+  }
+}
+

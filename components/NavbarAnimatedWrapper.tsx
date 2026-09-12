@@ -20,8 +20,8 @@ export default function NavbarAnimatedWrapper({ children }: { children: ReactNod
       transition={{ duration: 0.7, ease: 'easeOut', delay: 0.1 }}
       className={`fixed left-0 right-0 z-50 flex w-full justify-center transition-all duration-350 ${
         scrolled
-          ? 'top-2 md:top-3 px-4 sm:px-8 md:px-12 2xl:px-16'
-          : 'top-2 sm:top-3 px-5 sm:px-8 md:px-12 2xl:px-16'
+          ? 'top-4 md:top-5 px-4 sm:px-8 md:px-12 2xl:px-16'
+          : 'top-4 md:top-6 px-5 sm:px-8 md:px-12 2xl:px-16'
       }`}
     >
       <motion.div

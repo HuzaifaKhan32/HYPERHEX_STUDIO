@@ -91,18 +91,18 @@ function MobileMenuDrawer({ isOpen, onClose, links }: { isOpen: boolean; onClose
               {/* Panel top bar */}
               <div className="flex items-center justify-between px-4 pt-4 pb-3">
                 <div className="flex items-center gap-2.5">
-                  <div className="relative h-9 w-9 rounded-full overflow-hidden border border-black/10">
+                  <div className="relative h-11 w-11 shrink-0 overflow-hidden rounded-full border border-black/10 bg-black/10">
                     <Image
                       src="/logo/hyperhex-logo-H.avif"
                       alt="HyperHex"
                       fill
-                      sizes="36px"
+                      sizes="44px"
                       quality={90}
-                      className="object-contain"
+                      className="object-cover rounded-full"
                     />
                   </div>
                   <span
-                    className="font-black uppercase tracking-[-0.04em] text-base"
+                    className="font-black uppercase tracking-tight text-base leading-none"
                     style={{ fontFamily: 'var(--font-syne, sans-serif)', color: 'var(--color-on-surface)' }}
                   >
                     HyperHex Studio

@@ -27,7 +27,7 @@ const headingItemVariants = {
 function LatestWorkHeading() {
   return (
     <motion.div
-      className="flex flex-col items-center text-center gap-3 select-none"
+      className="flex flex-col items-start gap-3 select-none"
       variants={headingContainerVariants}
       initial="hidden"
       whileInView="visible"
@@ -62,6 +62,7 @@ const CATEGORIES = [
   'Web',
   'Branding & Advertisement',
   'Interior & Construction',
+  'AI Content Creation',
 ] as const;
 
 type CategoryType = (typeof CATEGORIES)[number];
@@ -159,19 +160,22 @@ const ALL_PROJECTS: Project[] = [
   webProject('web-ce', 'CE and Builders', '/images/ce-and-builders.webp', 'https://ceandbuilders.com/', ['Web', 'Interior & Construction'], 'CE and Builders'),
   webProject('web-nayyer', 'Nayyer Builders', '/images/nayyer-builder.webp', 'https://nayyerbuilders.com/', ['Web', 'Interior & Construction'], 'Nayyer Builders'),
   webProject('web-kurta', 'Kurta Dukan', '/images/kurta-Dukan.webp', 'https://www.kurtadukan.com/', ['Web', 'Branding & Advertisement'], 'Kurta Dukan'),
-  webProject('web-leather', 'Leather Crafted', '/images/leather-crafted.webp', 'https://leather-crafted.com/', ['Web', 'Branding & Advertisement'], 'Leather Crafted'),
-  yt('QM7FBByPTX8', 'I Handle The Heat', ['Animations', 'Branding & Advertisement'], undefined, 'I Handle The Heat'),
-  yt('SXNb1vR_snw', 'NS Arcade | 3D Animation', ['Animations', 'Interior & Construction'], undefined, 'NS Arcade'),
-  yt('Jq_njk26M3E', 'Commtel | 3D Design & Animation', ['Animations', 'Branding & Advertisement'], undefined, 'Commtel'),
-  yt('7JT-j8gz5uU', 'Luxury Watch 3D animation', ['Animations', 'Branding & Advertisement'], undefined, 'Luxury Watch'),
-  yt('8-daQ4f573M', 'VR Experience', 'VR', '/images/case-studies/vr-latest-work.webp', 'VR Experience'),
-  yt_drone('7wRGPltVun4', 'Jaguar Builder', ['Drone', 'Animations', '360 Tour', 'Interior & Construction'], 'Jaguar'),
-  yt_drone('YvvRPa5zVAM', 'Ahsan Town Project', ['Drone', 'Animations', '360 Tour', 'Interior & Construction'], 'Ahsan Town'),
-  yt_drone('NJgPMovdV2Y', 'Al Jannat Farmhouse', ['Animations', '360 Tour', 'Interior & Construction'], 'Al Jannat'),
-  yt('QhWmY9lXlZY', 'Modern Apartment Interior Design', ['Interior & Construction', '360 Tour', 'Animations'], undefined, 'Modern Apartment'),
-  yt('oQnWA-22Bf4', 'Governor House – Conference Room', ['Interior & Construction', 'Animations'], undefined, 'Governor House'),
-  yt('9JFPZnPXQ1Y', 'Call Center Interior 3D', ['Interior & Construction', '360 Tour', 'Animations'], undefined, 'Call Center'),
-  yt('WKOskq3aIQQ', 'Mumtaz Residency', ['Interior & Construction', 'Animations'], undefined, 'Mumtaz Residency'),
+  webProject('web-leather', 'Leather Crafted', '/portfolio/leather-crafted.webp', 'https://leather-crafted.com/', ['Web', 'Branding & Advertisement'], 'Leather Crafted'),
+  yt('Xz3ssJbRLJ4', 'AI Stadium View', 'AI Content Creation', '/portfolio/stadium-view.webp', 'Stadium View'),
+  yt('yU94W0ca258', 'AI View Creation', 'AI Content Creation', '/portfolio/view.webp', 'View Creation'),
+  yt('jnaCWbBifcQ', 'AI Vision Studio', 'AI Content Creation', '/portfolio/vision.webp', 'Vision Studio'),
+  yt('QM7FBByPTX8', 'I Handle The Heat', ['Animations'], undefined, 'I Handle The Heat'),
+  yt('SXNb1vR_snw', 'NS Arcade | 3D Animation', ['Animations'], undefined, 'NS Arcade'),
+  yt('Jq_njk26M3E', 'Commtel | 3D Design & Animation', ['Animations'], undefined, 'Commtel'),
+  yt('7JT-j8gz5uU', 'Luxury Watch 3D animation', ['Animations'], undefined, 'Luxury Watch'),
+  yt('8-daQ4f573M', 'VR Experience', 'VR', '/portfolio/VR.webp', 'VR Experience'),
+  yt_drone('7wRGPltVun4', 'Jaguar Builder', ['Drone'], 'Jaguar'),
+  yt_drone('YvvRPa5zVAM', 'Ahsan Town Project', ['Drone'], 'Ahsan Town'),
+  yt_drone('NJgPMovdV2Y', 'Al Jannat Farmhouse', ['Drone'], 'Al Jannat'),
+  yt('QhWmY9lXlZY', 'Modern Apartment Interior Design', ['Animations'], undefined, 'Modern Apartment'),
+  yt('oQnWA-22Bf4', 'Governor House – Conference Room', ['Animations'], undefined, 'Governor House'),
+  yt('9JFPZnPXQ1Y', 'Call Center Interior 3D', ['Animations'], undefined, 'Call Center'),
+  yt('WKOskq3aIQQ', 'Mumtaz Residency', ['Animations'], undefined, 'Mumtaz Residency'),
   yt('m2FYElEVclc', 'Nexgen Heights', ['Animations'], undefined, 'Nexgen Heights'),
   imgProject('img-nexgen', 'Nexgen Heights', '/portfolio/nexgen-1.webp', ['Visualization'], 'Nexgen Heights', [
     '/portfolio/nexgen-1.webp',
@@ -191,7 +195,7 @@ const ALL_PROJECTS: Project[] = [
   imgProject('img-car', 'Car Configurator', '/portfolio/car-configurator.jpg', ['Configurator'], 'Car Configurator'),
   imgProject('img-commtel', 'Commtel Project', '/portfolio/commtel.jpg', ['Visualization'], 'Commtel'),
   imgProject('img-exterior', 'Exterior House', '/portfolio/exterior-house.jpg', ['Visualization'], 'Exterior House'),
-  imgProject('img-governor', 'Governor House Render', '/portfolio/governor-house.jpg', ['Visualization', 'Animations'], 'Governor House'),
+  imgProject('img-governor', 'Governor House Render', '/portfolio/governor-house.jpg', ['Visualization'], 'Governor House'),
   imgProject('img-ivf', 'IVF Academy', '/portfolio/IVF.png', ['Visualization'], 'IVF Academy'),
   imgProject('img-arcade', 'NS Arcade', '/portfolio/ns-arcade.jpg', ['Visualization'], 'NS Arcade'),
   imgProject('img-watch', 'Luxury Watch 3D', '/portfolio/watch.png', ['Visualization'], 'Luxury Watch'),
@@ -297,10 +301,11 @@ const ProjectCard = React.memo(({
         alt={project.title}
         fill
         sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-        quality={80}
+        quality={75}
         loading={index < INITIAL_COUNT ? 'eager' : 'lazy'}
         priority={index < INITIAL_COUNT}
         className="object-cover transition-transform duration-400 ease-out group-hover:scale-110"
+        unoptimized={false}
       />
       {/* Hover overlay */}
       <div className="absolute inset-0 bg-black/60 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10 pointer-events-none">

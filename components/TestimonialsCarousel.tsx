@@ -18,6 +18,8 @@ interface TestimonialsCarouselProps {
 }
 
 function TestimonialCard({ item }: { item: Testimonial }) {
+  const isFounder = item.role.includes('Founder');
+
   return (
     <div
       className="flex-shrink-0 w-[300px] md:w-[320px] h-[220px] p-5 flex flex-col justify-between transition-transform duration-200 hover:-translate-y-1"
@@ -30,7 +32,7 @@ function TestimonialCard({ item }: { item: Testimonial }) {
     >
       <div className="relative">
         <PiQuotes className="w-6 h-6 mb-2 text-[#71717a]" />
-        <p className="text-sm text-[#161d1e] font-medium leading-relaxed line-clamp-3">
+        <p className={`${isFounder ? 'text-base md:text-lg font-black' : 'text-sm font-medium'} text-[#161d1e] leading-relaxed line-clamp-3`}>
           {item.quote}
         </p>
       </div>

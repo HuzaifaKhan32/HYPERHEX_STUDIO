@@ -126,7 +126,7 @@ export default function AboutUsServer() {
                   &ldquo;
                 </span>
                 <p className="-mt-3 text-sm md:text-base 2xl:text-lg font-bold leading-relaxed text-[#161d1e]">
-                  High-end 3D visualization and spatial web design bridge the gap between imagination and reality.
+                  Technology is only powerful when innovation meets creativity — we turn bold ideas into digital experiences built to inspire, connect, and last.
                 </p>
                 <div className="flex flex-col items-start gap-1">
                   <span className="text-sm font-bold text-[#161d1e]">
