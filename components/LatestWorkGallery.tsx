@@ -59,9 +59,9 @@ const CATEGORIES = [
   'Configurator',
   '360 Tour',
   'VR',
+  'Interactive real-time',
   'Web',
-  'Branding & Advertisement',
-  'Interior & Construction',
+  'Interior Designs',
   'AI Content Creation',
 ] as const;
 
@@ -126,7 +126,7 @@ function imgProject(
   id: string,
   title: string,
   path: string,
-  category: CategoryType | CategoryType[] = 'Interior & Construction',
+  category: CategoryType | CategoryType[] = 'Interior Designs',
   brand?: string,
   gallery?: string[],
   comingSoon?: boolean,
@@ -167,14 +167,15 @@ function webProject(
 
 // Project data moved outside component to prevent recreation on every render
 const ALL_PROJECTS: Project[] = [
-  webProject('web-ce', 'CE and Builders', '/images/ce-and-builders.webp', 'https://ceandbuilders.com/', ['Web', 'Interior & Construction'], 'CE and Builders'),
-  webProject('web-nayyer', 'Nayyer Builders', '/images/nayyer-builder.webp', 'https://nayyerbuilders.com/', ['Web', 'Interior & Construction'], 'Nayyer Builders'),
-  webProject('web-kurta', 'Kurta Dukan', '/images/kurta-Dukan.webp', 'https://www.kurtadukan.com/', ['Web', 'Branding & Advertisement'], 'Kurta Dukan'),
-  webProject('web-leather', 'Leather Crafted', '/portfolio/leather-crafted.webp', 'https://leather-crafted.com/', ['Web', 'Branding & Advertisement'], 'Leather Crafted'),
+  webProject('web-ce', 'CE and Builders', '/images/ce-and-builders.webp', 'https://ceandbuilders.com/', ['Web'], 'CE and Builders'),
+  webProject('web-nayyer', 'Nayyer Builders', '/images/nayyer-builder.webp', 'https://nayyerbuilders.com/', ['Web'], 'Nayyer Builders'),
+  webProject('web-kurta', 'Kurta Dukan', '/images/kurta-Dukan.webp', 'https://www.kurtadukan.com/', ['Web'], 'Kurta Dukan'),
+  webProject('web-leather', 'Leather Crafted', '/portfolio/leather-crafted.webp', 'https://leather-crafted.com/', ['Web'], 'Leather Crafted'),
   yt('Xz3ssJbRLJ4', 'AI Stadium View', 'AI Content Creation', '/portfolio/stadium-view.webp', 'Stadium View'),
   yt('yU94W0ca258', 'AI View Creation', 'AI Content Creation', '/portfolio/view.webp', 'View Creation'),
-  yt('jnaCWbBifcQ', 'AI Vision Studio', 'AI Content Creation', '/portfolio/vision.webp', 'Vision Studio'),
-  yt('QM7FBByPTX8', 'I Handle The Heat', ['Animations'], undefined, 'I Handle The Heat'),
+  yt('jnaCWbBifcQ', 'AI Vision Studio', 'Animations', '/portfolio/vision.webp', 'Vision Studio'),
+  yt('QM7FBByPTX8', 'I Handle The Heat', ['AI Content Creation'], undefined, 'I Handle The Heat'),
+  yt('etXi1RoYDnA', 'Stadium View Visualization', ['Animations'], '/portfolio/stadium-view-visualization.webp', 'Stadium View Visualization'),
   yt('SXNb1vR_snw', 'NS Arcade | 3D Animation', ['Animations'], undefined, 'NS Arcade'),
   yt('Jq_njk26M3E', 'Commtel | 3D Design & Animation', ['Animations'], undefined, 'Commtel'),
   yt('7JT-j8gz5uU', 'Luxury Watch 3D animation', ['Animations'], undefined, 'Luxury Watch'),
@@ -206,7 +207,7 @@ const ALL_PROJECTS: Project[] = [
   imgProject('img-commtel', 'Commtel Project', '/portfolio/commtel.jpg', ['Visualization'], 'Commtel'),
   imgProject('img-exterior', 'Exterior House', '/portfolio/exterior-house.jpg', ['Visualization'], 'Exterior House'),
   imgProject('img-governor', 'Governor House Render', '/portfolio/governor-house.jpg', ['Visualization'], 'Governor House'),
-  imgProject('img-ivf', 'IVF Academy', '/portfolio/IVF.png', ['Visualization'], 'IVF Academy'),
+  // imgProject('img-ivf', 'IVF Academy', '/portfolio/IVF.png', ['Visualization'], 'IVF Academy'),
   imgProject('img-arcade', 'NS Arcade', '/portfolio/ns-arcade.jpg', ['Visualization'], 'NS Arcade'),
   imgProject('img-watch', 'Luxury Watch 3D', '/portfolio/watch.png', ['Visualization'], 'Luxury Watch'),
   imgProject('img-bedroom', 'Luxury Bedroom', '/portfolio/bedroom.webp', ['Visualization'], 'Luxury Bedroom', [
@@ -220,7 +221,7 @@ const ALL_PROJECTS: Project[] = [
     'img-dha-suffa',
     'DHA Suffa University',
     '/portfolio/dha-suffa-4.webp',
-    ['Visualization', 'Interior & Construction'],
+    ['Visualization'],
     'DHA Suffa University',
     [
       '/portfolio/dha-suffa.webp',
