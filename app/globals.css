@@ -164,4 +164,13 @@ html.custom-cursor-active [contenteditable="true"] {
     transform: none !important;
   }
 }
+/* Service Card Custom Shadow */
+.service-card-shadow {
+  box-shadow: rgba(31, 224, 238, 0.4) 0px 2px 4px, rgba(31, 224, 238, 0.3) 0px 7px 13px -3px, rgba(31, 224, 238, 0.2) 0px -3px 0px inset;
+  transition: box-shadow 0.5s ease-in-out;
+}
 
+.group:hover .service-card-shadow,
+.service-card-shadow:hover {
+  box-shadow: rgba(31, 224, 238, 0.6) 0px 4px 14px, rgba(31, 224, 238, 0.45) 0px 10px 22px -3px, rgba(31, 224, 238, 0.3) 0px -3px 0px inset;
+}

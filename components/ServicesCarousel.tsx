@@ -6,6 +6,7 @@ import Autoplay from 'embla-carousel-autoplay';
 import { motion, AnimatePresence } from 'framer-motion';
 import { services } from '@/lib/services-data';
 import ServiceCard from './ServiceCard';
+import ServicesHeading from './ServicesHeading';
 
 const AUTOPLAY_INTERVAL = 5000;
 const SLIDE_SIZE = '68%';
@@ -66,6 +67,7 @@ export default function ServicesCarousel() {
   const [desktopPageIndex, setDesktopPageIndex] = useState(0);
   const [direction, setDirection] = useState(1);
   const [isHovered, setIsHovered] = useState(false);
+  const [hoveredCardIndex, setHoveredCardIndex] = useState<number | null>(null);
 
   const mobileServices = services;
   // Use the padding function to ensure exactly 6 cards per page
@@ -147,6 +149,10 @@ export default function ServicesCarousel() {
                       href={service.href}
                       panel={service.panel}
                       icon={service.icon}
+                      imagePath={service.imagePath}
+                      imageConfig={service.imageConfig}
+                      category={service.category}
+                      index={service.index}
                       className="h-full"
                     />
                   </motion.div>
@@ -176,57 +182,69 @@ export default function ServicesCarousel() {
 
       {/* DESKTOP: INDEPENDENT ANIMATED PAGES */}
       <div
-        className="hidden lg:flex flex-col gap-4 w-full pt-2"
+        className="hidden lg:block w-full"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
-        {/* Header Controls */}
-        <div className="flex items-center justify-end gap-6 mb-2 pr-2">
-          <div className="flex items-center gap-2 mr-2">
-            {desktopPages.map((_, pageIndex) => (
-              <button
-                key={pageIndex}
-                type="button"
-                onClick={() => {
-                  const dir = pageIndex > desktopPageIndex ? 1 : -1;
-                  handlePageChange(pageIndex, dir);
-                }}
-                aria-label={`Go to page ${pageIndex + 1}`}
-                aria-current={pageIndex === desktopPageIndex ? 'true' : undefined}
-                className={`h-2.5 rounded-full transition-all duration-300 ${
-                  pageIndex === desktopPageIndex
-                    ? 'w-8 bg-accent shadow-[0_0_10px_rgba(21,182,232,0.5)]'
-                    : 'w-2.5 bg-outline-variant hover:bg-accent/50'
-                }`}
-              />
-            ))}
+        {/* Header Row: Heading (left) + Controls (right) */}
+        <div className="relative w-full flex items-end justify-between mb-12 lg:mb-16 xl:mb-20">
+          {/* Heading on the left */}
+          <div className="flex-shrink-0">
+            <ServicesHeading />
           </div>
 
-          <button
-            type="button"
-            onClick={scrollPrev}
-            aria-label="Previous Page"
-            className="flex items-center justify-center w-12 h-12 bg-surface-bright rounded-xl border-2 border-outline-variant/30 text-on-surface
-                       shadow-[0_4px_0_0_var(--color-outline-variant)] hover:border-accent hover:text-accent hover:shadow-[0_4px_0_0_rgba(21,182,232,1)]
-                       hover:-translate-y-0.5 active:shadow-[0_0px_0_0_rgba(21,182,232,1)] active:translate-y-1 transition-all duration-150"
-          >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
-            </svg>
-          </button>
+          {/* Navigation Controls + Indicators on the right */}
+          <div className="relative flex flex-col items-end justify-end gap-4">
+            {/* Navigation Buttons */}
+            <div className="flex items-center gap-6">
+              <button
+                type="button"
+                onClick={scrollPrev}
+                aria-label="Previous Page"
+                className="flex items-center justify-center w-12 h-12 bg-surface-bright rounded-xl border-2 border-outline-variant/30 text-on-surface
+                           shadow-[0_4px_0_0_var(--color-outline-variant)] hover:border-accent hover:text-accent hover:shadow-[0_4px_0_0_rgba(21,182,232,1)]
+                           hover:-translate-y-0.5 active:shadow-[0_0px_0_0_rgba(21,182,232,1)] active:translate-y-1 transition-all duration-150"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+                </svg>
+              </button>
 
-          <button
-            type="button"
-            onClick={scrollNext}
-            aria-label="Next Page"
-            className="flex items-center justify-center w-12 h-12 bg-surface-bright rounded-xl border-2 border-outline-variant/30 text-on-surface
-                       shadow-[0_4px_0_0_var(--color-outline-variant)] hover:border-accent hover:text-accent hover:shadow-[0_4px_0_0_rgba(21,182,232,1)]
-                       hover:-translate-y-0.5 active:shadow-[0_0px_0_0_rgba(21,182,232,1)] active:translate-y-1 transition-all duration-150"
-          >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-            </svg>
-          </button>
+              <button
+                type="button"
+                onClick={scrollNext}
+                aria-label="Next Page"
+                className="flex items-center justify-center w-12 h-12 bg-surface-bright rounded-xl border-2 border-outline-variant/30 text-on-surface
+                           shadow-[0_4px_0_0_var(--color-outline-variant)] hover:border-accent hover:text-accent hover:shadow-[0_4px_0_0_rgba(21,182,232,1)]
+                           hover:-translate-y-0.5 active:shadow-[0_0px_0_0_rgba(21,182,232,1)] active:translate-y-1 transition-all duration-150"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                </svg>
+              </button>
+            </div>
+
+            {/* Page Indicators below buttons */}
+            <div className="flex items-center justify-center gap-2">
+              {desktopPages.map((_, pageIndex) => (
+                <button
+                  key={pageIndex}
+                  type="button"
+                  onClick={() => {
+                    const dir = pageIndex > desktopPageIndex ? 1 : -1;
+                    handlePageChange(pageIndex, dir);
+                  }}
+                  aria-label={`Go to page ${pageIndex + 1}`}
+                  aria-current={pageIndex === desktopPageIndex ? 'true' : undefined}
+                  className={`h-2.5 rounded-full transition-all duration-300 ${
+                    pageIndex === desktopPageIndex
+                      ? 'w-8 bg-accent shadow-[0_0_10px_rgba(21,182,232,0.5)]'
+                      : 'w-2.5 bg-outline-variant hover:bg-accent/50'
+                  }`}
+                />
+              ))}
+            </div>
+          </div>
         </div>
 
         {/* Animated Page Container */}
@@ -243,13 +261,26 @@ export default function ServicesCarousel() {
               className="grid grid-cols-3 grid-rows-2 gap-4 xl:gap-6 w-full"
             >
               {desktopPages[desktopPageIndex]?.map((service, cardIdx) => (
-                <div key={`${service.title}-${desktopPageIndex}-${cardIdx}`} className="min-w-0 w-full h-full">
+                <div
+                  key={`${service.title}-${desktopPageIndex}-${cardIdx}`}
+                  className="min-w-0 w-full h-full transition-all duration-300"
+                  style={{
+                    opacity: hoveredCardIndex !== null && hoveredCardIndex !== cardIdx ? 0.94 : 1,
+                    transform: hoveredCardIndex !== null && hoveredCardIndex !== cardIdx ? 'scale(0.99)' : 'scale(1)',
+                  }}
+                  onMouseEnter={() => setHoveredCardIndex(cardIdx)}
+                  onMouseLeave={() => setHoveredCardIndex(null)}
+                >
                   <ServiceCard
                     title={service.title}
                     description={service.description}
                     href={service.href}
                     panel={service.panel}
                     icon={service.icon}
+                    imagePath={service.imagePath}
+                    imageConfig={service.imageConfig}
+                    category={service.category}
+                    index={service.index}
                     className="w-full h-full"
                   />
                 </div>

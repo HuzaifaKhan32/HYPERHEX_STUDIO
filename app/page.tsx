@@ -46,6 +46,7 @@ const TestimonialsServer = dynamic(() => import('@/components/TestimonialsServer
   ),
 });
 
+
 const ContactForm = dynamic(() => import('@/components/ContactForm'), {
   loading: () => (
     <div className="w-full py-24 bg-surface flex items-center justify-center min-h-[400px]">
