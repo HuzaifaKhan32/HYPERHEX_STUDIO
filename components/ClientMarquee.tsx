@@ -5,7 +5,7 @@ import { MARQUEE_ITEMS, PILL_BG_COLORS, logoVariantForBg, type MarqueeItem } fro
 import InfiniteMarquee from '@/components/ui/InfiniteMarquee';
 
 const PILL_BASE =
-  'inline-flex shrink-0 items-center justify-center rounded-full h-[62px] min-w-[110px] px-4 mx-0.5 sm:h-[120px] sm:min-w-[160px] sm:px-8 sm:mx-3';
+  'inline-flex shrink-0 items-center justify-center rounded-full h-[62px] min-w-[90px] px-2.5 mx-0.5 sm:h-[120px] sm:min-w-[160px] sm:px-8 sm:mx-3';
 
 // White surface color per design specification.
 // Centralized here so the section bg and the fade masks can never drift apart.
@@ -15,7 +15,7 @@ function MarqueePill({ item }: { item: MarqueeItem }) {
   if (item.type === 'label') {
     return (
       <span
-        className={`${PILL_BASE} font-[family-name:var(--font-jetbrains)] text-[10px] sm:text-base font-medium tracking-[0.12em] text-[#161d1e] uppercase px-4 sm:px-14`}
+        className={`${PILL_BASE} font-[family-name:var(--font-jetbrains)] text-[10px] sm:text-base font-medium tracking-[0.12em] text-[#161d1e] uppercase px-3 sm:px-14`}
       >
         {item.name}
       </span>
@@ -26,10 +26,10 @@ function MarqueePill({ item }: { item: MarqueeItem }) {
 
   const dynamicPx =
     item.name.length > 10
-      ? 'px-10 sm:px-14'
+      ? 'px-4 sm:px-14'
       : item.name.length > 6
-      ? 'px-7 sm:px-10'
-      : 'px-5 sm:px-8';
+      ? 'px-3 sm:px-10'
+      : 'px-2.5 sm:px-8';
 
   return (
     <span
@@ -40,7 +40,7 @@ function MarqueePill({ item }: { item: MarqueeItem }) {
       <ClientLogo
         id={item.id}
         variant={logoVariant}
-        className="h-8 w-auto max-h-[36px] max-w-[120px] object-contain sm:h-16 md:h-20 sm:max-h-[85px] sm:max-w-[220px]"
+        className="h-11 w-auto max-h-[48px] max-w-[145px] object-contain sm:h-16 md:h-20 sm:max-h-[85px] sm:max-w-[220px]"
       />
     </span>
   );
@@ -57,7 +57,7 @@ export default function ClientMarquee() {
   return (
     <section
       aria-label="Our clients"
-      className="relative w-full overflow-hidden pt-1 pb-4 md:py-6 lg:mt-25 px-0 lg:px-5 2xl:px-16"
+      className="relative w-full overflow-hidden py-2 md:py-6 lg:mt-25 px-0 lg:px-5 2xl:px-16"
       style={{
         backgroundColor: MARQUEE_BG,
         borderTop: '3px solid #15b6e8',

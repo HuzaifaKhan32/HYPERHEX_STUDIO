@@ -72,7 +72,7 @@ export function ClientLogo({
   const variantStyles = variant === 'dark' ? 'brightness-0 invert' : '';
 
   return (
-    <div className="flex items-center justify-center overflow-hidden py-2 px-1">
+    <div className="flex items-center justify-center overflow-hidden py-0.5 sm:py-2 px-0.5 sm:px-1">
       <Image 
         src={src} 
         alt={`${id.replace(/_/g, ' ')} logo`} 

@@ -27,7 +27,7 @@ const headingItemVariants = {
 function LatestWorkHeading() {
   return (
     <motion.div
-      className="flex flex-col items-start gap-3 select-none"
+      className="flex w-full flex-col items-center justify-center text-center gap-3 select-none"
       variants={headingContainerVariants}
       initial="hidden"
       whileInView="visible"
@@ -35,15 +35,19 @@ function LatestWorkHeading() {
     >
       <motion.div
         variants={headingItemVariants}
-        className="inline-flex w-fit items-center gap-2 rounded-full border border-[#bac9cc] bg-white px-4 py-2 shadow-sm transition-transform hover:-translate-y-0.5"
+        className="inline-flex w-fit items-center gap-2 px-4 py-2 text-xs font-semibold tracking-wide text-[#3b494c] transition-transform hover:-translate-y-0.5"
+        style={{
+          backgroundColor: 'var(--token-5c4bbf1d-7534-4d20-87a6-b0deb15d1586, rgb(245, 245, 245))',
+          borderRadius: '8px',
+          boxShadow: 'rgba(0, 0, 0, 0.14) 0px 3px 3px 0px, rgba(0, 0, 0, 0.12) 0px 2.77px 2.21px 0px, rgb(233, 233, 233) 0px -3px 0px 0px inset',
+          opacity: 1,
+        }}
       >
         <span className="h-2 w-2 animate-pulse rounded-full bg-[#15b6e8]" />
-        <span className="text-xs font-semibold tracking-wide text-[#3b494c]">
-          Latest Work
-        </span>
+        <span>Latest Work</span>
       </motion.div>
 
-      <h2 className="flex flex-row gap-3 items-center text-5xl md:text-7xl lg:text-8xl 2xl:text-9xl font-black tracking-tight" style={{ fontFamily: 'var(--font-zalando-expanded, sans-serif)' }}>
+      <h2 className="flex flex-wrap items-center justify-center gap-3 text-center text-5xl md:text-7xl lg:text-8xl 2xl:text-9xl font-black tracking-tight" style={{ fontFamily: 'var(--font-zalando-expanded, sans-serif)' }}>
         <motion.span variants={headingItemVariants} className="text-[#161d1e]">Latest</motion.span>
         <motion.span variants={headingItemVariants} className="bg-gradient-to-b from-[#15b6e8] to-transparent bg-clip-text text-transparent">Work</motion.span>
       </h2>
@@ -51,11 +55,13 @@ function LatestWorkHeading() {
   );
 }
 
+import { PROJECTS, ProjectCategory as CategoryType, Project } from '@/lib/content-data';
+
 const CATEGORIES = [
   'All',
   'Animations',
   'Drone',
-  "Visualization",
+  'Visualization',
   'Configurator',
   '360 Tour',
   'VR',
@@ -65,174 +71,8 @@ const CATEGORIES = [
   'AI Content Creation',
 ] as const;
 
-type CategoryType = (typeof CATEGORIES)[number];
+const ALL_PROJECTS: Project[] = PROJECTS;
 
-type Project = {
-  id: string;
-  title: string;
-  brand: string;
-  category: CategoryType | CategoryType[];
-  imageUrl: string;
-  embedUrl?: string;
-  projectUrl?: string;
-  isVideo: boolean;
-  gallery?: string[]; // Array of images for carousel modal
-  comingSoon?: boolean; // Flag for coming soon projects
-  objectFit?: 'cover' | 'contain'; // Custom object-fit for thumbnails that need it
-};
-
-// ── YouTube video helper ───────────────────────────────────────────────────
-function yt(
-  id: string,
-  title: string,
-  category: CategoryType | CategoryType[] = 'Animations',
-  imageUrl?: string,
-  brand?: string,
-  objectFit?: 'cover' | 'contain'
-): Project {
-  return {
-    id,
-    title,
-    brand: brand || title.split('|')[0].trim().split('–')[0].trim(),
-    category,
-    imageUrl: imageUrl || `/images/case-studies/${id}.webp`,
-    embedUrl: `https://www.youtube.com/embed/${id}?rel=0`,
-    isVideo: true,
-    objectFit,
-  };
-}
-
-function yt_drone(
-  id: string,
-  title: string,
-  category: CategoryType | CategoryType[] = ['Drone', 'Animations', '360 Tour'],
-  brand?: string,
-  objectFit?: 'cover' | 'contain'
-): Project {
-  return {
-    id,
-    title,
-    brand: brand || title.split('|')[0].trim().split('–')[0].trim(),
-    category,
-    imageUrl: `/images/case-studies/${id}.webp`,
-    embedUrl: `https://www.youtube.com/embed/${id}?rel=0`,
-    isVideo: true,
-    objectFit,
-  };
-}
-
-// ── Portfolio image helper ─────────────────────────────────────────────────
-function imgProject(
-  id: string,
-  title: string,
-  path: string,
-  category: CategoryType | CategoryType[] = 'Interior Designs',
-  brand?: string,
-  gallery?: string[],
-  comingSoon?: boolean,
-  objectFit?: 'cover' | 'contain'
-): Project {
-  return {
-    id,
-    title,
-    brand: brand || title.split('|')[0].trim().split('–')[0].trim(),
-    category,
-    imageUrl: path,
-    isVideo: false,
-    gallery,
-    comingSoon,
-    objectFit,
-  };
-}
-
-// ── Web live project helper ────────────────────────────────────────────────
-function webProject(
-  id: string,
-  title: string,
-  path: string,
-  projectUrl: string,
-  category: CategoryType | CategoryType[] = 'Web',
-  brand?: string
-): Project {
-  return {
-    id,
-    title,
-    brand: brand || title,
-    category,
-    imageUrl: path,
-    projectUrl,
-    isVideo: false,
-  };
-}
-
-// Project data moved outside component to prevent recreation on every render
-const ALL_PROJECTS: Project[] = [
-  webProject('web-ce', 'CE and Builders', '/images/ce-and-builders.webp', 'https://ceandbuilders.com/', ['Web'], 'CE and Builders'),
-  webProject('web-nayyer', 'Nayyer Builders', '/images/nayyer-builder.webp', 'https://nayyerbuilders.com/', ['Web'], 'Nayyer Builders'),
-  webProject('web-kurta', 'Kurta Dukan', '/images/kurta-Dukan.webp', 'https://www.kurtadukan.com/', ['Web'], 'Kurta Dukan'),
-  webProject('web-leather', 'Leather Crafted', '/portfolio/leather-crafted.webp', 'https://leather-crafted.com/', ['Web'], 'Leather Crafted'),
-  yt('Xz3ssJbRLJ4', 'AI Stadium View', 'AI Content Creation', '/portfolio/stadium-view.webp', 'Stadium View'),
-  yt('yU94W0ca258', 'AI View Creation', 'AI Content Creation', '/portfolio/view.webp', 'View Creation'),
-  yt('jnaCWbBifcQ', 'AI Vision Studio', 'Animations', '/portfolio/vision.webp', 'Vision Studio'),
-  yt('QM7FBByPTX8', 'I Handle The Heat', ['AI Content Creation'], undefined, 'I Handle The Heat'),
-  yt('etXi1RoYDnA', 'Stadium View Visualization', ['Animations'], '/portfolio/stadium-view-visualization.webp', 'Stadium View Visualization'),
-  yt('SXNb1vR_snw', 'NS Arcade | 3D Animation', ['Animations'], undefined, 'NS Arcade'),
-  yt('Jq_njk26M3E', 'Commtel | 3D Design & Animation', ['Animations'], undefined, 'Commtel'),
-  yt('7JT-j8gz5uU', 'Luxury Watch 3D animation', ['Animations'], undefined, 'Luxury Watch'),
-  yt('8-daQ4f573M', 'VR Experience', 'VR', '/portfolio/VR.webp', 'VR Experience', 'contain'),
-  yt_drone('7wRGPltVun4', 'Jaguar Builder', ['Drone'], 'Jaguar', 'contain'),
-  yt_drone('YvvRPa5zVAM', 'Ahsan Town Project', ['Drone'], 'Ahsan Town'),
-  yt_drone('NJgPMovdV2Y', 'Al Jannat Farmhouse', ['Drone'], 'Al Jannat'),
-  yt('QhWmY9lXlZY', 'Modern Apartment Interior Design', ['Animations'], undefined, 'Modern Apartment'),
-  yt('oQnWA-22Bf4', 'Governor House – Conference Room', ['Animations'], undefined, 'Governor House'),
-  yt('9JFPZnPXQ1Y', 'Call Center Interior 3D', ['Animations'], undefined, 'Call Center'),
-  yt('WKOskq3aIQQ', 'Mumtaz Residency', ['Animations'], undefined, 'Mumtaz Residency'),
-  yt('m2FYElEVclc', 'Nexgen Heights', ['Animations'], undefined, 'Nexgen Heights'),
-  imgProject('img-nexgen', 'Nexgen Heights', '/portfolio/nexgen-1.webp', ['Visualization'], 'Nexgen Heights', [
-    '/portfolio/nexgen-1.webp',
-    '/portfolio/nexgen-2.webp',
-    '/portfolio/nexgen-3.webp',
-    '/portfolio/nexgen-4.webp',
-    '/portfolio/nexgen-5.webp',
-    '/portfolio/nexgen-6.webp',
-    '/portfolio/nexgen-7.webp',
-    '/portfolio/nexgen-8.webp',
-    '/portfolio/nexgen-9.webp',
-    '/portfolio/nexgen-10.webp',
-    '/portfolio/nexgen-11.webp',
-    '/portfolio/nexgen-12.webp',
-    '/portfolio/nexgen-13.webp',
-  ]),
-  imgProject('img-car', 'Car Configurator', '/portfolio/car-configurator.jpg', ['Configurator'], 'Car Configurator'),
-  imgProject('img-commtel', 'Commtel Project', '/portfolio/commtel.jpg', ['Visualization'], 'Commtel'),
-  imgProject('img-exterior', 'Exterior House', '/portfolio/exterior-house.jpg', ['Visualization'], 'Exterior House'),
-  imgProject('img-governor', 'Governor House Render', '/portfolio/governor-house.jpg', ['Visualization'], 'Governor House'),
-  // imgProject('img-ivf', 'IVF Academy', '/portfolio/IVF.png', ['Visualization'], 'IVF Academy'),
-  imgProject('img-arcade', 'NS Arcade', '/portfolio/ns-arcade.jpg', ['Visualization'], 'NS Arcade'),
-  imgProject('img-watch', 'Luxury Watch 3D', '/portfolio/watch.png', ['Visualization'], 'Luxury Watch'),
-  imgProject('img-bedroom', 'Luxury Bedroom', '/portfolio/bedroom.webp', ['Visualization'], 'Luxury Bedroom', [
-    '/portfolio/bedroom.webp',
-    '/portfolio/washroom.webp',
-    '/portfolio/kitchen.webp',
-    '/portfolio/lounge.webp',
-    '/portfolio/swimming-pool.webp'
-  ]),
-  imgProject(
-    'img-dha-suffa',
-    'DHA Suffa University',
-    '/portfolio/dha-suffa-4.webp',
-    ['Visualization'],
-    'DHA Suffa University',
-    [
-      '/portfolio/dha-suffa.webp',
-      '/portfolio/dha-suffa-2.webp',
-      '/portfolio/dha-suffa-3.webp',
-      '/portfolio/dha-suffa-4.webp',
-    ]
-  ),
-  imgProject('img-esouth', 'E-South 360 Tour', '/portfolio/e-south.webp', '360 Tour', 'E-South', undefined, true),
-  imgProject('img-amna', 'Amna Ashraf 360 Tour', '/portfolio/amna-ashraf.webp', '360 Tour', 'Amna Ashraf', undefined, true),
-];
 
 // Base grid-reveal variants used for the initial whileInView entrance. Only
 // opacity/y are animated (compositor-friendly).
@@ -457,12 +297,12 @@ export default function LatestWorkGallery() {
 
         {/* Header */}
         <div className="flex flex-col gap-8 pb-8 border-b border-outline-variant/30">
-          <div className="flex flex-col items-start gap-6 w-full">
+          <div className="flex flex-col items-center justify-center text-center gap-6 w-full">
             <LatestWorkHeading />
-            <div className="flex flex-col gap-3 w-full">
+            <div className="flex flex-col items-center justify-center text-center gap-3 w-full">
               {/* Parent Category Filters */}
               <motion.div
-                className="flex flex-wrap items-center gap-2.5 sm:gap-3 font-bold text-sm"
+                className="flex flex-wrap items-center justify-center gap-2.5 sm:gap-3 font-bold text-sm text-center w-full"
                 variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.05, delayChildren: 0.3 } } }}
                 initial="hidden"
                 whileInView="visible"

@@ -58,11 +58,17 @@ export default function TestimonialsServer() {
 
         {/* Header */}
         <div className="flex flex-col items-center text-center gap-3 mb-8">
-          <div className="inline-flex w-fit items-center gap-2 rounded-full border border-[#bac9cc] bg-white px-4 py-2 shadow-sm transition-transform hover:-translate-y-0.5">
+          <div
+            className="inline-flex w-fit items-center gap-2 px-4 py-2 text-xs font-semibold tracking-wide text-[#3b494c] transition-transform hover:-translate-y-0.5"
+            style={{
+              backgroundColor: 'var(--token-5c4bbf1d-7534-4d20-87a6-b0deb15d1586, rgb(245, 245, 245))',
+              borderRadius: '8px',
+              boxShadow: 'rgba(0, 0, 0, 0.14) 0px 3px 3px 0px, rgba(0, 0, 0, 0.12) 0px 2.77px 2.21px 0px, rgb(233, 233, 233) 0px -3px 0px 0px inset',
+              opacity: 1,
+            }}
+          >
             <span className="h-2 w-2 animate-pulse rounded-full bg-[#15b6e8]" />
-            <span className="text-xs font-semibold tracking-wide text-[#3b494c]">
-              Testimonials
-            </span>
+            <span>Testimonials</span>
           </div>
 
           <h2 className="flex flex-col items-center text-5xl md:text-7xl lg:text-8xl 2xl:text-9xl font-black tracking-tight">

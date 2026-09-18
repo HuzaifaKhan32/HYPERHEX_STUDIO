@@ -103,12 +103,6 @@ export default function ContactForm() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: Implement actual form submission logic
-    // - Add API endpoint for form processing
-    // - Add loading state during submission
-    // - Add success/error toast notifications
-    // - Add form validation feedback
-    console.log({ email, phone, message });
   };
 
   return (
@@ -138,18 +132,16 @@ export default function ContactForm() {
             whileHover={{ y: -6 }}
             className="relative order-2 w-full md:order-1 md:w-[45%]"
           >
-            {/* White Card with Faceted Corner */}
+            {/* Contact Form Card — Testimonials Card Design */}
             <div
-              className="relative rounded-3xl bg-[#f4fafd] p-8 shadow-md shadow-outline-variant/30 transition-transform duration-300 md:p-12 2xl:p-16"
-              style={{ clipPath: 'polygon(40px 0, 100% 0, 100% 100%, 0 100%, 0 40px)' }}
+              className="relative p-8 md:p-12 2xl:p-16 transition-transform duration-300"
+              style={{
+                backgroundColor: 'rgb(244, 244, 245)',
+                borderRadius: '24px',
+                boxShadow:
+                  'rgba(255, 255, 255, 0.6) 0px 4px 0px 0px inset, rgba(0, 0, 0, 0.05) 0px -8px 0px 0px inset, rgba(0, 0, 0, 0.1) 0px 3px 3px 0px, rgba(0, 0, 0, 0.06) 0px 7.77px 16px 0px',
+              }}
             >
-              {/* Inner Notch Detail */}
-              <div className="absolute top-0 left-0 w-16 h-16 pointer-events-none">
-                <svg fill="none" height="64" viewBox="0 0 64 64" width="64" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M0 40L40 0" stroke="var(--color-surface-variant)" strokeWidth="2"></path>
-                </svg>
-              </div>
-
               <form className="flex flex-col gap-6" onSubmit={handleSubmit}>
                 {/* Email Field */}
                 <motion.div
@@ -157,14 +149,20 @@ export default function ContactForm() {
                   className="flex flex-col gap-2"
                 >
                   <label
-                    className="font-[family-name:var(--font-dm-sans)] text-sm 2xl:text-base uppercase tracking-widest text-mist flex items-center gap-2 font-semibold"
+                    className="font-[family-name:var(--font-dm-sans)] text-xs 2xl:text-sm uppercase tracking-widest text-[#3b494c] flex items-center gap-2 font-bold"
                     htmlFor="email"
                   >
                     <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: 'var(--color-accent)' }}></span>
                     Your Email
                   </label>
                   <input
-                    className="w-full rounded-xl bg-[#dde4e6] px-5 py-4 2xl:px-8 2xl:py-6 2xl:text-lg font-[family-name:var(--font-dm-sans)] text-on-surface transition-all placeholder:text-mist focus:outline-none focus:ring-2 focus:ring-[rgba(21,182,232,0.5)]"
+                    className="w-full px-5 py-4 2xl:px-8 2xl:py-6 2xl:text-lg font-[family-name:var(--font-dm-sans)] text-[#161d1e] transition-all placeholder:text-[#71717a] focus:outline-none focus:ring-2 focus:ring-[#15b6e8]"
+                    style={{
+                      backgroundColor: 'rgb(244, 244, 245)',
+                      borderRadius: '16px',
+                      boxShadow:
+                        'rgba(255, 255, 255, 0.6) 0px 4px 0px 0px inset, rgba(0, 0, 0, 0.05) 0px -8px 0px 0px inset, rgba(0, 0, 0, 0.1) 0px 3px 3px 0px, rgba(0, 0, 0, 0.06) 0px 7.77px 16px 0px',
+                    }}
                     id="email"
                     placeholder="john@example.com"
                     type="email"
@@ -180,14 +178,20 @@ export default function ContactForm() {
                   className="flex flex-col gap-2"
                 >
                   <label
-                    className="font-[family-name:var(--font-dm-sans)] text-sm 2xl:text-base uppercase tracking-widest text-mist flex items-center gap-2 font-semibold"
+                    className="font-[family-name:var(--font-dm-sans)] text-xs 2xl:text-sm uppercase tracking-widest text-[#3b494c] flex items-center gap-2 font-bold"
                     htmlFor="phone"
                   >
                     <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: 'var(--color-accent)' }}></span>
                     Your Phone
                   </label>
                   <input
-                    className="w-full bg-[#dde4e6] rounded-xl px-5 py-4 2xl:px-8 2xl:py-6 2xl:text-lg font-[family-name:var(--font-dm-sans)] text-on-surface focus:outline-none focus:ring-2 transition-all placeholder:text-mist"
+                    className="w-full px-5 py-4 2xl:px-8 2xl:py-6 2xl:text-lg font-[family-name:var(--font-dm-sans)] text-[#161d1e] transition-all placeholder:text-[#71717a] focus:outline-none focus:ring-2 focus:ring-[#15b6e8]"
+                    style={{
+                      backgroundColor: 'rgb(244, 244, 245)',
+                      borderRadius: '16px',
+                      boxShadow:
+                        'rgba(255, 255, 255, 0.6) 0px 4px 0px 0px inset, rgba(0, 0, 0, 0.05) 0px -8px 0px 0px inset, rgba(0, 0, 0, 0.1) 0px 3px 3px 0px, rgba(0, 0, 0, 0.06) 0px 7.77px 16px 0px',
+                    }}
                     id="phone"
                     placeholder="+1 (555) 000-0000"
                     type="tel"
@@ -202,14 +206,20 @@ export default function ContactForm() {
                   className="flex flex-col gap-2"
                 >
                   <label
-                    className="font-[family-name:var(--font-dm-sans)] text-sm 2xl:text-base uppercase tracking-widest text-mist flex items-center gap-2 font-semibold"
+                    className="font-[family-name:var(--font-dm-sans)] text-xs 2xl:text-sm uppercase tracking-widest text-[#3b494c] flex items-center gap-2 font-bold"
                     htmlFor="message"
                   >
                     <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: 'var(--color-accent)' }}></span>
                     Message
                   </label>
                   <textarea
-                    className="w-full bg-[#dde4e6] rounded-xl px-5 py-4 2xl:px-8 2xl:py-6 2xl:text-lg font-[family-name:var(--font-dm-sans)] text-on-surface focus:outline-none focus:ring-2 transition-all resize-none placeholder:text-mist"
+                    className="w-full px-5 py-4 2xl:px-8 2xl:py-6 2xl:text-lg font-[family-name:var(--font-dm-sans)] text-[#161d1e] transition-all resize-none placeholder:text-[#71717a] focus:outline-none focus:ring-2 focus:ring-[#15b6e8]"
+                    style={{
+                      backgroundColor: 'rgb(244, 244, 245)',
+                      borderRadius: '16px',
+                      boxShadow:
+                        'rgba(255, 255, 255, 0.6) 0px 4px 0px 0px inset, rgba(0, 0, 0, 0.05) 0px -8px 0px 0px inset, rgba(0, 0, 0, 0.1) 0px 3px 3px 0px, rgba(0, 0, 0, 0.06) 0px 7.77px 16px 0px',
+                    }}
                     id="message"
                     placeholder="Tell us about your project..."
                     rows={4}
@@ -240,15 +250,16 @@ export default function ContactForm() {
             {/* Badge */}
             <motion.div
               variants={badgeVariants}
-              className="mb-12 inline-flex w-max items-center gap-2 rounded-full py-2 pr-4 pl-2 pointer-events-auto"
-              style={{ backgroundColor: 'rgba(0, 0, 0, 0.4)' }}
+              className="mb-12 inline-flex w-max items-center gap-2 px-4 py-2 pointer-events-auto"
+              style={{
+                backgroundColor: 'var(--token-5c4bbf1d-7534-4d20-87a6-b0deb15d1586, rgb(245, 245, 245))',
+                borderRadius: '8px',
+                boxShadow: 'rgba(0, 0, 0, 0.14) 0px 3px 3px 0px, rgba(0, 0, 0, 0.12) 0px 2.77px 2.21px 0px, rgb(233, 233, 233) 0px -3px 0px 0px inset',
+                opacity: 1,
+              }}
             >
-              <div className="w-8 h-8 rounded-full bg-surface-bright flex items-center justify-center shrink-0">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ color: 'var(--color-accent)' }}>
-                  <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
-                </svg>
-              </div>
-              <span className="font-[family-name:var(--font-dm-sans)] text-sm font-semibold" style={{ color: 'var(--color-paper)' }}>
+              <span className="h-2 w-2 animate-pulse rounded-full bg-[#15b6e8]" />
+              <span className="font-[family-name:var(--font-dm-sans)] text-xs font-semibold tracking-wide text-[#3b494c]">
                 Contact Form
               </span>
             </motion.div>
@@ -278,9 +289,9 @@ export default function ContactForm() {
                     style={{ color: 'var(--color-paper)' }}
                     onMouseEnter={(e) => e.currentTarget.style.color = 'var(--color-accent)'}
                     onMouseLeave={(e) => e.currentTarget.style.color = 'var(--color-paper)'}
-                    href="mailto:info@hyperhex.studio"
+                    href="mailto:hyperhexstudios@gmail.com"
                   >
-                    info@hyperhex.studio
+                    hyperhexstudios@gmail.com
                   </a>
                 </div>
               </motion.div>
@@ -290,19 +301,34 @@ export default function ContactForm() {
                 variants={childVariants}
                 className="flex items-center gap-4"
               >
-                <div className="w-14 h-14 rounded-full flex items-center justify-center shrink-0" style={{ backgroundColor: 'rgba(255, 255, 255, 0.05)' }}>
+                <a
+                  href="https://www.google.com/maps/search/?api=1&query=Office+No.C-02+Mezzanine+Floor+Momin+Square+Gulshan+E+Iqbal+Block+6%2C+Karachi"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-14 h-14 rounded-full flex items-center justify-center shrink-0 transition-transform hover:scale-105"
+                  style={{ backgroundColor: 'rgba(255, 255, 255, 0.05)' }}
+                  aria-label="Open office address in Google Maps"
+                >
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
                     <circle cx="12" cy="10" r="3"></circle>
                   </svg>
-                </div>
+                </a>
                 <div className="flex flex-col gap-1">
                   <span className="font-[family-name:var(--font-dm-sans)] text-sm 2xl:text-base font-medium" style={{ color: 'var(--color-mist)' }}>
                     Office Address
                   </span>
-                  <span className="font-[family-name:var(--font-dm-sans)] text-base 2xl:text-xl font-bold" style={{ color: 'var(--color-paper)' }}>
-                    404 Hexagon Ave, Neo-Tokyo, NT 100-0001
-                  </span>
+                  <a
+                    className="font-[family-name:var(--font-dm-sans)] text-base 2xl:text-xl font-bold transition-colors"
+                    style={{ color: 'var(--color-paper)' }}
+                    onMouseEnter={(e) => e.currentTarget.style.color = 'var(--color-accent)'}
+                    onMouseLeave={(e) => e.currentTarget.style.color = 'var(--color-paper)'}
+                    href="https://www.google.com/maps/search/?api=1&query=Office+No.C-02+Mezzanine+Floor+Momin+Square+Gulshan+E+Iqbal+Block+6%2C+Karachi"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Office No.C-02 Mezzanine Floor Momin Square Gulshan E Iqbal Block 6, Karachi.
+                  </a>
                 </div>
               </motion.div>
             </div>
