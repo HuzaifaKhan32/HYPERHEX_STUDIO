@@ -1,7 +1,5 @@
-// Server Component - Testimonials section
-// Client carousel handles auto-scroll and drag interactions
-
 import TestimonialsCarousel from './TestimonialsCarousel';
+import TestimonialsHeaderAnimated from './TestimonialsHeaderAnimated';
 
 const TESTIMONIALS_DATA = [
   {
@@ -56,26 +54,8 @@ export default function TestimonialsServer() {
     >
       <div className="max-w-[1280px] xl:max-w-[1400px] 2xl:max-w-none mx-auto px-5 lg:px-16 2xl:px-24 flex flex-col">
 
-        {/* Header */}
-        <div className="flex flex-col items-center text-center gap-3 mb-8">
-          <div
-            className="inline-flex w-fit items-center gap-2 px-4 py-2 text-xs font-semibold tracking-wide text-[#3b494c] transition-transform hover:-translate-y-0.5"
-            style={{
-              backgroundColor: 'var(--token-5c4bbf1d-7534-4d20-87a6-b0deb15d1586, rgb(245, 245, 245))',
-              borderRadius: '8px',
-              boxShadow: 'rgba(0, 0, 0, 0.14) 0px 3px 3px 0px, rgba(0, 0, 0, 0.12) 0px 2.77px 2.21px 0px, rgb(233, 233, 233) 0px -3px 0px 0px inset',
-              opacity: 1,
-            }}
-          >
-            <span className="h-2 w-2 animate-pulse rounded-full bg-[#15b6e8]" />
-            <span>Testimonials</span>
-          </div>
-
-          <h2 className="flex flex-col items-center text-5xl md:text-7xl lg:text-8xl 2xl:text-9xl font-black tracking-tight">
-            <span className="text-[#161d1e] tracking-wide">Don't Just Take</span>
-            <span className="tracking-wider bg-gradient-to-b from-[#15b6e8] to-transparent bg-clip-text text-transparent">Our Word</span>
-          </h2>
-        </div>
+        {/* Animated Header */}
+        <TestimonialsHeaderAnimated />
 
         {/* Carousel */}
         <TestimonialsCarousel testimonials={TESTIMONIALS_DATA} />

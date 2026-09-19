@@ -7,6 +7,7 @@ import { motion } from 'framer-motion';
 import { MAIN_CASE_STUDIES, SUB_CASE_STUDIES, type CaseStudy } from '@/lib/case-studies-data';
 import StaggeredHeading from '@/components/ui/StaggeredHeading';
 import InfiniteMarquee from '@/components/ui/InfiniteMarquee';
+import SectionPill from '@/components/ui/SectionPill';
 
 const CaseStudyModal = dynamic(() => import('./CaseStudyModal'), { ssr: false });
 
@@ -106,26 +107,38 @@ function useInfiniteSlider(autoMs: number, n: number) {
 }
 
 function FeaturedHeading() {
+  const revealVariants = {
+    hidden: { opacity: 0, y: -36, filter: 'blur(12px)' },
+    visible: {
+      opacity: 1,
+      y: 0,
+      filter: 'blur(0px)',
+      transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] },
+    },
+  };
+
+  const containerVariants = {
+    hidden: {},
+    visible: { transition: { staggerChildren: 0.14, delayChildren: 0.05 } },
+  };
+
   return (
-    <div className="flex flex-col items-center text-center gap-3 mb-6 md:mb-8 select-none">
-      <div
-        className="inline-flex w-fit items-center gap-2 px-4 py-2 text-xs font-semibold tracking-wide text-[#3b494c] transition-transform hover:-translate-y-0.5"
-        style={{
-          backgroundColor: 'var(--token-5c4bbf1d-7534-4d20-87a6-b0deb15d1586, rgb(245, 245, 245))',
-          borderRadius: '8px',
-          boxShadow: 'rgba(0, 0, 0, 0.14) 0px 3px 3px 0px, rgba(0, 0, 0, 0.12) 0px 2.77px 2.21px 0px, rgb(233, 233, 233) 0px -3px 0px 0px inset',
-          opacity: 1,
-        }}
-      >
-        <span className="h-2 w-2 animate-pulse rounded-full bg-[#15b6e8]" />
-        <span>Featured Projects</span>
-      </div>
+    <motion.div
+      className="flex flex-col items-center text-center gap-3 mb-6 md:mb-8 select-none"
+      variants={containerVariants}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, amount: 0.18 }}
+    >
+      <motion.div variants={revealVariants}>
+        <SectionPill label="Featured Projects" />
+      </motion.div>
 
       <h2 className="flex flex-col items-center text-5xl md:text-7xl lg:text-8xl 2xl:text-9xl font-black tracking-tight" style={{ fontFamily: 'var(--font-zalando-expanded, sans-serif)' }}>
-        <span className="text-[#161d1e] tracking-wide">Featured</span>
-        <span className="tracking-wider bg-gradient-to-b from-[#15b6e8] to-transparent bg-clip-text text-transparent">Projects</span>
+        <motion.span variants={revealVariants} className="text-[#161d1e] tracking-wide">Featured</motion.span>
+        <motion.span variants={revealVariants} className="tracking-wider bg-gradient-to-b from-[#15b6e8] to-transparent bg-clip-text text-transparent">Projects</motion.span>
       </h2>
-    </div>
+    </motion.div>
   );
 }
 
@@ -269,14 +282,14 @@ export default function CaseStudiesSection() {
                       </div>
                     )}
 
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex flex-col justify-end p-6 md:p-8 pointer-events-none transition-opacity duration-300 group-hover:opacity-0">
+                    {!isCenter && <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex flex-col justify-end p-6 md:p-8 pointer-events-none transition-opacity duration-300 group-hover:opacity-0">
                       <span className="text-xs font-bold uppercase tracking-widest text-[var(--color-accent)] mb-1.5">
                         {study.category}
                       </span>
                       <h3 className="font-[family-name:var(--font-syne)] font-bold text-xl md:text-3xl text-white uppercase tracking-tight leading-tight">
                         {study.title}
                       </h3>
-                    </div>
+                    </div>}
 
                     <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center pointer-events-none z-20">
                       <span className="text-xs uppercase tracking-[0.3em] mb-3 text-white/70">

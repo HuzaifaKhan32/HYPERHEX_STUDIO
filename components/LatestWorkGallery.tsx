@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import Button3D from './Button3D';
 import StaggeredHeading from '@/components/ui/StaggeredHeading';
+import SectionPill from '@/components/ui/SectionPill';
 
 const BLACK = '#161d1e';
 const ACCENT = '#15b6e8';
@@ -13,14 +14,15 @@ const ACCENT = '#15b6e8';
 // reads as a sequence rather than a flat fade.
 const headingContainerVariants = {
   hidden: {},
-  visible: { transition: { staggerChildren: 0.1, delayChildren: 0.05 } },
+  visible: { transition: { staggerChildren: 0.14, delayChildren: 0.05 } },
 };
 const headingItemVariants = {
-  hidden: { opacity: 0, y: 28 },
+  hidden: { opacity: 0, y: -36, filter: 'blur(12px)' },
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] },
+    filter: 'blur(0px)',
+    transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] },
   },
 };
 
@@ -31,20 +33,10 @@ function LatestWorkHeading() {
       variants={headingContainerVariants}
       initial="hidden"
       whileInView="visible"
-      viewport={{ once: true, margin: '-100px' }}
+      viewport={{ once: true, amount: 0.18 }}
     >
-      <motion.div
-        variants={headingItemVariants}
-        className="inline-flex w-fit items-center gap-2 px-4 py-2 text-xs font-semibold tracking-wide text-[#3b494c] transition-transform hover:-translate-y-0.5"
-        style={{
-          backgroundColor: 'var(--token-5c4bbf1d-7534-4d20-87a6-b0deb15d1586, rgb(245, 245, 245))',
-          borderRadius: '8px',
-          boxShadow: 'rgba(0, 0, 0, 0.14) 0px 3px 3px 0px, rgba(0, 0, 0, 0.12) 0px 2.77px 2.21px 0px, rgb(233, 233, 233) 0px -3px 0px 0px inset',
-          opacity: 1,
-        }}
-      >
-        <span className="h-2 w-2 animate-pulse rounded-full bg-[#15b6e8]" />
-        <span>Latest Work</span>
+      <motion.div variants={headingItemVariants}>
+        <SectionPill label="Latest Work" />
       </motion.div>
 
       <h2 className="flex flex-wrap items-center justify-center gap-3 text-center text-5xl md:text-7xl lg:text-8xl 2xl:text-9xl font-black tracking-tight" style={{ fontFamily: 'var(--font-zalando-expanded, sans-serif)' }}>

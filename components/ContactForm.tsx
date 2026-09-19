@@ -1,10 +1,13 @@
 'use client';
 
-import { motion } from 'framer-motion';
-import { useState, useRef } from 'react';
+import { motion, Variants } from 'framer-motion';
+import { useState, useRef, useEffect } from 'react';
+import { Tooltip } from 'react-tooltip';
+import 'react-tooltip/dist/react-tooltip.css';
 import Button3D from './Button3D';
 import DotGridBackground from './DotGridBackground';
 import StaggeredHeading from '@/components/ui/StaggeredHeading';
+import SectionPill from '@/components/ui/SectionPill';
 
 function ContactTitle() {
   return (
@@ -29,7 +32,7 @@ function ContactTitle() {
   );
 }
 
-const containerVariants = {
+const containerVariants: Variants = {
   hidden: { opacity: 0, y: 64 },
   visible: {
     opacity: 1,
@@ -43,7 +46,7 @@ const containerVariants = {
   },
 };
 
-const leftColVariants = {
+const leftColVariants: Variants = {
   hidden: { opacity: 0, y: 40 },
   visible: {
     opacity: 1,
@@ -51,13 +54,13 @@ const leftColVariants = {
     transition: {
       duration: 0.8,
       ease: [0.16, 1, 0.3, 1] as const,
-      staggerChildren: 0.08,
-      delayChildren: 0.1,
+      staggerChildren: 0.18,
+      delayChildren: 0.15,
     },
   },
 };
 
-const rightColVariants = {
+const rightColVariants: Variants = {
   hidden: { opacity: 0, y: 60 },
   visible: {
     opacity: 1,
@@ -71,7 +74,7 @@ const rightColVariants = {
   },
 };
 
-const childVariants = {
+const childVariants: Variants = {
   hidden: { opacity: 0, y: 20 },
   visible: {
     opacity: 1,
@@ -83,26 +86,100 @@ const childVariants = {
   },
 };
 
-const badgeVariants = {
-  hidden: { opacity: 0, x: 20 },
+const fieldPopVariants: Variants = {
+  hidden: { opacity: 0, scale: 0, y: 15 },
   visible: {
     opacity: 1,
-    x: 0,
+    scale: 1,
+    y: 0,
     transition: {
-      duration: 0.6,
-      ease: [0.16, 1, 0.3, 1] as const,
+      type: 'spring',
+      stiffness: 150,
+      damping: 14,
+      mass: 1,
     },
   },
 };
 
+interface ToastState {
+  type: 'success' | 'error';
+  message: string;
+}
+
 export default function ContactForm() {
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
   const [message, setMessage] = useState('');
+  const [website, setWebsite] = useState(''); // Anti-spam honeypot field
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [toast, setToast] = useState<ToastState | null>(null);
+
   const panelRef = useRef<HTMLDivElement>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  // Auto-dismiss toast after ~4 seconds
+  useEffect(() => {
+    if (!toast) return;
+    const timer = setTimeout(() => {
+      setToast(null);
+    }, 4000);
+    return () => clearTimeout(timer);
+  }, [toast]);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!name.trim() || !email.trim() || !message.trim()) {
+      setToast({
+        type: 'error',
+        message: 'Please fill out all required fields.',
+      });
+      return;
+    }
+
+    setIsSubmitting(true);
+    setToast(null);
+
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: name.trim(),
+          email: email.trim(),
+          phone: phone.trim(),
+          message: message.trim(),
+          website, // Honeypot field passed to API
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Something went wrong. Please try again.');
+      }
+
+      setToast({
+        type: 'success',
+        message: "Thank you for contacting us! We'll get back to you soon.",
+      });
+
+      // Reset form fields
+      setName('');
+      setEmail('');
+      setPhone('');
+      setMessage('');
+      setWebsite('');
+    } catch (err: any) {
+      setToast({
+        type: 'error',
+        message: err.message || 'Something went wrong. Please try again.',
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -143,10 +220,53 @@ export default function ContactForm() {
               }}
             >
               <form className="flex flex-col gap-6" onSubmit={handleSubmit}>
+                {/* Honeypot field (hidden from real users, bots fill this in) */}
+                <input
+                  type="text"
+                  name="website"
+                  value={website}
+                  onChange={(e) => setWebsite(e.target.value)}
+                  tabIndex={-1}
+                  autoComplete="off"
+                  className="hidden absolute opacity-0 pointer-events-none h-0 w-0 -z-50"
+                  aria-hidden="true"
+                />
+
+                {/* Name Field */}
+                <motion.div
+                  variants={fieldPopVariants}
+                  className="flex flex-col gap-2"
+                  style={{ transformOrigin: 'center center' }}
+                >
+                  <label
+                    className="font-[family-name:var(--font-dm-sans)] text-xs 2xl:text-sm uppercase tracking-widest text-[#3b494c] flex items-center gap-2 font-bold"
+                    htmlFor="name"
+                  >
+                    <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: 'var(--color-accent)' }}></span>
+                    Your Name
+                  </label>
+                  <input
+                    className="w-full px-5 py-4 2xl:px-8 2xl:py-6 2xl:text-lg font-[family-name:var(--font-dm-sans)] text-[#161d1e] transition-all placeholder:text-[#71717a] focus:outline-none focus:ring-2 focus:ring-[#15b6e8]"
+                    style={{
+                      backgroundColor: 'rgb(244, 244, 245)',
+                      borderRadius: '16px',
+                      boxShadow:
+                        'rgba(255, 255, 255, 0.6) 0px 4px 0px 0px inset, rgba(0, 0, 0, 0.05) 0px -8px 0px 0px inset, rgba(0, 0, 0, 0.1) 0px 3px 3px 0px, rgba(0, 0, 0, 0.06) 0px 7.77px 16px 0px',
+                    }}
+                    id="name"
+                    placeholder="John Doe"
+                    type="text"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    required
+                  />
+                </motion.div>
+
                 {/* Email Field */}
                 <motion.div
-                  variants={childVariants}
+                  variants={fieldPopVariants}
                   className="flex flex-col gap-2"
+                  style={{ transformOrigin: 'center center' }}
                 >
                   <label
                     className="font-[family-name:var(--font-dm-sans)] text-xs 2xl:text-sm uppercase tracking-widest text-[#3b494c] flex items-center gap-2 font-bold"
@@ -174,8 +294,9 @@ export default function ContactForm() {
 
                 {/* Phone Field */}
                 <motion.div
-                  variants={childVariants}
+                  variants={fieldPopVariants}
                   className="flex flex-col gap-2"
+                  style={{ transformOrigin: 'center center' }}
                 >
                   <label
                     className="font-[family-name:var(--font-dm-sans)] text-xs 2xl:text-sm uppercase tracking-widest text-[#3b494c] flex items-center gap-2 font-bold"
@@ -202,8 +323,9 @@ export default function ContactForm() {
 
                 {/* Message Field */}
                 <motion.div
-                  variants={childVariants}
+                  variants={fieldPopVariants}
                   className="flex flex-col gap-2"
+                  style={{ transformOrigin: 'center center' }}
                 >
                   <label
                     className="font-[family-name:var(--font-dm-sans)] text-xs 2xl:text-sm uppercase tracking-widest text-[#3b494c] flex items-center gap-2 font-bold"
@@ -229,14 +351,119 @@ export default function ContactForm() {
                   />
                 </motion.div>
 
-                {/* Submit Button */}
+                {/* Submit Button — tooltip anchor */}
                 <motion.div
-                  variants={childVariants}
+                  variants={fieldPopVariants}
                   className="mt-4"
+                  style={{ transformOrigin: 'center center' }}
                 >
-                  <Button3D type="submit" className="justify-between">
-                    Send Request
-                  </Button3D>
+                  <div id="submit-btn-anchor" className="inline-block">
+                    <Button3D type="submit" loading={isSubmitting} className="justify-between">
+                      {isSubmitting ? 'Sending...' : 'Send Request'}
+                    </Button3D>
+                  </div>
+
+                  {/* react-tooltip anchored above the submit button */}
+                  <Tooltip
+                    anchorSelect="#submit-btn-anchor"
+                    place="top"
+                    isOpen={!!toast}
+                    clickable
+                    opacity={1}
+                    style={{
+                      padding: 0,
+                      background: 'transparent',
+                      border: 'none',
+                      boxShadow: 'none',
+                      zIndex: 9999,
+                    }}
+                  >
+                    {toast && (
+                      <div
+                        role="alert"
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '10px',
+                          padding: '12px 14px',
+                          borderRadius: '16px',
+                          border: `1.5px solid ${toast.type === 'success' ? '#15b6e8' : '#ef4444'}`,
+                          backgroundColor: toast.type === 'success' ? '#ffffff' : '#fef2f2',
+                          color: toast.type === 'success' ? '#161d1e' : '#991b1b',
+                          boxShadow:
+                            toast.type === 'success'
+                              ? '0 12px 32px -4px rgba(21,182,232,0.28), 0 2px 8px rgba(0,0,0,0.08)'
+                              : '0 12px 32px -4px rgba(239,68,68,0.22), 0 2px 8px rgba(0,0,0,0.08)',
+                          maxWidth: '320px',
+                          minWidth: '240px',
+                          fontFamily: 'var(--font-dm-sans, sans-serif)',
+                          fontSize: '13px',
+                          fontWeight: 500,
+                          lineHeight: 1.45,
+                        }}
+                      >
+                        {/* Icon */}
+                        <div
+                          style={{
+                            flexShrink: 0,
+                            width: 28,
+                            height: 28,
+                            borderRadius: '50%',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            backgroundColor:
+                              toast.type === 'success'
+                                ? 'rgba(21,182,232,0.12)'
+                                : 'rgba(239,68,68,0.12)',
+                            color: toast.type === 'success' ? '#15b6e8' : '#ef4444',
+                          }}
+                        >
+                          {toast.type === 'success' ? (
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                              <polyline points="20 6 9 17 4 12" />
+                            </svg>
+                          ) : (
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                              <circle cx="12" cy="12" r="10" />
+                              <line x1="12" y1="8" x2="12" y2="12" />
+                              <line x1="12" y1="16" x2="12.01" y2="16" />
+                            </svg>
+                          )}
+                        </div>
+
+                        {/* Message */}
+                        <span style={{ flex: 1 }}>{toast.message}</span>
+
+                        {/* Close */}
+                        <button
+                          type="button"
+                          onClick={() => setToast(null)}
+                          aria-label="Close notification"
+                          style={{
+                            flexShrink: 0,
+                            background: 'none',
+                            border: 'none',
+                            cursor: 'pointer',
+                            padding: '2px',
+                            color: '#9a9fa5',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            borderRadius: '50%',
+                            transition: 'color 0.15s',
+                          }}
+                          onMouseEnter={(e) => (e.currentTarget.style.color = '#161d1e')}
+                          onMouseLeave={(e) => (e.currentTarget.style.color = '#9a9fa5')}
+                        >
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                            <line x1="18" y1="6" x2="6" y2="18" />
+                            <line x1="6" y1="6" x2="18" y2="18" />
+                          </svg>
+                        </button>
+                      </div>
+                    )}
+                  </Tooltip>
                 </motion.div>
               </form>
             </div>
@@ -248,21 +475,7 @@ export default function ContactForm() {
             className="relative z-10 order-1 flex w-full flex-col justify-center md:order-2 md:w-[55%] md:pl-8"
           >
             {/* Badge */}
-            <motion.div
-              variants={badgeVariants}
-              className="mb-12 inline-flex w-max items-center gap-2 px-4 py-2 pointer-events-auto"
-              style={{
-                backgroundColor: 'var(--token-5c4bbf1d-7534-4d20-87a6-b0deb15d1586, rgb(245, 245, 245))',
-                borderRadius: '8px',
-                boxShadow: 'rgba(0, 0, 0, 0.14) 0px 3px 3px 0px, rgba(0, 0, 0, 0.12) 0px 2.77px 2.21px 0px, rgb(233, 233, 233) 0px -3px 0px 0px inset',
-                opacity: 1,
-              }}
-            >
-              <span className="h-2 w-2 animate-pulse rounded-full bg-[#15b6e8]" />
-              <span className="font-[family-name:var(--font-dm-sans)] text-xs font-semibold tracking-wide text-[#3b494c]">
-                Contact Form
-              </span>
-            </motion.div>
+            <SectionPill label="Contact Form" className="mb-12 font-[family-name:var(--font-dm-sans)]" />
 
             {/* Heading */}
             <ContactTitle />

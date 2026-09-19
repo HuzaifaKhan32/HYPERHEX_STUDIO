@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { motion, type Variants } from 'framer-motion';
+import { motion, useReducedMotion, type Variants } from 'framer-motion';
 
 export interface StaggeredWordItem {
   text: string;
@@ -19,37 +19,20 @@ interface StaggeredHeadingProps {
   className?: string;
   staggerDelay?: number;
   wordDuration?: number;
-  viewportMargin?: string;
   dataCursor?: string;
 }
 
-const defaultEase: [number, number, number, number] = [0.16, 1, 0.3, 1];
-
-// FIXED: Removed filter: blur() — animating filter bypasses GPU compositor
-// and causes layout thrashing. Opacity + y-translate is fully GPU-accelerated.
-export const wordVariants: Variants = {
-  hidden: {
-    opacity: 0,
-    y: 20,
-  },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.55,
-      ease: defaultEase,
-    },
-  },
-};
+const SMOOTH_EASE = [0.22, 1, 0.36, 1] as const;
 
 export default function StaggeredHeading({
   lines,
   className = '',
-  staggerDelay = 0.07,
-  wordDuration = 0.55,
-  viewportMargin = '-40px',
+  staggerDelay = 0.12,
+  wordDuration = 0.7,
   dataCursor = 'text',
 }: StaggeredHeadingProps) {
+  const shouldReduceMotion = useReducedMotion();
+
   const containerVariants: Variants = {
     hidden: {},
     visible: {
@@ -60,17 +43,19 @@ export default function StaggeredHeading({
     },
   };
 
-  const customWordVariants: Variants = {
+  const wordVariants: Variants = {
     hidden: {
       opacity: 0,
-      y: 20,
+      y: shouldReduceMotion ? 0 : -36,
+      filter: shouldReduceMotion ? 'none' : 'blur(12px)',
     },
     visible: {
       opacity: 1,
       y: 0,
+      filter: 'blur(0px)',
       transition: {
         duration: wordDuration,
-        ease: defaultEase,
+        ease: SMOOTH_EASE as unknown as [number, number, number, number],
       },
     },
   };
@@ -81,7 +66,7 @@ export default function StaggeredHeading({
       variants={containerVariants}
       initial="hidden"
       whileInView="visible"
-      viewport={{ once: true, margin: viewportMargin }}
+      viewport={{ once: true, amount: 0.18 }}
       className={`font-[family-name:var(--font-zalando-expanded)] font-black uppercase tracking-[-0.04em] ${className}`}
     >
       {lines.map((line, lineIdx) => {
@@ -100,8 +85,8 @@ export default function StaggeredHeading({
               return (
                 <motion.span
                   key={`w-${lineIdx}-${wordIdx}`}
-                  variants={customWordVariants}
-                  className={`inline-block will-change-[transform,opacity] mr-[0.25em] last:mr-0 ${wordClass}`}
+                  variants={wordVariants}
+                  className={`inline-block mr-[0.25em] last:mr-0 ${wordClass}`}
                   style={wordColor ? { color: wordColor } : undefined}
                 >
                   {text}
@@ -114,3 +99,4 @@ export default function StaggeredHeading({
     </motion.h2>
   );
 }
+
