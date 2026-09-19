@@ -94,7 +94,7 @@ export default function CustomCursor() {
           } else {
             nextType = 'default';
           }
-        } else if (target.closest('[aria-label="Our clients"], .cursor-grab')) {
+        } else if (target.closest('[aria-label="Our clients"]')) {
           nextType = 'drag';
         } else if (target.closest('h1, h2, h3')) {
           nextType = 'text';

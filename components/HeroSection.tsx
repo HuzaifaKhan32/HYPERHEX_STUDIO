@@ -64,7 +64,6 @@ export default function HeroSection() {
                 className="max-w-[220px] sm:max-w-[260px] 2xl:max-w-[320px] font-[family-name:var(--font-dm-sans)] text-[clamp(12px,1.2vw,16px)]"
                 style={{ color: 'var(--color-paper)' }}
               >
-                Where imagination becomes experience.
 We design, visualize, and build what others can only imagine.
               </p>
             </div>

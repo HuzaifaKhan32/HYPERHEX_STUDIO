@@ -124,24 +124,49 @@ export function InfiniteMarquee({
   });
 
   // Pointer event handlers for drag interaction with momentum decay
+  const isPointerDown = useRef(false);
+  const dragStartX = useRef(0);
+  const dragStartY = useRef(0);
+  const hasMoved = useRef(false);
+
   const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
-    isDragging.current = true;
+    isPointerDown.current = true;
+    dragStartX.current = e.clientX;
+    dragStartY.current = e.clientY;
+    hasMoved.current = false;
+    isDragging.current = false;
     lastPointerX.current = e.clientX;
     lastPointerTime.current = performance.now();
     velocity.current = 0;
-    e.currentTarget.setPointerCapture(e.pointerId);
   };
 
   const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
-    if (!isDragging.current) return;
+    if (!isPointerDown.current) return;
 
     const currentX = e.clientX;
-    const currentTime = performance.now();
+    const currentY = e.clientY;
     const deltaX = currentX - lastPointerX.current;
+    const totalDistX = Math.abs(currentX - dragStartX.current);
+    const totalDistY = Math.abs(currentY - dragStartY.current);
+
+    if (!isDragging.current) {
+      if (totalDistX > 5 && totalDistX > totalDistY) {
+        isDragging.current = true;
+        hasMoved.current = true;
+        if (!e.currentTarget.hasPointerCapture(e.pointerId)) {
+          try {
+            e.currentTarget.setPointerCapture(e.pointerId);
+          } catch {}
+        }
+      } else {
+        return;
+      }
+    }
+
+    const currentTime = performance.now();
     const deltaTime = currentTime - lastPointerTime.current;
 
     if (deltaTime > 0) {
-      // Calculate instantaneous velocity in px per frame (~16.67ms)
       velocity.current = (deltaX / deltaTime) * 16.67;
     }
 
@@ -151,10 +176,20 @@ export function InfiniteMarquee({
   };
 
   const handlePointerUp = (e: React.PointerEvent<HTMLDivElement>) => {
-    if (!isDragging.current) return;
-    isDragging.current = false;
+    isPointerDown.current = false;
     if (e.currentTarget.hasPointerCapture(e.pointerId)) {
-      e.currentTarget.releasePointerCapture(e.pointerId);
+      try {
+        e.currentTarget.releasePointerCapture(e.pointerId);
+      } catch {}
+    }
+    isDragging.current = false;
+  };
+
+  const handleClickCapture = (e: React.MouseEvent) => {
+    if (hasMoved.current) {
+      e.stopPropagation();
+      e.preventDefault();
+      hasMoved.current = false;
     }
   };
 
@@ -168,6 +203,7 @@ export function InfiniteMarquee({
       onPointerMove={handlePointerMove}
       onPointerUp={handlePointerUp}
       onPointerCancel={handlePointerUp}
+      onClickCapture={handleClickCapture}
       onMouseEnter={() => {
         isHovered.current = true;
       }}

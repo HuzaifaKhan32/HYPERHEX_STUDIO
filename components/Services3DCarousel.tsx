@@ -1,7 +1,7 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
-import { motion } from 'framer-motion';
+import { useState, useEffect, useCallback, useRef, type PointerEvent as ReactPointerEvent } from 'react';
+import { motion, useMotionValue, useTransform, animate, MotionValue } from 'framer-motion';
 import ServiceCard from './NewServiceCard';
 import { newServicesData } from '@/lib/new-services-data';
 
@@ -123,12 +123,176 @@ function getSpatialState(offset: number, multiplier: number = 1, cardScale: numb
   };
 }
 
+function lerp(a: number, b: number, t: number): number {
+  return a + (b - a) * t;
+}
+
+/**
+ * Interpolate continuous 3D spatial properties for fractional offsets (e.g. -0.4, 0.75, +1.2).
+ */
+function getInterpolatedSpatialState(offset: number, multiplier: number = 1, cardScale: number = 1): SpatialState {
+  const floorOffset = Math.floor(offset);
+  const ceilOffset = Math.ceil(offset);
+  const t = offset - floorOffset;
+
+  if (floorOffset === ceilOffset) {
+    return getSpatialState(floorOffset, multiplier, cardScale);
+  }
+
+  const lower = getSpatialState(floorOffset, multiplier, cardScale);
+  const upper = getSpatialState(ceilOffset, multiplier, cardScale);
+  const nearest = getSpatialState(Math.round(offset), multiplier, cardScale);
+
+  return {
+    scale: lerp(lower.scale, upper.scale, t),
+    translateX: lerp(lower.translateX, upper.translateX, t),
+    translateY: lerp(lower.translateY, upper.translateY, t),
+    translateZ: lerp(lower.translateZ, upper.translateZ, t),
+    rotateY: lerp(lower.rotateY, upper.rotateY, t),
+    rotateZ: lerp(lower.rotateZ, upper.rotateZ, t),
+    opacity: lerp(lower.opacity, upper.opacity, t),
+    blur: lerp(lower.blur, upper.blur, t),
+    zIndex: nearest.zIndex,
+    pointerEvents: Math.abs(offset) <= 2.2 ? 'auto' : 'none',
+  };
+}
+
+interface CarouselCardItemProps {
+  service: typeof newServicesData[0];
+  index: number;
+  virtualIndex: number;
+  total: number;
+  dragOffset: MotionValue<number>;
+  responsiveMultiplier: number;
+  desktopScale: number;
+  onCardClick: (offset: number) => void;
+}
+
+function CarouselCardItem({
+  service,
+  index,
+  virtualIndex,
+  total,
+  dragOffset,
+  responsiveMultiplier,
+  desktopScale,
+  onCardClick,
+}: CarouselCardItemProps) {
+  let baseOffset = index - (virtualIndex % total);
+  if (baseOffset > total / 2) baseOffset -= total;
+  if (baseOffset < -total / 2) baseOffset += total;
+
+  const stepPx = Math.max(200, 310 * responsiveMultiplier);
+
+  const effectiveOffset = useTransform(dragOffset, (latestPx) => {
+    return baseOffset + latestPx / stepPx;
+  });
+
+  const x = useTransform(effectiveOffset, (off) =>
+    getInterpolatedSpatialState(off, responsiveMultiplier, desktopScale).translateX
+  );
+  const y = useTransform(effectiveOffset, (off) =>
+    getInterpolatedSpatialState(off, responsiveMultiplier, desktopScale).translateY
+  );
+  const z = useTransform(effectiveOffset, (off) =>
+    getInterpolatedSpatialState(off, responsiveMultiplier, desktopScale).translateZ
+  );
+  const rotateY = useTransform(effectiveOffset, (off) =>
+    getInterpolatedSpatialState(off, responsiveMultiplier, desktopScale).rotateY
+  );
+  const rotateZ = useTransform(effectiveOffset, (off) =>
+    getInterpolatedSpatialState(off, responsiveMultiplier, desktopScale).rotateZ
+  );
+  const scale = useTransform(effectiveOffset, (off) =>
+    getInterpolatedSpatialState(off, responsiveMultiplier, desktopScale).scale
+  );
+  const opacity = useTransform(effectiveOffset, (off) =>
+    getInterpolatedSpatialState(off, responsiveMultiplier, desktopScale).opacity
+  );
+  const filter = useTransform(effectiveOffset, (off) => {
+    const b = getInterpolatedSpatialState(off, responsiveMultiplier, desktopScale).blur;
+    return b > 0 ? `blur(${b}px)` : 'none';
+  });
+  const zIndex = useTransform(effectiveOffset, (off) =>
+    getInterpolatedSpatialState(off, responsiveMultiplier, desktopScale).zIndex
+  );
+  const pointerEvents = useTransform(effectiveOffset, (off) =>
+    getInterpolatedSpatialState(off, responsiveMultiplier, desktopScale).pointerEvents
+  );
+
+  const isFocusedState = useTransform(effectiveOffset, (off) => Math.abs(off) < 0.5);
+  const [isFocused, setIsFocused] = useState(baseOffset === 0);
+
+  useEffect(() => {
+    const unsubscribe = isFocusedState.on('change', (v) => setIsFocused(v));
+    return () => unsubscribe();
+  }, [isFocusedState]);
+
+  const shadowScale = useTransform(effectiveOffset, (off) =>
+    Math.abs(off) < 0.5 ? 1 : 0.7
+  );
+  const shadowOpacity = useTransform(effectiveOffset, (off) =>
+    Math.abs(off) < 0.5 ? 1 : 0.45
+  );
+
+  return (
+    <motion.div
+      className="absolute cursor-pointer rounded-3xl"
+      onClick={() => onCardClick(baseOffset)}
+      style={{
+        x,
+        y,
+        z,
+        rotateY,
+        rotateZ,
+        scale,
+        opacity,
+        filter,
+        zIndex,
+        pointerEvents,
+        transformStyle: 'preserve-3d',
+        WebkitBackfaceVisibility: 'hidden',
+        backfaceVisibility: 'hidden',
+        willChange: 'transform, opacity',
+      }}
+    >
+      {/* Ground Contact Shadows (Dark Slate Gray for Side Cards, Cyan for Active Center Card) */}
+      <motion.div
+        className="pointer-events-none absolute left-1/2 -translate-x-1/2"
+        style={{
+          bottom: -30,
+          width: '70%',
+          height: 14,
+          borderRadius: '50%',
+          background: isFocused
+            ? 'radial-gradient(ellipse at center, rgba(0, 240, 255, 0.35) 0%, rgba(0, 0, 0, 0.2) 40%, transparent 70%)'
+            : 'radial-gradient(ellipse at center, rgba(15, 23, 42, 0.45) 0%, rgba(0, 0, 0, 0.3) 50%, transparent 75%)',
+          filter: 'blur(10px)',
+          scale: shadowScale,
+          opacity: shadowOpacity,
+        }}
+      />
+
+      {/* Card Container */}
+      <div className="relative rounded-3xl transition-all duration-300">
+        <ServiceCard data={service} isFocused={isFocused} />
+      </div>
+    </motion.div>
+  );
+}
+
 export default function Services3DCarousel() {
   const [virtualIndex, setVirtualIndex] = useState(0);
-  const [isHovered, setIsHovered] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
   const [responsiveMultiplier, setResponsiveMultiplier] = useState(1);
   const [desktopScale, setDesktopScale] = useState(1);
   const total = newServicesData.length;
+
+  const dragOffset = useMotionValue(0);
+  const pointerStartRef = useRef<{ x: number; y: number; time: number } | null>(null);
+  const isPointerDownRef = useRef(false);
+  const isDraggingRef = useRef(false);
+  const hasMovedRef = useRef(false);
 
   // Active index mapped to data array length
   const activeIndex = ((virtualIndex % total) + total) % total;
@@ -162,16 +326,76 @@ export default function Services3DCarousel() {
     return () => window.removeEventListener('resize', updateScale);
   }, []);
 
-  const handleNext = useCallback(() => {
-    setVirtualIndex((prev) => prev + 1);
+  const isTransitioningRef = useRef(false);
+  const autoRotateTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const scheduleAutoRotateRef = useRef<() => void>(() => {});
+
+  const clearAutoRotateTimer = useCallback(() => {
+    if (autoRotateTimerRef.current !== null) {
+      clearTimeout(autoRotateTimerRef.current);
+      autoRotateTimerRef.current = null;
+    }
   }, []);
 
+  const runRollerTransition = useCallback(
+    (direction: 1 | -1, afterComplete?: () => void) => {
+      if (isTransitioningRef.current) return;
+
+      isTransitioningRef.current = true;
+      dragOffset.stop();
+
+      const stepPx = Math.max(200, 310 * responsiveMultiplier);
+      const targetPx = direction === 1 ? -stepPx : stepPx;
+
+      animate(dragOffset, targetPx, {
+        type: 'spring',
+        stiffness: 230,
+        damping: 30,
+        mass: 0.85,
+        onComplete: () => {
+          setVirtualIndex((prev) => prev + direction);
+          dragOffset.set(0);
+          isTransitioningRef.current = false;
+          afterComplete?.();
+        },
+      });
+    },
+    [dragOffset, responsiveMultiplier]
+  );
+
+  const scheduleAutoRotate = useCallback(() => {
+    clearAutoRotateTimer();
+
+    if (isDraggingRef.current || isTransitioningRef.current) return;
+
+    autoRotateTimerRef.current = setTimeout(() => {
+      if (isDraggingRef.current || isTransitioningRef.current) {
+        scheduleAutoRotateRef.current();
+        return;
+      }
+
+      runRollerTransition(1, () => {
+        scheduleAutoRotateRef.current();
+      });
+    }, 5000);
+  }, [clearAutoRotateTimer, runRollerTransition]);
+
+  scheduleAutoRotateRef.current = scheduleAutoRotate;
+
+  const handleNext = useCallback(() => {
+    clearAutoRotateTimer();
+    runRollerTransition(1, () => scheduleAutoRotateRef.current());
+  }, [clearAutoRotateTimer, runRollerTransition]);
+
   const handlePrev = useCallback(() => {
-    setVirtualIndex((prev) => prev - 1);
-  }, []);
+    clearAutoRotateTimer();
+    runRollerTransition(-1, () => scheduleAutoRotateRef.current());
+  }, [clearAutoRotateTimer, runRollerTransition]);
 
   const handleJumpToPill = useCallback(
     (pillIdx: number) => {
+      clearAutoRotateTimer();
+      dragOffset.stop();
       const targetCardIndex = Math.floor((pillIdx / 4) * total);
       setVirtualIndex((current) => {
         const currentActive = ((current % total) + total) % total;
@@ -180,25 +404,141 @@ export default function Services3DCarousel() {
         if (diff < -total / 2) diff += total;
         return current + diff;
       });
+      dragOffset.set(0);
+      scheduleAutoRotateRef.current();
     },
-    [total]
+    [total, clearAutoRotateTimer, dragOffset]
   );
 
-  // Auto-rotate every 5 seconds (5000ms), pauses when hovered
+  // Pointer drag gesture handlers
+  const handlePointerDown = (e: ReactPointerEvent<HTMLDivElement>) => {
+    if (e.button !== 0) return;
+
+    clearAutoRotateTimer();
+    dragOffset.stop();
+    pointerStartRef.current = { x: e.clientX, y: e.clientY, time: Date.now() };
+    isPointerDownRef.current = true;
+    isDraggingRef.current = false;
+    hasMovedRef.current = false;
+
+    (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
+  };
+
+  const handlePointerMove = (e: ReactPointerEvent<HTMLDivElement>) => {
+    if (!isPointerDownRef.current || !pointerStartRef.current) return;
+
+    const deltaX = e.clientX - pointerStartRef.current.x;
+    const deltaY = e.clientY - pointerStartRef.current.y;
+
+    if (!hasMovedRef.current) {
+      const absX = Math.abs(deltaX);
+      const absY = Math.abs(deltaY);
+
+      if (absX > 8 && absX > absY) {
+        hasMovedRef.current = true;
+        isDraggingRef.current = true;
+        clearAutoRotateTimer();
+        setIsDragging(true);
+      }
+    }
+
+    if (isDraggingRef.current) {
+      // Drag resistance of 0.75
+      const effectiveDelta = deltaX * 0.75;
+      dragOffset.set(effectiveDelta);
+    }
+  };
+
+  const handlePointerUp = (e: ReactPointerEvent<HTMLDivElement>) => {
+    if (!isPointerDownRef.current || !pointerStartRef.current) return;
+
+    isPointerDownRef.current = false;
+
+    try {
+      (e.currentTarget as HTMLElement).releasePointerCapture(e.pointerId);
+    } catch {
+      // Ignore if pointer capture already released
+    }
+
+    const currentPx = dragOffset.get();
+    const dt = (Date.now() - pointerStartRef.current.time) / 1000;
+    const deltaX = e.clientX - pointerStartRef.current.x;
+    const velocityX = deltaX / Math.max(dt, 0.001);
+
+    pointerStartRef.current = null;
+
+    if (isDraggingRef.current) {
+      const stepPx = Math.max(200, 310 * responsiveMultiplier);
+      const threshold = responsiveMultiplier < 0.6 ? 50 : 80;
+
+      let targetPx = 0;
+      let navDirection = 0;
+
+      if (currentPx < -threshold || (velocityX < -400 && deltaX < -20)) {
+        targetPx = -stepPx;
+        navDirection = 1;
+      } else if (currentPx > threshold || (velocityX > 400 && deltaX > 20)) {
+        targetPx = stepPx;
+        navDirection = -1;
+      }
+
+      if (navDirection !== 0) {
+        clearAutoRotateTimer();
+        isTransitioningRef.current = true;
+        animate(dragOffset, targetPx, {
+          type: 'spring',
+          stiffness: 230,
+          damping: 30,
+          mass: 0.85,
+          onComplete: () => {
+            setVirtualIndex((prev) => prev + navDirection);
+            dragOffset.set(0);
+            isTransitioningRef.current = false;
+            setIsDragging(false);
+            isDraggingRef.current = false;
+            scheduleAutoRotate();
+          },
+        });
+      } else {
+        animate(dragOffset, 0, {
+          type: 'spring',
+          stiffness: 350,
+          damping: 28,
+          onComplete: () => {
+            setIsDragging(false);
+            isDraggingRef.current = false;
+            scheduleAutoRotate();
+          },
+        });
+      }
+    } else {
+      // A simple click / vertical gesture should not leave autoplay disabled.
+      scheduleAutoRotate();
+    }
+  };
+
+  const handleCardClick = (baseOffset: number) => {
+    if (isDraggingRef.current || isTransitioningRef.current) return;
+    if (baseOffset < 0) handlePrev();
+    if (baseOffset > 0) handleNext();
+  };
+
+  // Auto-rotation is scheduled by the same roller transition used by drag/manual navigation.
   useEffect(() => {
-    if (isHovered) return;
-    const interval = setInterval(() => {
-      handleNext();
-    }, 5000);
-    return () => clearInterval(interval);
-  }, [handleNext, isHovered]);
+    scheduleAutoRotate();
+    return () => clearAutoRotateTimer();
+  }, [scheduleAutoRotate, clearAutoRotateTimer]);
 
   // Support left/right arrow key navigation
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
+      const target = e.target as HTMLElement | null;
+      if (target?.matches('input, textarea, select, [contenteditable="true"]')) return;
       if (e.key === 'ArrowLeft') {
+        e.preventDefault();
         handlePrev();
       } else if (e.key === 'ArrowRight') {
+        e.preventDefault();
         handleNext();
       }
     };
@@ -207,23 +547,34 @@ export default function Services3DCarousel() {
   }, [handleNext, handlePrev]);
 
   return (
-    <section className="relative w-full bg-[#f4fafd] py-10 md:py-16 overflow-hidden select-none">
+    <section className="relative w-full bg-[#f4fafd] py-6 md:py-10 overflow-hidden select-none">
       {/* SECTION HEADER */}
-      <div className="mx-auto max-w-[1400px] px-6 md:px-12 mb-4 md:mb-6 text-center">
-        <div className="flex flex-col items-center gap-2 select-none">
-          {/* Subtitle Badge */}
-          <div className="flex items-center justify-center gap-2.5 text-[#15b6e8] text-xs font-bold tracking-[0.25em] uppercase">
-            <span className="w-6 h-[1.5px] bg-[#15b6e8]" />
+      <div className="mx-auto max-w-[1400px] px-6 md:px-12 mb-3 md:mb-5 text-center">
+        <div className="flex flex-col items-center gap-3 select-none">
+          {/* Subtitle Badge Card - Same styling as other sections */}
+          <div
+            className="inline-flex w-fit items-center gap-2 px-4 py-2 text-xs font-semibold tracking-wide text-[#3b494c] transition-transform hover:-translate-y-0.5"
+            style={{
+              backgroundColor: 'var(--token-5c4bbf1d-7534-4d20-87a6-b0deb15d1586, rgb(245, 245, 245))',
+              borderRadius: '8px',
+              boxShadow:
+                'rgba(0, 0, 0, 0.14) 0px 3px 3px 0px, rgba(0, 0, 0, 0.12) 0px 2.77px 2.21px 0px, rgb(233, 233, 233) 0px -3px 0px 0px inset',
+              opacity: 1,
+            }}
+          >
+            <span className="h-2 w-2 animate-pulse rounded-full bg-[#15b6e8]" />
             <span>SERVICES</span>
-            <span className="w-6 h-[1.5px] bg-[#15b6e8]" />
           </div>
 
-          {/* Title */}
+          {/* Title - Same style as other sections */}
           <h2
-            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-8xl font-bold tracking-tight text-[#161d1e] my-0.5"
+            className="flex flex-col items-center text-center text-4xl sm:text-5xl md:text-6xl lg:text-7xl 2xl:text-8xl font-black tracking-tight"
             style={{ fontFamily: 'var(--font-zalando-expanded, sans-serif)' }}
           >
-            Design. Build. Grow.
+            <span className="text-[#161d1e] tracking-wide">Design. Build.</span>
+            <span className="tracking-wider bg-gradient-to-b from-[#15b6e8] to-transparent bg-clip-text text-transparent">
+              Grow.
+            </span>
           </h2>
 
           {/* Sub-description */}
@@ -233,15 +584,18 @@ export default function Services3DCarousel() {
         </div>
       </div>
 
-      {/* 3D PRESENTATION STAGE ENVIRONMENT */}
+      {/* 3D PRESENTATION STAGE ENVIRONMENT WITH PHYSICAL DRAG */}
       <div
-        className="relative w-full h-[470px] sm:h-[490px] md:h-[510px] xl:h-[570px] 2xl:h-[640px] flex items-center justify-center"
+        className="relative w-full h-[440px] sm:h-[460px] md:h-[480px] xl:h-[530px] 2xl:h-[580px] flex items-center justify-center touch-pan-y cursor-grab active:cursor-grabbing"
         style={{
           perspective: '1000px',
           transformStyle: 'preserve-3d',
+          touchAction: 'pan-y',
         }}
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
+        onPointerDown={handlePointerDown}
+        onPointerMove={handlePointerMove}
+        onPointerUp={handlePointerUp}
+        onPointerCancel={handlePointerUp}
       >
         {/* Dim Top Anchor Pin Indicator pointing directly at top-center edge of active card */}
         <div className="absolute top-2 left-1/2 -translate-x-1/2 flex flex-col items-center z-40 pointer-events-none">
@@ -259,7 +613,7 @@ export default function Services3DCarousel() {
         />
 
         {/* Deeply Curved Solid SVG Arc String Line (#15b6e8) with Center Gap for Pills */}
-        <div className="pointer-events-none absolute bottom-1 left-1/2 -translate-x-1/2 w-[1150px] max-w-[95vw] h-[60px] z-20 flex items-center justify-center">
+        <div className="pointer-events-none absolute -bottom-1 left-1/2 -translate-x-1/2 w-[1150px] max-w-[95vw] h-[60px] z-20 flex items-center justify-center">
           <svg viewBox="0 0 1150 60" className="w-full h-full overflow-visible">
             <defs>
               <linearGradient id="arcStringGrad" x1="0%" y1="0%" x2="100%" y2="0%">
@@ -310,105 +664,31 @@ export default function Services3DCarousel() {
 
         {/* 3D Stage Container */}
         <div
-          className="relative w-full h-full flex items-center justify-center -translate-y-4"
+          className="relative w-full h-full flex items-center justify-center -translate-y-5"
           style={{
             transformStyle: 'preserve-3d',
           }}
         >
-          {newServicesData.map((service, index) => {
-            // Calculate circular offset relative to virtualIndex
-            let offset = index - (virtualIndex % total);
-            if (offset > total / 2) offset -= total;
-            if (offset < -total / 2) offset += total;
-
-            const state = getSpatialState(offset, responsiveMultiplier, desktopScale);
-
-            return (
-              <motion.div
-                key={service.id}
-                className="absolute cursor-pointer rounded-3xl"
-                onClick={() => {
-                  if (offset < 0) handlePrev();
-                  if (offset > 0) handleNext();
-                }}
-                initial={false}
-                animate={{
-                  x: state.translateX,
-                  y: state.translateY,
-                  z: state.translateZ,
-                  rotateY: state.rotateY,
-                  rotateZ: state.rotateZ,
-                  scale: state.scale,
-                  opacity: state.opacity,
-                  filter: state.blur > 0 ? `blur(${state.blur}px)` : 'none',
-                }}
-                transition={{
-                  type: 'spring',
-                  stiffness: 260,
-                  damping: 28,
-                  mass: 0.8,
-                }}
-                style={{
-                  transformStyle: 'preserve-3d',
-                  WebkitBackfaceVisibility: 'hidden',
-                  backfaceVisibility: 'hidden',
-                  willChange: 'transform, opacity',
-                  zIndex: state.zIndex,
-                  pointerEvents: state.pointerEvents,
-                }}
-              >
-                {/* Ground Contact Shadows (Dark Slate Gray for Side Cards, Cyan for Active Center Card) */}
-                <motion.div
-                  className="pointer-events-none absolute left-1/2 -translate-x-1/2"
-                  style={{
-                    bottom: -30,
-                    width: '70%',
-                    height: 14,
-                    borderRadius: '50%',
-                    background:
-                      offset === 0
-                        ? 'radial-gradient(ellipse at center, rgba(0, 240, 255, 0.35) 0%, rgba(0, 0, 0, 0.2) 40%, transparent 70%)'
-                        : 'radial-gradient(ellipse at center, rgba(15, 23, 42, 0.45) 0%, rgba(0, 0, 0, 0.3) 50%, transparent 75%)',
-                    filter: 'blur(10px)',
-                  }}
-                  animate={{
-                    scale: offset === 0 ? 1 : 0.7,
-                    opacity: offset === 0 ? 1 : 0.45,
-                  }}
-                  transition={{
-                    type: 'spring',
-                    stiffness: 260,
-                    damping: 28,
-                    mass: 0.8,
-                  }}
-                />
-
-                {/* Card Container with OUTSIDE Dark Slate Drop Shadow for Side Cards */}
-                <div
-                  className="relative rounded-3xl transition-all duration-500 overflow-hidden"
-                  style={{
-                    border:
-                      offset === 0
-                        ? '1.5px solid rgba(21, 182, 232, 0.85)'
-                        : '1px solid rgba(15, 23, 42, 0.08)',
-                    boxShadow:
-                      offset === 0
-                        ? '0 10px 30px rgba(21, 182, 232, 0.25)'
-                        : '0 24px 48px -10px rgba(15, 23, 42, 0.38), 0 12px 24px -6px rgba(0, 0, 0, 0.22)',
-                  }}
-                >
-                  <ServiceCard data={service} isFocused={offset === 0} />
-                </div>
-              </motion.div>
-            );
-          })}
+          {newServicesData.map((service, index) => (
+            <CarouselCardItem
+              key={service.id}
+              service={service}
+              index={index}
+              virtualIndex={virtualIndex}
+              total={total}
+              dragOffset={dragOffset}
+              responsiveMultiplier={responsiveMultiplier}
+              desktopScale={desktopScale}
+              onCardClick={handleCardClick}
+            />
+          ))}
         </div>
       </div>
 
       {/* FOOTER CONTROLS & SUB-LABEL */}
-      <div className="mx-auto max-w-[1400px] px-6 mt-2 flex flex-col items-center gap-2.5 z-40 relative">
+      <div className="mx-auto max-w-[1400px] px-6 mt-4 md:mt-5 flex flex-col items-center gap-2.5 z-40 relative">
         {/* Explore Sub-label */}
-        <div className="flex flex-col items-center gap-1 text-[10px] font-bold tracking-[0.3em] uppercase text-[#15b6e8]">
+        <div className="flex flex-col items-center gap-1 text-[10px] font-bold tracking-[0.3em] uppercase text-[#161d1e]">
           <span>EXPLORE OUR SERVICES</span>
         </div>
 
@@ -420,41 +700,32 @@ export default function Services3DCarousel() {
             className="
               group
               flex
-              h-9
-              w-9
+              h-11
+              w-11
               items-center
               justify-center
               rounded-full
-              border
-              border-[#bac9cc]
-              bg-white
               text-[#161d1e]
-              shadow-sm
               transition-all
               duration-300
-              hover:border-[#15b6e8]
-              hover:bg-[#15b6e8]
-              hover:text-white
-              hover:shadow-[0_0_14px_rgba(21,182,232,0.35)]
+              hover:scale-105
+              hover:text-[#15b6e8]
               active:scale-95
             "
+            style={{
+              backgroundColor: 'rgb(244, 244, 245)',
+              border: 'none',
+              boxShadow:
+                'rgba(255, 255, 255, 0.6) 0px 4px 0px 0px inset, rgba(0, 0, 0, 0.05) 0px -8px 0px 0px inset, rgba(0, 0, 0, 0.1) 0px 3px 3px 0px, rgba(0, 0, 0, 0.06) 0px 7.77px 16px 0px',
+            }}
           >
             <svg
               viewBox="0 0 24 24"
-              className="h-4 w-4 fill-none stroke-current stroke-[2] transition-transform duration-300 group-hover:-translate-x-0.5"
+              className="h-5 w-5 fill-none stroke-current stroke-[2.5] transition-transform duration-300 group-hover:-translate-x-0.5"
             >
               <path d="m15 18-6-6 6-6" />
             </svg>
           </button>
-
-          {/* Counter */}
-          <div className="flex items-center gap-1.5 font-mono text-xs tracking-wider">
-            <span className="font-bold text-[#15b6e8]">
-              {String(activeIndex + 1).padStart(2, '0')}
-            </span>
-            <span className="text-[#bac9cc]">/</span>
-            <span className="text-[#3b494c]">{String(total).padStart(2, '0')}</span>
-          </div>
 
           <button
             onClick={handleNext}
@@ -462,28 +733,28 @@ export default function Services3DCarousel() {
             className="
               group
               flex
-              h-9
-              w-9
+              h-11
+              w-11
               items-center
               justify-center
               rounded-full
-              border
-              border-[#bac9cc]
-              bg-white
               text-[#161d1e]
-              shadow-sm
               transition-all
               duration-300
-              hover:border-[#15b6e8]
-              hover:bg-[#15b6e8]
-              hover:text-white
-              hover:shadow-[0_0_14px_rgba(21,182,232,0.35)]
+              hover:scale-105
+              hover:text-[#15b6e8]
               active:scale-95
             "
+            style={{
+              backgroundColor: 'rgb(244, 244, 245)',
+              border: 'none',
+              boxShadow:
+                'rgba(255, 255, 255, 0.6) 0px 4px 0px 0px inset, rgba(0, 0, 0, 0.05) 0px -8px 0px 0px inset, rgba(0, 0, 0, 0.1) 0px 3px 3px 0px, rgba(0, 0, 0, 0.06) 0px 7.77px 16px 0px',
+            }}
           >
             <svg
               viewBox="0 0 24 24"
-              className="h-4 w-4 fill-none stroke-current stroke-[2] transition-transform duration-300 group-hover:translate-x-0.5"
+              className="h-5 w-5 fill-none stroke-current stroke-[2.5] transition-transform duration-300 group-hover:translate-x-0.5"
             >
               <path d="m9 18 6-6-6-6" />
             </svg>
@@ -493,3 +764,4 @@ export default function Services3DCarousel() {
     </section>
   );
 }
+

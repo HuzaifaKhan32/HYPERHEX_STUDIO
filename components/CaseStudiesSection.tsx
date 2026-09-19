@@ -108,16 +108,22 @@ function useInfiniteSlider(autoMs: number, n: number) {
 function FeaturedHeading() {
   return (
     <div className="flex flex-col items-center text-center gap-3 mb-6 md:mb-8 select-none">
-      <div className="inline-flex w-fit items-center gap-2 rounded-full border border-[#bac9cc] bg-white px-4 py-2 shadow-sm transition-transform hover:-translate-y-0.5">
+      <div
+        className="inline-flex w-fit items-center gap-2 px-4 py-2 text-xs font-semibold tracking-wide text-[#3b494c] transition-transform hover:-translate-y-0.5"
+        style={{
+          backgroundColor: 'var(--token-5c4bbf1d-7534-4d20-87a6-b0deb15d1586, rgb(245, 245, 245))',
+          borderRadius: '8px',
+          boxShadow: 'rgba(0, 0, 0, 0.14) 0px 3px 3px 0px, rgba(0, 0, 0, 0.12) 0px 2.77px 2.21px 0px, rgb(233, 233, 233) 0px -3px 0px 0px inset',
+          opacity: 1,
+        }}
+      >
         <span className="h-2 w-2 animate-pulse rounded-full bg-[#15b6e8]" />
-        <span className="text-xs font-semibold tracking-wide text-[#3b494c]">
-          Case Studies
-        </span>
+        <span>Featured Projects</span>
       </div>
 
       <h2 className="flex flex-col items-center text-5xl md:text-7xl lg:text-8xl 2xl:text-9xl font-black tracking-tight" style={{ fontFamily: 'var(--font-zalando-expanded, sans-serif)' }}>
         <span className="text-[#161d1e] tracking-wide">Featured</span>
-        <span className="tracking-wider bg-gradient-to-b from-[#15b6e8] to-transparent bg-clip-text text-transparent">Case Studies</span>
+        <span className="tracking-wider bg-gradient-to-b from-[#15b6e8] to-transparent bg-clip-text text-transparent">Projects</span>
       </h2>
     </div>
   );
@@ -236,14 +242,14 @@ export default function CaseStudiesSection() {
                       src={study.thumbnail}
                       alt={study.title}
                       fill
-                      sizes="(max-width: 640px) 80vw, (max-width: 768px) 60vw, (max-width: 1280px) 65vw, 48vw"
-                      quality={80}
+                      sizes="(max-width: 768px) 100vw, 80vw"
+                      quality={95}
                       {...(!(isCenter || distanceFromCenter <= 1) && { loading: 'lazy' })}
                       priority={isCenter || distanceFromCenter <= 1}
                       draggable={false}
                       onDragStart={(e) => e.preventDefault()}
                       style={{ userSelect: 'none', WebkitUserDrag: 'none' } as React.CSSProperties}
-                      className={`object-cover transition-all duration-500 ease-out group-hover:scale-105 pointer-events-none select-none ${isSide ? 'filter blur-[2px] brightness-75' : ''
+                      className={`object-cover w-full h-full transition-all duration-500 ease-out group-hover:scale-105 pointer-events-none select-none ${isSide ? 'filter blur-[2px] brightness-75' : ''
                         }`}
                     />
 
@@ -338,13 +344,13 @@ export default function CaseStudiesSection() {
                     src={study.thumbnail}
                     alt={study.title}
                     fill
-                    sizes="(max-width: 640px) 70vw, (max-width: 768px) 48vw, (max-width: 1024px) 42vw, 32vw"
-                    quality={80}
+                    sizes="(max-width: 640px) 100vw, (max-width: 768px) 70vw, (max-width: 1024px) 50vw, 40vw"
+                    quality={95}
                     loading="lazy"
                     draggable={false}
                     onDragStart={(e) => e.preventDefault()}
                     style={{ userSelect: 'none', WebkitUserDrag: 'none' } as React.CSSProperties}
-                    className="object-cover transition-transform duration-500 ease-out group-hover:scale-105 pointer-events-none select-none"
+                    className="object-cover w-full h-full transition-transform duration-500 ease-out group-hover:scale-105 pointer-events-none select-none"
                   />
 
                   {study.isVideo && (

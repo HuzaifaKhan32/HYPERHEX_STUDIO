@@ -25,6 +25,11 @@ export default function NavbarDesktopLinks({ links }: { links: NavLink[] }) {
             onClick={(e) => {
               setActiveLink(link.id);
               if (link.href.startsWith('#')) {
+                if (typeof window !== 'undefined' && window.location.pathname !== '/') {
+                  // Navigate to root homepage with section hash
+                  window.location.href = `/${link.href}`;
+                  return;
+                }
                 e.preventDefault();
                 const targetId = link.href === '#' ? 'home' : link.href.substring(1);
                 if (targetId === 'home') {

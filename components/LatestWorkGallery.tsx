@@ -453,7 +453,7 @@ export default function LatestWorkGallery() {
                     )}
                   </div>
                 ) : selectedProject.gallery ? (
-                  <div className="relative w-full h-[60vh] overflow-hidden flex items-center justify-center bg-black">
+                  <div className="relative w-full overflow-hidden bg-black" style={{ aspectRatio: '16/9' }}>
                     <AnimatePresence mode="wait" initial={false}>
                       <motion.div
                         key={currentImageIndex}
@@ -461,14 +461,15 @@ export default function LatestWorkGallery() {
                         animate={{ opacity: 1, x: 0 }}
                         exit={{ opacity: 0, x: -100 }}
                         transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-                        className="relative w-full h-full"
+                        className="absolute inset-0 w-full h-full"
                       >
                         <Image
                           src={selectedProject.gallery[currentImageIndex]}
                           alt={`${selectedProject.title} - Image ${currentImageIndex + 1}`}
                           fill
                           sizes="(max-width: 1024px) 100vw, 896px"
-                          className="object-contain"
+                          quality={95}
+                          className="object-cover"
                           priority
                         />
                       </motion.div>
@@ -506,13 +507,14 @@ export default function LatestWorkGallery() {
                     )}
                   </div>
                 ) : (
-                  <div className="relative w-full h-[60vh] overflow-hidden flex items-center justify-center bg-black">
+                  <div className="relative w-full overflow-hidden bg-black" style={{ aspectRatio: '16/9' }}>
                     <Image
                       src={selectedProject.imageUrl}
                       alt={selectedProject.title}
                       fill
                       sizes="(max-width: 1024px) 100vw, 896px"
-                      className="object-contain"
+                      quality={95}
+                      className="object-cover"
                       priority
                     />
                   </div>
