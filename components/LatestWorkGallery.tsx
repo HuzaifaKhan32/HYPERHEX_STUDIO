@@ -187,7 +187,7 @@ const ProjectCard = React.memo(({
         ) : (
           <div className="mt-4 px-5 py-2 rounded-full bg-white text-black font-semibold text-xs md:text-sm uppercase tracking-wider flex items-center gap-2 shadow-lg">
             <svg className="w-3.5 h-3.5 fill-black" viewBox="0 0 24 24">
-              <path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/>
+              <path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z" />
             </svg>
             View Image
           </div>
@@ -232,18 +232,33 @@ export default function LatestWorkGallery() {
   const [iframeError, setIframeError] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
-  // Projects matching active category
-  const filtered = useMemo(
-    () =>
-      ALL_PROJECTS.filter((p) => {
-        if (activeCategory === 'All') return true;
-        if (Array.isArray(p.category)) {
-          return p.category.includes(activeCategory as CategoryType);
-        }
-        return p.category === activeCategory;
-      }),
-    [activeCategory]
-  );
+  // Projects matching active category ordered by CATEGORIES filter pill hierarchy
+  const filtered = useMemo(() => {
+    const list = ALL_PROJECTS.filter((p) => {
+      if (activeCategory === 'All') return true;
+      if (Array.isArray(p.category)) {
+        return p.category.includes(activeCategory as CategoryType);
+      }
+      return p.category === activeCategory;
+    });
+
+    if (activeCategory === 'All') {
+      const categoryOrderMap = new Map<string, number>();
+      CATEGORIES.forEach((cat, idx) => {
+        categoryOrderMap.set(cat, idx);
+      });
+
+      return [...list].sort((a, b) => {
+        const catA = Array.isArray(a.category) ? a.category[0] : a.category;
+        const catB = Array.isArray(b.category) ? b.category[0] : b.category;
+        const orderA = categoryOrderMap.get(catA) ?? 99;
+        const orderB = categoryOrderMap.get(catB) ?? 99;
+        return orderA - orderB;
+      });
+    }
+
+    return list;
+  }, [activeCategory]);
 
   const visible = filtered.slice(0, visibleCount);
   const hasMore = visibleCount < filtered.length;
@@ -314,11 +329,10 @@ export default function LatestWorkGallery() {
                       }}
                       whileHover={{ y: -2 }}
                       whileTap={{ y: 1, scale: 0.97 }}
-                      className={`flex items-center justify-center px-5 py-2.5 bg-surface-bright rounded-xl border-2 font-bold text-xs sm:text-sm uppercase tracking-wider cursor-pointer transition-[color,border-color,box-shadow] duration-150 ${
-                        isActive
+                      className={`flex items-center justify-center px-5 py-2.5 bg-surface-bright rounded-xl border-2 font-bold text-xs sm:text-sm uppercase tracking-wider cursor-pointer transition-[color,border-color,box-shadow] duration-150 ${isActive
                           ? 'border-accent text-accent shadow-[0_4px_0_0_rgba(21,182,232,1)]'
                           : 'border-outline-variant/30 text-on-surface shadow-[0_4px_0_0_var(--color-outline-variant)] hover:border-accent hover:text-accent hover:shadow-[0_4px_0_0_rgba(21,182,232,1)]'
-                      }`}
+                        }`}
                     >
                       {category}
                     </motion.button>
@@ -476,7 +490,7 @@ export default function LatestWorkGallery() {
                           aria-label="Previous image"
                         >
                           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                            <path d="m15 18-6-6 6-6"/>
+                            <path d="m15 18-6-6 6-6" />
                           </svg>
                         </button>
                         <button
@@ -485,7 +499,7 @@ export default function LatestWorkGallery() {
                           aria-label="Next image"
                         >
                           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                            <path d="m9 18 6-6-6-6"/>
+                            <path d="m9 18 6-6-6-6" />
                           </svg>
                         </button>
 

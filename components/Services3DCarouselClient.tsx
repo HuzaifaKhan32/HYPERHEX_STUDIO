@@ -42,32 +42,32 @@ function getSpatialState(offset: number, multiplier: number = 1, cardScale: numb
     };
   }
 
-  // Immediate Left Card (-1)
+  // Immediate Left Card (-1) - Closer spacing & higher opacity for mobile
   if (offset === -1) {
     return {
-      scale: isMobile ? 0.58 : 0.84 * baseScale,
-      translateX: isMobile ? -150 : -310 * multiplier * (cardScale > 1 ? Math.sqrt(cardScale) : 1),
-      translateY: (isMobile ? 18 : 14) * baseScale,
-      translateZ: isMobile ? -180 : -140,
-      rotateY: isMobile ? 38 : 32,
-      rotateZ: -5,
-      opacity: isMobile ? 0.40 : 0.85,
+      scale: isMobile ? 0.68 : 0.82 * baseScale,
+      translateX: isMobile ? -110 : -255 * multiplier * (cardScale > 1 ? Math.sqrt(cardScale) : 1),
+      translateY: (isMobile ? 14 : 12) * baseScale,
+      translateZ: isMobile ? -120 : 60,
+      rotateY: isMobile ? 28 : 57,
+      rotateZ: 0,
+      opacity: isMobile ? 0.82 : 1,
       blur: 0,
       zIndex: 20,
       pointerEvents: 'auto',
     };
   }
 
-  // Immediate Right Card (+1)
+  // Immediate Right Card (+1) - Balanced symmetrically with -1
   if (offset === 1) {
     return {
-      scale: isMobile ? 0.58 : 0.84 * baseScale,
-      translateX: isMobile ? 150 : 310 * multiplier * (cardScale > 1 ? Math.sqrt(cardScale) : 1),
-      translateY: (isMobile ? 18 : 14) * baseScale,
-      translateZ: isMobile ? -180 : -140,
-      rotateY: isMobile ? -38 : -32,
-      rotateZ: 5,
-      opacity: isMobile ? 0.40 : 0.85,
+      scale: isMobile ? 0.68 : 0.82 * baseScale,
+      translateX: isMobile ? 110 : 255 * multiplier * (cardScale > 1 ? Math.sqrt(cardScale) : 1),
+      translateY: (isMobile ? 14 : 12) * baseScale,
+      translateZ: isMobile ? -120 : 60,
+      rotateY: isMobile ? -28 : -57,
+      rotateZ: 0,
+      opacity: isMobile ? 0.82 : 1,
       blur: 0,
       zIndex: 20,
       pointerEvents: 'auto',
@@ -77,13 +77,13 @@ function getSpatialState(offset: number, multiplier: number = 1, cardScale: numb
   // Outer Left Card (-2)
   if (offset === -2) {
     return {
-      scale: isMobile ? 0.42 : 0.68 * baseScale,
-      translateX: isMobile ? -230 : -580 * multiplier * (cardScale > 1 ? Math.sqrt(cardScale) : 1),
-      translateY: (isMobile ? 38 : 34) * baseScale,
-      translateZ: isMobile ? -300 : -280,
-      rotateY: isMobile ? 54 : 50,
-      rotateZ: -10,
-      opacity: isMobile ? 0.15 : 0.55,
+      scale: isMobile ? 0.52 : 0.68 * baseScale,
+      translateX: isMobile ? -180 : -500 * multiplier * (cardScale > 1 ? Math.sqrt(cardScale) : 1),
+      translateY: (isMobile ? 28 : 30) * baseScale,
+      translateZ: isMobile ? -220 : -30,
+      rotateY: isMobile ? 42 : 82,
+      rotateZ: 0,
+      opacity: isMobile ? 0.55 : 0.85,
       blur: 0,
       zIndex: 10,
       pointerEvents: 'auto',
@@ -93,13 +93,13 @@ function getSpatialState(offset: number, multiplier: number = 1, cardScale: numb
   // Outer Right Card (+2)
   if (offset === 2) {
     return {
-      scale: isMobile ? 0.42 : 0.68 * baseScale,
-      translateX: isMobile ? 230 : 580 * multiplier * (cardScale > 1 ? Math.sqrt(cardScale) : 1),
-      translateY: (isMobile ? 38 : 34) * baseScale,
-      translateZ: isMobile ? -300 : -280,
-      rotateY: isMobile ? -54 : -50,
-      rotateZ: 10,
-      opacity: isMobile ? 0.15 : 0.55,
+      scale: isMobile ? 0.52 : 0.68 * baseScale,
+      translateX: isMobile ? 180 : 500 * multiplier * (cardScale > 1 ? Math.sqrt(cardScale) : 1),
+      translateY: (isMobile ? 28 : 30) * baseScale,
+      translateZ: isMobile ? -220 : -30,
+      rotateY: isMobile ? -42 : -82,
+      rotateZ: 0,
+      opacity: isMobile ? 0.55 : 1,
       blur: 0,
       zIndex: 10,
       pointerEvents: 'auto',
@@ -110,11 +110,11 @@ function getSpatialState(offset: number, multiplier: number = 1, cardScale: numb
   const isLeft = offset < 0;
   return {
     scale: (isMobile ? 0.35 : 0.55) * baseScale,
-    translateX: (isLeft ? -760 : 760) * multiplier * (cardScale > 1 ? Math.sqrt(cardScale) : 1),
+    translateX: (isLeft ? -780 : 780) * multiplier * (cardScale > 1 ? Math.sqrt(cardScale) : 1),
     translateY: 55 * baseScale,
     translateZ: -400,
     rotateY: isLeft ? 60 : -60,
-    rotateZ: isLeft ? -14 : 14,
+    rotateZ: isLeft ? -10 : 10,
     opacity: 0,
     blur: 2,
     zIndex: 0,
@@ -181,7 +181,7 @@ function CarouselCardItem({
   if (baseOffset > total / 2) baseOffset -= total;
   if (baseOffset < -total / 2) baseOffset += total;
 
-  const stepPx = Math.max(200, 310 * responsiveMultiplier);
+  const stepPx = Math.max(200, 350 * responsiveMultiplier);
 
   const effectiveOffset = useTransform(dragOffset, (latestPx) => {
     return baseOffset + latestPx / stepPx;
@@ -219,7 +219,7 @@ function CarouselCardItem({
     getInterpolatedSpatialState(off, responsiveMultiplier, desktopScale).pointerEvents
   );
 
-  const isFocusedState = useTransform(effectiveOffset, (off) => Math.abs(off) < 0.5);
+  const isFocusedState = useTransform(effectiveOffset, (off) => Math.abs(off) < 0.15);
   const [isFocused, setIsFocused] = useState(baseOffset === 0);
 
   useEffect(() => {
@@ -228,16 +228,19 @@ function CarouselCardItem({
   }, [isFocusedState]);
 
   const shadowScale = useTransform(effectiveOffset, (off) =>
-    Math.abs(off) < 0.5 ? 1 : 0.7
+    Math.abs(off) < 0.15 ? 1 : 0.7
   );
   const shadowOpacity = useTransform(effectiveOffset, (off) =>
-    Math.abs(off) < 0.5 ? 1 : 0.45
+    Math.abs(off) < 0.15 ? 1 : 0.45
   );
 
   return (
     <motion.div
-      className="absolute cursor-pointer rounded-3xl"
-      onClick={() => onCardClick(baseOffset)}
+      className="absolute cursor-pointer rounded-3xl select-none outline-none focus:outline-none [WebkitTapHighlightColor:transparent]"
+      onClick={(e) => {
+        e.stopPropagation();
+        onCardClick(baseOffset);
+      }}
       style={{
         x,
         y,
@@ -257,7 +260,7 @@ function CarouselCardItem({
     >
       {/* Ground Contact Shadows (Dark Slate Gray for Side Cards, Cyan for Active Center Card) */}
       <motion.div
-        className="pointer-events-none absolute left-1/2 -translate-x-1/2"
+        className="pointer-events-none absolute left-1/2 -translate-x-1/2 transition-all duration-500 ease-out"
         style={{
           bottom: -30,
           width: '70%',
@@ -273,7 +276,7 @@ function CarouselCardItem({
       />
 
       {/* Card Container */}
-      <div className="relative rounded-3xl transition-all duration-300">
+      <div className="relative rounded-3xl transition-all duration-500 ease-out outline-none focus:outline-none [WebkitTapHighlightColor:transparent]">
         <ServiceCard data={service} isFocused={isFocused} />
       </div>
     </motion.div>
@@ -331,7 +334,7 @@ export default function Services3DCarouselClient({ services }: Services3DCarouse
 
   const isTransitioningRef = useRef(false);
   const autoRotateTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const scheduleAutoRotateRef = useRef<() => void>(() => {});
+  const scheduleAutoRotateRef = useRef<() => void>(() => { });
 
   const clearAutoRotateTimer = useCallback(() => {
     if (autoRotateTimerRef.current !== null) {
@@ -347,7 +350,7 @@ export default function Services3DCarouselClient({ services }: Services3DCarouse
       isTransitioningRef.current = true;
       dragOffset.stop();
 
-      const stepPx = Math.max(200, 310 * responsiveMultiplier);
+      const stepPx = Math.max(200, 350 * responsiveMultiplier);
       const targetPx = direction === 1 ? -stepPx : stepPx;
 
       animate(dragOffset, targetPx, {
@@ -423,8 +426,6 @@ export default function Services3DCarouselClient({ services }: Services3DCarouse
     isPointerDownRef.current = true;
     isDraggingRef.current = false;
     hasMovedRef.current = false;
-
-    (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
   };
 
   const handlePointerMove = (e: ReactPointerEvent<HTMLDivElement>) => {
@@ -442,6 +443,12 @@ export default function Services3DCarouselClient({ services }: Services3DCarouse
         isDraggingRef.current = true;
         clearAutoRotateTimer();
         setIsDragging(true);
+
+        try {
+          (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
+        } catch {
+          // Ignore if pointer capture fails
+        }
       }
     }
 
@@ -471,7 +478,7 @@ export default function Services3DCarouselClient({ services }: Services3DCarouse
     pointerStartRef.current = null;
 
     if (isDraggingRef.current) {
-      const stepPx = Math.max(200, 310 * responsiveMultiplier);
+      const stepPx = Math.max(200, 350 * responsiveMultiplier);
       const threshold = responsiveMultiplier < 0.6 ? 50 : 80;
 
       let targetPx = 0;
@@ -520,11 +527,32 @@ export default function Services3DCarouselClient({ services }: Services3DCarouse
     }
   };
 
-  const handleCardClick = (baseOffset: number) => {
-    if (isDraggingRef.current || isTransitioningRef.current) return;
-    if (baseOffset < 0) handlePrev();
-    if (baseOffset > 0) handleNext();
-  };
+  const handleCardClick = useCallback(
+    (baseOffset: number) => {
+      if (isDraggingRef.current || isTransitioningRef.current || baseOffset === 0) return;
+
+      clearAutoRotateTimer();
+      isTransitioningRef.current = true;
+      dragOffset.stop();
+
+      const stepPx = Math.max(200, 350 * responsiveMultiplier);
+      const targetPx = baseOffset < 0 ? stepPx * Math.abs(baseOffset) : -stepPx * baseOffset;
+
+      animate(dragOffset, targetPx, {
+        type: 'spring',
+        stiffness: 230,
+        damping: 30,
+        mass: 0.85,
+        onComplete: () => {
+          setVirtualIndex((prev) => prev + baseOffset);
+          dragOffset.set(0);
+          isTransitioningRef.current = false;
+          scheduleAutoRotateRef.current();
+        },
+      });
+    },
+    [clearAutoRotateTimer, dragOffset, responsiveMultiplier]
+  );
 
   // Auto-rotation is scheduled by the same roller transition used by drag/manual navigation.
   useEffect(() => {
@@ -565,12 +593,6 @@ export default function Services3DCarouselClient({ services }: Services3DCarouse
         onPointerUp={handlePointerUp}
         onPointerCancel={handlePointerUp}
       >
-        {/* Dim Top Anchor Pin Indicator pointing directly at top-center edge of active card */}
-        <div className="absolute top-2 left-1/2 -translate-x-1/2 flex flex-col items-center z-40 pointer-events-none">
-          <div className="w-2.5 h-2.5 bg-[#15b6e8] rounded-full border border-white shadow-[0_0_8px_rgba(21,182,232,0.6)]" />
-          <div className="w-[1.5px] h-[41px] bg-gradient-to-b from-[#15b6e8] via-[#15b6e8]/60 to-transparent" />
-        </div>
-
         {/* Ambient Radial Gradient Glow */}
         <div
           className="pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[420px] w-[800px] max-w-full rounded-full blur-[60px]"

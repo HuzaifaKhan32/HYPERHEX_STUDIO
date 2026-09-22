@@ -101,120 +101,132 @@ export default function ServiceCard({
   isFocused = true,
 }: ServiceCardProps) {
   return (
-    <div
-      className={`group relative flex w-[300px] md:w-[320px] h-[360px] p-6 flex-col justify-between overflow-hidden transition-all duration-300 ${className}`}
-      style={{
-        backgroundColor: 'rgb(244, 244, 245)',
-        borderRadius: '24px',
-        border: isFocused ? '1.5px solid rgba(21, 182, 232, 0.85)' : 'none',
-        boxShadow: isFocused
-          ? 'rgba(255, 255, 255, 0.6) 0px 4px 0px 0px inset, rgba(0, 0, 0, 0.05) 0px -8px 0px 0px inset, rgba(0, 0, 0, 0.1) 0px 3px 3px 0px, 0 12px 30px rgba(21, 182, 232, 0.3)'
-          : 'rgba(255, 255, 255, 0.6) 0px 4px 0px 0px inset, rgba(0, 0, 0, 0.05) 0px -8px 0px 0px inset, rgba(0, 0, 0, 0.1) 0px 3px 3px 0px, rgba(0, 0, 0, 0.06) 0px 7.77px 16px 0px',
-        ...style,
-      }}
-    >
-      {/* Top Section: Counter + Icon with Perfectly Centered Concentric Circles */}
-      <div className="relative z-10">
-        <div className="flex items-center justify-between mb-3">
-          <span className="text-xs font-bold tracking-[0.08em] text-[#15b6e8]">
-            {data.counter}
-          </span>
-
-          {/* Icon Wrapper & Centered Concentric Circles */}
-          <div className="relative flex items-center justify-center">
-            {/* CONCENTRIC ANIMATED CIRCLES (MATHEMATICALLY CENTERED BEHIND THE ICON) */}
-            <div className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-[150px] w-[150px] flex items-center justify-center z-0">
-              <AnimatePresence>
-                {isFocused && (
-                  <motion.div
-                    key="sub-circles-group"
-                    initial={{ opacity: 0, scale: 0.35 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.35 }}
-                    transition={{
-                      type: "spring",
-                      stiffness: 280,
-                      damping: 24,
-                      mass: 0.8,
-                    }}
-                    className="relative flex items-center justify-center h-full w-full"
-                  >
-                    {/* DECORATIVE CIRCLE 1 (Outer) */}
-                    <motion.div
-                      initial={{ opacity: 0, scale: 0.2 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      exit={{ opacity: 0, scale: 0.2 }}
-                      transition={{ duration: 0.3, delay: 0.04 }}
-                      className="absolute h-[135px] w-[135px] rounded-full bg-[#15b6e8]/[0.06] border border-white/60 shadow-[0_8px_20px_rgba(15,23,42,0.08),_inset_0_2px_6px_rgba(255,255,255,0.9)] transition-transform duration-500 ease-out group-hover:scale-105"
-                    />
-
-                    {/* DECORATIVE CIRCLE 2 (Middle) */}
-                    <motion.div
-                      initial={{ opacity: 0, scale: 0.2 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      exit={{ opacity: 0, scale: 0.2 }}
-                      transition={{ duration: 0.3, delay: 0.08 }}
-                      className="absolute h-[98px] w-[98px] rounded-full bg-[#15b6e8]/[0.11] border border-white/70 shadow-[0_10px_24px_rgba(15,23,42,0.11),_inset_0_2px_8px_rgba(255,255,255,0.95)] transition-transform duration-500 ease-out group-hover:scale-105"
-                    />
-
-                    {/* DECORATIVE CIRCLE 3 (Inner) */}
-                    <motion.div
-                      initial={{ opacity: 0, scale: 0.2 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      exit={{ opacity: 0, scale: 0.2 }}
-                      transition={{ duration: 0.3, delay: 0.12 }}
-                      className="absolute h-[68px] w-[68px] rounded-full bg-[#15b6e8]/[0.20] border border-white/80 shadow-[0_12px_28px_rgba(15,23,42,0.14),_inset_0_2px_10px_rgba(255,255,255,1)] transition-transform duration-500 ease-out group-hover:scale-110"
-                    />
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
-
-            {/* Hero Icon Button */}
-            <div className="relative z-10 flex h-11 w-11 items-center justify-center rounded-full bg-[#15b6e8] shadow-[0_10px_24px_-6px_rgba(21,182,232,0.6)] transition-transform duration-300 group-hover:scale-105">
-              {SERVICE_ICONS[data.id] ?? DEFAULT_ICON}
-            </div>
-          </div>
-        </div>
-
-        <h3 className="text-xl md:text-2xl font-bold leading-tight tracking-[-0.02em] text-[#161d1e] mb-2 pr-10">
-          {data.title}
-        </h3>
-        <p className="text-[11px] md:text-xs font-medium leading-relaxed text-[#3b494c] line-clamp-3">
-          {data.description}
-        </p>
-      </div>
-
-      {/* Middle Image Frame */}
-      {data.imageSrc && (
-        <div className="relative z-10 h-[130px] w-full flex items-center justify-center overflow-hidden">
-          <Image
-            src={data.imageSrc}
-            alt={data.title}
-            width={280}
-            height={160}
-            className="object-contain h-full w-full max-h-[125px] transition-transform duration-300 group-hover:scale-105"
-          />
-        </div>
+    <div className="relative group/card-wrapper select-none">
+      {/* SOFT GROUND CONTACT GLOW FOR SIDE CARDS */}
+      {!isFocused && (
+        <div
+          className="pointer-events-none absolute -bottom-2 left-1/2 -translate-x-1/2 h-4 w-[80%] rounded-[100%] bg-[#030712]/20 blur-md z-0 transition-opacity duration-300 select-none"
+        />
       )}
 
-      {/* Bottom Action Link */}
-      <div className="relative z-10 pt-2">
-        <Link
-          href={`/services/${data.id}`}
-          tabIndex={isFocused ? 0 : -1}
-          className={`inline-flex items-center gap-1.5 text-xs font-bold text-[#161d1e] transition-colors duration-200 hover:text-[#15b6e8] ${
-            isFocused ? "pointer-events-auto" : "pointer-events-none"
-          }`}
-        >
-          View more
-          <svg
-            viewBox="0 0 24 24"
-            className="h-3.5 w-3.5 fill-none stroke-current stroke-[2.4] transition-transform duration-200 group-hover:translate-x-0.5"
+      {/* MAIN CARD */}
+      <div
+        className={`group relative flex w-[300px] md:w-[320px] h-[360px] p-6 flex-col justify-between overflow-hidden transition-all duration-500 ease-out z-10 select-none outline-none focus:outline-none [WebkitTapHighlightColor:transparent] ${className}`}
+        style={{
+          boxSizing: 'border-box',
+          backgroundColor: '#f4f4f5',
+          borderRadius: '24px',
+          border: isFocused ? '1.5px solid rgba(21, 182, 232, 0.85)' : 'none',
+
+          boxShadow: isFocused
+            ? '0 12px 30px rgba(21, 182, 232, 0.3), 0 20px 40px -10px rgba(6, 182, 212, 0.25)'
+            : '0px 8px 24px rgba(15, 23, 42, 0.06), 0px 2px 6px rgba(15, 23, 42, 0.04)',
+          ...style,
+        }}
+      >
+        {/* Top Section: Counter + Icon with Perfectly Centered Concentric Circles */}
+        <div className="relative z-10">
+          <div className="flex items-center justify-between mb-3">
+            <span className="text-xs font-bold tracking-[0.08em] text-[#15b6e8]">
+              {data.counter}
+            </span>
+
+            {/* Icon Wrapper & Centered Concentric Circles */}
+            <div className="relative flex items-center justify-center">
+              {/* CONCENTRIC ANIMATED CIRCLES */}
+              <div className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-[150px] w-[150px] flex items-center justify-center z-0">
+                <AnimatePresence>
+                  {isFocused && (
+                    <motion.div
+                      key="sub-circles-group"
+                      initial={{ opacity: 0, scale: 0.35 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.35 }}
+                      transition={{
+                        type: "spring",
+                        stiffness: 280,
+                        damping: 24,
+                        mass: 0.8,
+                      }}
+                      className="relative flex items-center justify-center h-full w-full"
+                    >
+                      {/* DECORATIVE CIRCLE 1 (Outer) */}
+                      <motion.div
+                        initial={{ opacity: 0, scale: 0.2 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0, scale: 0.2 }}
+                        transition={{ duration: 0.3, delay: 0.04 }}
+                        className="absolute h-[135px] w-[135px] rounded-full bg-[#15b6e8]/[0.06] border border-white/60 shadow-[0_8px_20px_rgba(15,23,42,0.08),_inset_0_2px_6px_rgba(255,255,255,0.9)] transition-transform duration-500 ease-out group-hover:scale-105"
+                      />
+
+                      {/* DECORATIVE CIRCLE 2 (Middle) */}
+                      <motion.div
+                        initial={{ opacity: 0, scale: 0.2 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0, scale: 0.2 }}
+                        transition={{ duration: 0.3, delay: 0.08 }}
+                        className="absolute h-[98px] w-[98px] rounded-full bg-[#15b6e8]/[0.11] border border-white/70 shadow-[0_10px_24px_rgba(15,23,42,0.11),_inset_0_2px_8px_rgba(255,255,255,0.95)] transition-transform duration-500 ease-out group-hover:scale-105"
+                      />
+
+                      {/* DECORATIVE CIRCLE 3 (Inner) */}
+                      <motion.div
+                        initial={{ opacity: 0, scale: 0.2 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0, scale: 0.2 }}
+                        transition={{ duration: 0.3, delay: 0.12 }}
+                        className="absolute h-[68px] w-[68px] rounded-full bg-[#15b6e8]/[0.20] border border-white/80 shadow-[0_12px_28px_rgba(15,23,42,0.14),_inset_0_2px_10px_rgba(255,255,255,1)] transition-transform duration-500 ease-out group-hover:scale-110"
+                      />
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+
+              {/* Hero Icon Button */}
+              <div className="relative z-10 flex h-11 w-11 items-center justify-center rounded-full bg-[#15b6e8] shadow-[0_10px_24px_-6px_rgba(21,182,232,0.6)] transition-transform duration-300 group-hover:scale-105">
+                {SERVICE_ICONS[data.id] ?? DEFAULT_ICON}
+              </div>
+            </div>
+          </div>
+
+          <h3 className="text-xl md:text-2xl font-bold leading-tight tracking-[-0.02em] text-[#161d1e] mb-2 pr-10">
+            {data.title}
+          </h3>
+          <p className="text-[11px] md:text-xs font-medium leading-relaxed text-[#3b494c] line-clamp-3">
+            {data.description}
+          </p>
+        </div>
+
+        {/* Middle Image Frame */}
+        {data.imageSrc && (
+          <div className="relative z-10 h-[130px] w-full flex items-center justify-center overflow-hidden select-none pointer-events-none">
+            <Image
+              src={data.imageSrc}
+              alt={data.title}
+              width={280}
+              height={160}
+              draggable={false}
+              className="object-contain h-full w-full max-h-[125px] transition-transform duration-300 group-hover:scale-105 select-none pointer-events-none"
+            />
+          </div>
+        )}
+
+        {/* Bottom Action Link */}
+        <div className="relative z-10 pt-2">
+          <Link
+            href={`/services/${data.id}`}
+            tabIndex={isFocused ? 0 : -1}
+            className={`inline-flex items-center gap-1.5 text-xs font-bold text-[#161d1e] transition-colors duration-200 hover:text-[#15b6e8] ${isFocused ? "pointer-events-auto" : "pointer-events-none"
+              }`}
           >
-            <path d="m9 18 6-6-6-6" />
-          </svg>
-        </Link>
+            View more
+            <svg
+              viewBox="0 0 24 24"
+              className="h-3.5 w-3.5 fill-none stroke-current stroke-[2.4] transition-transform duration-200 group-hover:translate-x-0.5"
+            >
+              <path d="m9 18 6-6-6-6" />
+            </svg>
+          </Link>
+        </div>
       </div>
     </div>
   );
