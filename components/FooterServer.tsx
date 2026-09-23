@@ -13,7 +13,7 @@ const companyLinks = [
   { label: 'About Us', href: '#' },
   { label: 'Portfolio', href: '#works' },
   { label: 'Case Studies', href: '#case-studies' },
-  { label: 'Contact', href: '#contact' },
+  { label: 'Contact', href: '/contact' },
 ];
 
 const serviceLinks = [

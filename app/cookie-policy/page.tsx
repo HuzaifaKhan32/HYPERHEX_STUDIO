@@ -48,7 +48,10 @@ export default function CookiePolicyPage() {
         {/* Hero / Header Section */}
         <header className="mb-12 border-b border-border/40 pb-8">
           <SectionPill label="Cookies & Telemetry" className="mb-4" />
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-black tracking-tight leading-tight mb-4 text-foreground">
+          <h1
+            className="text-4xl sm:text-5xl md:text-6xl font-black tracking-tight leading-tight mb-4 text-foreground"
+            style={{ fontFamily: 'var(--font-zalando-expanded, sans-serif)' }}
+          >
             Cookie Policy
           </h1>
           <p className="text-sm font-medium text-muted-foreground flex items-center gap-2">

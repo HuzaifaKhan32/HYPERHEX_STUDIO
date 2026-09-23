@@ -16,9 +16,8 @@ export default function NavbarLogoHover() {
       onHoverEnd={() => setIsLogoHovered(false)}
     >
       <Link
-        href="#"
-        onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
-        aria-label="HyperHex Studio — back to top"
+        href="/"
+        aria-label="HyperHex Studio — Home"
         className="relative z-10 flex h-11 w-11 2xl:h-14 2xl:w-14 shrink-0 items-center justify-center overflow-hidden rounded-full border border-white/20 bg-black/10 hover:scale-105 transition-transform duration-200"
       >
         <Image

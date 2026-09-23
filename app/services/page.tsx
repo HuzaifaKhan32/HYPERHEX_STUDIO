@@ -3,6 +3,8 @@ import Link from 'next/link';
 import Image from 'next/image';
 import NavbarServer from '@/components/NavbarServer';
 import FooterServer from '@/components/FooterServer';
+import SectionPill from '@/components/ui/SectionPill';
+import Button3D from '@/components/Button3D';
 import { SERVICES } from '@/lib/content-data';
 import { SITE_CONFIG } from '@/lib/site-config';
 
@@ -19,71 +21,82 @@ export const metadata: Metadata = {
   },
 };
 
+const skeuomorphicCardStyle = {
+  backgroundColor: 'rgb(244, 244, 245)',
+  borderRadius: '24px',
+  boxShadow:
+    'rgba(255, 255, 255, 0.6) 0px 4px 0px 0px inset, rgba(0, 0, 0, 0.05) 0px -8px 0px 0px inset, rgba(0, 0, 0, 0.1) 0px 3px 3px 0px, rgba(0, 0, 0, 0.06) 0px 7.77px 16px 0px',
+};
+
 export default function ServicesPage() {
   return (
-    <div className="min-h-screen bg-[#0b0f10] text-[#e0f7fa]">
+    <div className="min-h-screen bg-background text-foreground transition-colors duration-300">
       <NavbarServer />
-      
-      <main className="w-full pt-32 pb-24 px-6 md:px-12 max-w-7xl mx-auto">
+
+      <main className="w-full pt-32 md:pt-40 pb-16 md:pb-24 px-4 sm:px-6 md:px-12 max-w-7xl mx-auto">
         {/* Header section */}
-        <header className="mb-16 text-left max-w-3xl">
-          <div className="inline-flex items-center gap-2 rounded-full border border-[#15b6e8]/30 bg-[#15b6e8]/10 px-4 py-2 text-xs font-semibold text-[#15b6e8] mb-4">
-            Capabilities & Disciplines
-          </div>
-          <h1 className="text-4xl md:text-6xl lg:text-7xl font-black text-white tracking-tight leading-tight">
+        <header className="mb-10 text-left max-w-3xl">
+          <SectionPill label="Capabilities & Disciplines" className="mb-3" />
+          <h1
+            className="text-4xl md:text-6xl lg:text-7xl font-black text-foreground tracking-tight leading-tight"
+            style={{ fontFamily: 'var(--font-zalando-expanded, sans-serif)' }}
+          >
             Engineered Visual <span className="text-[#15b6e8]">Capabilities</span>
           </h1>
-          <p className="mt-4 text-[#a0b0b5] text-lg leading-relaxed">
+          <p className="mt-3 text-muted-foreground text-base md:text-lg leading-relaxed">
             From photorealistic 3D architectural rendering and interactive WebGL engines to high-converting commercial media — explore our end-to-end digital production disciplines.
           </p>
         </header>
 
-        {/* Services Grid */}
-        <section aria-label="Services List" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {/* Services Grid (Compact cards to fit row in frame) */}
+        <section aria-label="Services List" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {SERVICES.map((service) => (
             <article
               key={service.id}
-              className="group relative flex flex-col justify-between rounded-2xl border border-white/10 bg-[#12181a] p-6 transition-all duration-300 hover:border-[#15b6e8]/50 hover:bg-[#162023] hover:shadow-[0_0_30px_rgba(21,182,232,0.15)]"
+              className="group relative flex flex-col justify-between p-5 transition-transform duration-200 hover:-translate-y-1 text-[#161d1e]"
+              style={skeuomorphicCardStyle}
             >
               <div>
-                <div className="flex items-center justify-between mb-4">
-                  <span className="text-xs font-bold tracking-widest text-[#15b6e8]">
-                    {service.counter}
-                  </span>
+                <div className="flex items-center justify-between mb-3">
+                  <SectionPill label={service.counter} />
                 </div>
-                <div className="relative w-full h-48 mb-6 overflow-hidden rounded-xl bg-[#0b0f10]">
+
+                <div className="relative w-full h-32 mb-4 overflow-hidden rounded-xl bg-white/70 shadow-inner">
                   <Image
                     src={service.imageSrc}
                     alt={service.title}
                     fill
-                    className="object-contain p-4 transition-transform duration-500 group-hover:scale-105"
+                    className="object-contain p-2.5 transition-transform duration-500 group-hover:scale-105"
                   />
                 </div>
-                <h2 className="text-2xl font-bold text-white mb-3 group-hover:text-[#15b6e8] transition-colors">
+
+                <h2
+                  className="text-xl font-bold text-[#161d1e] mb-2 group-hover:text-[#15b6e8] transition-colors"
+                  style={{ fontFamily: 'var(--font-zalando-expanded, sans-serif)' }}
+                >
                   {service.title}
                 </h2>
-                <p className="text-sm text-[#a0b0b5] leading-relaxed mb-6">
+
+                <p className="text-xs text-[#3b494c] leading-relaxed mb-4 line-clamp-2 font-medium">
                   {service.description}
                 </p>
 
                 {/* Capabilities snippet */}
-                <div className="space-y-1.5 mb-6">
+                <div className="space-y-1.5 mb-5">
                   {service.capabilities.slice(0, 3).map((cap, i) => (
-                    <div key={i} className="flex items-center text-xs text-[#80959c]">
-                      <span className="w-1.5 h-1.5 rounded-full bg-[#15b6e8] mr-2" />
-                      {cap}
+                    <div key={i} className="flex items-center text-xs font-semibold text-[#161d1e]">
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#15b6e8] mr-2 shrink-0 shadow-[0_0_6px_#15b6e8]" />
+                      <span className="truncate">{cap}</span>
                     </div>
                   ))}
                 </div>
               </div>
 
-              <Link
-                href={`/services/${service.slug}`}
-                className="inline-flex items-center justify-between w-full py-3 px-4 rounded-xl border border-white/10 bg-white/5 text-xs font-semibold text-white transition-all group-hover:border-[#15b6e8] group-hover:bg-[#15b6e8] group-hover:text-[#0b0f10]"
-              >
-                <span>Explore Discipline</span>
-                <span>→</span>
-              </Link>
+              <div className="pt-2">
+                <Button3D href={`/services/${service.slug}`} className="w-full justify-center">
+                  Explore Discipline
+                </Button3D>
+              </div>
             </article>
           ))}
         </section>

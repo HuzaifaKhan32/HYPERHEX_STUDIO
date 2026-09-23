@@ -4,7 +4,10 @@
 import { motion, AnimatePresence, useMotionValueEvent, useScroll } from 'framer-motion';
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import Button3D from './Button3D';
+
+const MotionLink = motion.create(Link);
 
 type NavLink = {
   id: string;
@@ -48,12 +51,6 @@ function HamburgerIcon({ isOpen, scrolled }: { isOpen: boolean; scrolled: boolea
 }
 
 function MobileMenuDrawer({ isOpen, onClose, links }: { isOpen: boolean; onClose: () => void; links: NavLink[] }) {
-  const handleNav = (href: string) => {
-    onClose();
-    if (href === '#') { window.scrollTo({ top: 0, behavior: 'smooth' }); return; }
-    document.getElementById(href.replace('#', ''))?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  };
-
   return (
     <AnimatePresence>
       {isOpen && (
@@ -90,7 +87,7 @@ function MobileMenuDrawer({ isOpen, onClose, links }: { isOpen: boolean; onClose
             >
               {/* Panel top bar */}
               <div className="flex items-center justify-between px-4 pt-4 pb-3">
-                <div className="flex items-center gap-2.5">
+                <Link href="/" onClick={onClose} className="flex items-center gap-2.5">
                   <div className="relative h-11 w-11 shrink-0 overflow-hidden rounded-full border border-black/10 bg-black/10">
                     <Image
                       src="/logo/hyperhex-logo-H.avif"
@@ -107,7 +104,7 @@ function MobileMenuDrawer({ isOpen, onClose, links }: { isOpen: boolean; onClose
                   >
                     HyperHex Studio
                   </span>
-                </div>
+                </Link>
 
                 {/* Close button */}
                 <button
@@ -125,9 +122,10 @@ function MobileMenuDrawer({ isOpen, onClose, links }: { isOpen: boolean; onClose
               {/* Nav links */}
               <nav className="flex flex-col px-3 pt-2 pb-2">
                 {links.map((link, i) => (
-                  <motion.button
+                  <MotionLink
                     key={link.id}
-                    onClick={() => handleNav(link.href)}
+                    href={link.href}
+                    onClick={onClose}
                     className="group flex items-center justify-between w-full px-4 py-3.5 rounded-xl text-left font-bold text-[15px] text-on-surface/75 hover:text-on-surface hover:bg-inverse-surface/5 transition-all duration-200 uppercase tracking-tight"
                     initial={{ opacity: 0, x: -10 }}
                     animate={{ opacity: 1,  x: 0   }}
@@ -141,7 +139,7 @@ function MobileMenuDrawer({ isOpen, onClose, links }: { isOpen: boolean; onClose
                     >
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M14 5l7 7m0 0l-7 7m7-7H3" />
                     </svg>
-                  </motion.button>
+                  </MotionLink>
                 ))}
               </nav>
 
@@ -156,7 +154,7 @@ function MobileMenuDrawer({ isOpen, onClose, links }: { isOpen: boolean; onClose
                 transition={{ delay: 0.28, duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
               >
                 <Button3D
-                  href="#contact"
+                  href="/contact"
                   onClick={onClose}
                   className="flex-1 justify-center"
                 >

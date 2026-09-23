@@ -4,6 +4,8 @@ import Link from 'next/link';
 import Image from 'next/image';
 import NavbarServer from '@/components/NavbarServer';
 import FooterServer from '@/components/FooterServer';
+import SectionPill from '@/components/ui/SectionPill';
+import Button3D from '@/components/Button3D';
 import { PROJECTS, SERVICES, getProjectBySlug } from '@/lib/content-data';
 import { SITE_CONFIG } from '@/lib/site-config';
 
@@ -49,6 +51,13 @@ export async function generateMetadata({ params }: ProjectPageProps): Promise<Me
   };
 }
 
+const skeuomorphicCardStyle = {
+  backgroundColor: 'rgb(244, 244, 245)',
+  borderRadius: '24px',
+  boxShadow:
+    'rgba(255, 255, 255, 0.6) 0px 4px 0px 0px inset, rgba(0, 0, 0, 0.05) 0px -8px 0px 0px inset, rgba(0, 0, 0, 0.1) 0px 3px 3px 0px, rgba(0, 0, 0, 0.06) 0px 7.77px 16px 0px',
+};
+
 export default async function ProjectDetailPage({ params }: ProjectPageProps) {
   const { slug } = await params;
   const project = getProjectBySlug(slug);
@@ -70,56 +79,63 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
   const relatedServices = SERVICES.filter((s) => project.serviceIds?.includes(s.id));
 
   return (
-    <div className="min-h-screen bg-[#0b0f10] text-[#e0f7fa]">
+    <div className="min-h-screen bg-background text-foreground transition-colors duration-300">
       <NavbarServer />
 
-      <main className="w-full pt-32 pb-24 px-6 md:px-12 max-w-7xl mx-auto space-y-16">
+      <main className="w-full pt-32 md:pt-40 pb-20 md:pb-28 px-4 sm:px-6 md:px-12 max-w-7xl mx-auto space-y-16">
         {/* Header & Meta */}
         <header className="max-w-4xl space-y-6">
           <div className="flex flex-wrap items-center gap-3 text-xs font-semibold text-[#15b6e8]">
             <Link href="/projects" className="hover:underline">Projects</Link>
             <span>/</span>
-            <span className="text-[#a0b0b5]">
+            <span className="text-muted-foreground">
               {Array.isArray(project.category) ? project.category.join(' • ') : project.category}
             </span>
           </div>
 
-          <h1 className="text-4xl md:text-6xl font-black text-white tracking-tight leading-tight">
+          <h1
+            className="text-4xl md:text-6xl font-black text-foreground tracking-tight leading-tight"
+            style={{ fontFamily: 'var(--font-zalando-expanded, sans-serif)' }}
+          >
             {project.title}
           </h1>
 
-          <p className="text-lg text-[#a0b0b5] leading-relaxed">
+          <p className="text-lg text-muted-foreground leading-relaxed">
             {project.description}
           </p>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 pt-6 border-t border-white/10 text-xs">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 pt-6 border-t border-border/40 text-xs">
             <div>
-              <span className="text-[#60757c] uppercase block mb-1">Brand / Client</span>
-              <span className="font-semibold text-white">{project.brand}</span>
+              <span className="text-muted-foreground uppercase block mb-1 font-mono text-[10px]">Brand / Client</span>
+              <span className="font-semibold text-foreground">{project.brand}</span>
             </div>
             <div>
-              <span className="text-[#60757c] uppercase block mb-1">Category</span>
-              <span className="font-semibold text-white">
+              <span className="text-muted-foreground uppercase block mb-1 font-mono text-[10px]">Category</span>
+              <span className="font-semibold text-foreground">
                 {Array.isArray(project.category) ? project.category[0] : project.category}
               </span>
             </div>
             <div>
-              <span className="text-[#60757c] uppercase block mb-1">Format</span>
+              <span className="text-muted-foreground uppercase block mb-1 font-mono text-[10px]">Format</span>
               <span className="font-semibold text-[#15b6e8]">
                 {project.isVideo ? 'Cinematic 3D Video' : '3D Render / Interactive'}
               </span>
             </div>
             <div>
-              <span className="text-[#60757c] uppercase block mb-1">Status</span>
-              <span className="font-semibold text-emerald-400">Production Complete</span>
+              <span className="text-muted-foreground uppercase block mb-1 font-mono text-[10px]">Status</span>
+              <span className="font-semibold text-emerald-600">Production Complete</span>
             </div>
           </div>
         </header>
 
         {/* Media Player or Showcase Image */}
-        <section aria-label="Media Showcase" className="w-full rounded-2xl border border-white/10 bg-[#12181a] overflow-hidden shadow-[0_0_50px_rgba(21,182,232,0.1)]">
+        <section
+          aria-label="Media Showcase"
+          className="w-full overflow-hidden p-2 sm:p-4"
+          style={skeuomorphicCardStyle}
+        >
           {project.isVideo && project.embedUrl ? (
-            <div className="relative aspect-video w-full">
+            <div className="relative aspect-video w-full rounded-2xl overflow-hidden">
               <iframe
                 src={project.embedUrl}
                 title={project.title}
@@ -129,7 +145,7 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
               />
             </div>
           ) : (
-            <div className="relative aspect-video w-full">
+            <div className="relative aspect-video w-full rounded-2xl overflow-hidden">
               <Image
                 src={project.imageUrl}
                 alt={project.title}
@@ -143,11 +159,21 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
 
         {/* Gallery grid if available */}
         {project.gallery && project.gallery.length > 0 && (
-          <section aria-label="Project Gallery" className="space-y-6 border-t border-white/10 pt-12">
-            <h2 className="text-2xl font-bold text-white">Project Stills & Rendering Suite</h2>
+          <section aria-label="Project Gallery" className="space-y-6 border-t border-border/40 pt-12">
+            <SectionPill label="Stills Suite" className="mb-3" />
+            <h2
+              className="text-2xl font-bold text-foreground"
+              style={{ fontFamily: 'var(--font-zalando-expanded, sans-serif)' }}
+            >
+              Project Stills &amp; Rendering Suite
+            </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {project.gallery.map((img, i) => (
-                <div key={i} className="relative aspect-video rounded-xl overflow-hidden border border-white/10 bg-[#0b0f10]">
+                <div
+                  key={i}
+                  className="relative aspect-video overflow-hidden transition-transform duration-200 hover:-translate-y-1"
+                  style={skeuomorphicCardStyle}
+                >
                   <Image
                     src={img}
                     alt={`${project.title} Still ${i + 1}`}
@@ -162,21 +188,28 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
 
         {/* Related Services */}
         {relatedServices.length > 0 && (
-          <section aria-label="Related Services" className="border-t border-white/10 pt-12 space-y-6">
-            <h2 className="text-2xl font-bold text-white">Disciplines & Services Applied</h2>
+          <section aria-label="Related Services" className="border-t border-border/40 pt-12 space-y-6">
+            <SectionPill label="Services Applied" className="mb-3" />
+            <h2
+              className="text-2xl font-bold text-foreground"
+              style={{ fontFamily: 'var(--font-zalando-expanded, sans-serif)' }}
+            >
+              Disciplines &amp; Services Applied
+            </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {relatedServices.map((service) => (
                 <Link
                   key={service.id}
                   href={`/services/${service.slug}`}
-                  className="p-6 rounded-xl border border-white/10 bg-[#12181a] flex items-center justify-between transition-colors hover:border-[#15b6e8]"
+                  className="p-5 flex items-center justify-between transition-transform duration-200 hover:-translate-y-1 text-[#161d1e]"
+                  style={skeuomorphicCardStyle}
                 >
                   <div>
-                    <span className="text-xs text-[#15b6e8] font-bold">{service.counter}</span>
-                    <h3 className="text-lg font-bold text-white">{service.title}</h3>
-                    <p className="text-xs text-[#a0b0b5] mt-1">{service.description}</p>
+                    <SectionPill label={service.counter} className="mb-2" />
+                    <h3 className="text-lg font-bold text-[#161d1e]">{service.title}</h3>
+                    <p className="text-xs text-[#3b494c] mt-1">{service.description}</p>
                   </div>
-                  <span className="text-[#15b6e8] text-xl">→</span>
+                  <span className="text-[#15b6e8] text-xl font-bold">→</span>
                 </Link>
               ))}
             </div>
@@ -185,24 +218,38 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
 
         {/* Related Projects */}
         {relatedProjects.length > 0 && (
-          <section aria-label="Related Case Studies" className="border-t border-white/10 pt-12 space-y-6">
+          <section aria-label="Related Case Studies" className="border-t border-border/40 pt-12 space-y-6">
             <div className="flex items-center justify-between">
-              <h2 className="text-2xl font-bold text-white">Related Case Studies</h2>
+              <h2
+                className="text-2xl font-bold text-foreground"
+                style={{ fontFamily: 'var(--font-zalando-expanded, sans-serif)' }}
+              >
+                Related Case Studies
+              </h2>
               <Link href="/projects" className="text-sm text-[#15b6e8] font-semibold hover:underline">
                 View All →
               </Link>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {relatedProjects.map((rel) => (
-                <article key={rel.id} className="group rounded-xl border border-white/10 bg-[#12181a] overflow-hidden">
-                  <Link href={`/projects/${rel.slug}`} className="block relative aspect-video">
-                    <Image src={rel.imageUrl} alt={rel.title} fill className="object-cover group-hover:scale-105 transition-transform" />
-                  </Link>
-                  <div className="p-4 space-y-2">
-                    <h3 className="text-sm font-bold text-white group-hover:text-[#15b6e8]">
-                      <Link href={`/projects/${rel.slug}`}>{rel.title}</Link>
-                    </h3>
+                <article
+                  key={rel.id}
+                  className="group flex flex-col justify-between p-4 overflow-hidden transition-transform duration-200 hover:-translate-y-1 text-[#161d1e]"
+                  style={skeuomorphicCardStyle}
+                >
+                  <div>
+                    <Link href={`/projects/${rel.slug}`} className="block relative aspect-video bg-white/60 rounded-xl overflow-hidden mb-3">
+                      <Image src={rel.imageUrl} alt={rel.title} fill className="object-cover group-hover:scale-105 transition-transform" />
+                    </Link>
+                    <div className="space-y-1 mb-3">
+                      <h3 className="text-sm font-bold text-[#161d1e] group-hover:text-[#15b6e8]">
+                        <Link href={`/projects/${rel.slug}`}>{rel.title}</Link>
+                      </h3>
+                    </div>
                   </div>
+                  <Button3D href={`/projects/${rel.slug}`} className="w-full justify-center">
+                    Explore
+                  </Button3D>
                 </article>
               ))}
             </div>

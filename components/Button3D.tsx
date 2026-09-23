@@ -20,6 +20,7 @@ interface Button3DProps {
   arrowDirection?: keyof typeof ARROW_PATHS;
   disabled?: boolean;
   loading?: boolean;
+  variant?: 'primary' | 'secondary' | 'gray';
 }
 
 export default function Button3D({
@@ -32,10 +33,12 @@ export default function Button3D({
   arrowDirection = 'up-right',
   disabled = false,
   loading = false,
+  variant = 'primary',
 }: Button3DProps) {
   const [isHovered, setIsHovered] = useState(false);
 
   const isDisabled = disabled || loading;
+  const isGray = variant === 'secondary' || variant === 'gray';
 
   const buttonClasses = `group relative inline-flex items-center gap-3 rounded-[100px] py-1.5 pl-4 pr-1.5 2xl:py-2.5 2xl:pl-6 2xl:pr-2.5 outline-none transition-opacity ${
     loading
@@ -54,7 +57,7 @@ export default function Button3D({
     >
       <path
         d={ARROW_PATHS[arrowDirection]}
-        stroke="black"
+        stroke={isGray ? '#15b6e8' : 'black'}
         strokeWidth="2"
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -86,11 +89,15 @@ export default function Button3D({
   );
 
   const labelContent = (
-    <span className="flex items-center gap-2 2xl:gap-3 font-[family-name:var(--font-dm-sans)] text-xs 2xl:text-sm font-bold uppercase tracking-wide text-white">
+    <span
+      className={`flex items-center gap-2 2xl:gap-3 font-[family-name:var(--font-dm-sans)] text-xs 2xl:text-sm font-bold uppercase tracking-wide ${
+        isGray ? 'text-[#161d1e]' : 'text-white'
+      }`}
+    >
       {showDot && !loading && (
         <span
-          className="h-1.5 w-1.5 shrink-0 rounded-[100px] 2xl:h-2 2xl:w-2"
-          style={{ backgroundColor: 'rgb(255, 255, 255)' }}
+          className="h-1.5 w-1.5 shrink-0 rounded-[100px] 2xl:h-2 2xl:w-2 shadow-[0_0_6px_#15b6e8]"
+          style={{ backgroundColor: isGray ? '#15b6e8' : 'rgb(255, 255, 255)' }}
         />
       )}
       {children}
@@ -105,17 +112,21 @@ export default function Button3D({
       <div
         className="absolute inset-0 z-0 rounded-[100px]"
         style={{
-          background: 'linear-gradient(180deg, #6cdcfb 0%, #0d8ec4 100%)',
+          background: isGray
+            ? 'linear-gradient(180deg, #ffffff 0%, #cbd5e1 100%)'
+            : 'linear-gradient(180deg, #6cdcfb 0%, #0d8ec4 100%)',
           opacity: 1,
         }}
       />
 
-      {/* 2. Main BG (The Cyan body with a pillowy top inner-shadow) */}
+      {/* 2. Main BG (Pillowy top inner-shadow) */}
       <div
         className="absolute inset-[1px] z-0 rounded-[100px]"
         style={{
-          backgroundColor: '#15b6e8',
-          boxShadow: 'rgba(255, 255, 255, 0.4) 0px 4px 6px 0px inset',
+          backgroundColor: isGray ? 'rgb(244, 244, 245)' : '#15b6e8',
+          boxShadow: isGray
+            ? 'rgba(255, 255, 255, 0.9) 0px 4px 6px 0px inset, rgba(0, 0, 0, 0.06) 0px -2px 0px 0px inset'
+            : 'rgba(255, 255, 255, 0.4) 0px 4px 6px 0px inset',
           opacity: 1,
         }}
       />
@@ -144,7 +155,7 @@ export default function Button3D({
           className="relative flex h-8 w-8 shrink-0 items-center justify-center overflow-hidden rounded-[100px] text-[#15b6e8] 2xl:h-10 2xl:w-10"
           style={{
             backgroundColor: 'rgb(255, 255, 255)',
-            boxShadow: 'rgba(255, 255, 255, 0.3) 0px 4px 6px 0px',
+            boxShadow: 'rgba(0, 0, 0, 0.1) 0px 3px 6px 0px',
             opacity: 1,
             willChange: 'transform',
           }}
