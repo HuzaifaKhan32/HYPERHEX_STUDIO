@@ -116,7 +116,7 @@ function getSpatialState(offset: number, multiplier: number = 1, cardScale: numb
     rotateY: isLeft ? 60 : -60,
     rotateZ: isLeft ? -10 : 10,
     opacity: 0,
-    blur: 2,
+    blur: 0,
     zIndex: 0,
     pointerEvents: 'none',
   };
@@ -208,10 +208,6 @@ function CarouselCardItem({
   const opacity = useTransform(effectiveOffset, (off) =>
     getInterpolatedSpatialState(off, responsiveMultiplier, desktopScale).opacity
   );
-  const filter = useTransform(effectiveOffset, (off) => {
-    const b = getInterpolatedSpatialState(off, responsiveMultiplier, desktopScale).blur;
-    return b > 0 ? `blur(${b}px)` : 'none';
-  });
   const zIndex = useTransform(effectiveOffset, (off) =>
     getInterpolatedSpatialState(off, responsiveMultiplier, desktopScale).zIndex
   );
@@ -249,12 +245,12 @@ function CarouselCardItem({
         rotateZ,
         scale,
         opacity,
-        filter,
         zIndex,
         pointerEvents,
         transformStyle: 'preserve-3d',
         WebkitBackfaceVisibility: 'hidden',
         backfaceVisibility: 'hidden',
+        WebkitFontSmoothing: 'antialiased',
         willChange: 'transform, opacity',
       }}
     >

@@ -169,7 +169,7 @@ export const SERVICES: Service[] = [
     id: 'interactive-real-time',
     slug: 'interactive-real-time',
     counter: '08 / 09',
-    title: 'Interactive Real Time',
+    title: 'Real-Time 3D',
     description: 'Real-time 3D graphics engines delivering zero-latency visual feedback and physical interactions.',
     longDescription: 'High-performance interactive 3D graphics engines delivering zero-latency visual feedback, physics simulation, and real-time ray-traced viewports in browser and desktop applications.',
     imageSrc: '/services/real-time-interactive.webp',

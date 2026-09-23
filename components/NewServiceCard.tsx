@@ -59,12 +59,14 @@ const SERVICE_ICONS: Record<string, ReactNode> = {
   ),
   "3d-animation": (
     <svg viewBox="0 0 24 24" className="h-5 w-5 fill-none stroke-white stroke-[2]">
-      <circle cx="12" cy="12" r="2.5" />
-      <path d="M12 9.5V5M12 14.5V19M9.5 12H5M14.5 12H19" />
-      <circle cx="5" cy="5" r="2.5" />
-      <circle cx="19" cy="5" r="2.5" />
-      <circle cx="5" cy="19" r="2.5" />
-      <circle cx="19" cy="19" r="2.5" />
+      <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 14a4 4 0 1 1 4-4 4 4 0 0 1-4 4z" />
+      <path d="M12 6v2M12 16v2M6 12H4M20 12h-2" />
+    </svg>
+  ),
+  "drone-animation": (
+    <svg viewBox="0 0 24 24" className="h-5 w-5 fill-none stroke-white stroke-[2]">
+      <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 14a4 4 0 1 1 4-4 4 4 0 0 1-4 4z" />
+      <path d="M12 6v2M12 16v2M6 12H4M20 12h-2" />
     </svg>
   ),
   "web-development": (
@@ -75,6 +77,11 @@ const SERVICE_ICONS: Record<string, ReactNode> = {
     </svg>
   ),
   "interactive-real-time": (
+    <svg viewBox="0 0 24 24" className="h-5 w-5 fill-none stroke-white stroke-[2]">
+      <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+    </svg>
+  ),
+  "real-time-3d": (
     <svg viewBox="0 0 24 24" className="h-5 w-5 fill-none stroke-white stroke-[2]">
       <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
     </svg>
@@ -117,10 +124,12 @@ export default function ServiceCard({
           backgroundColor: '#f4f4f5',
           borderRadius: '24px',
           border: isFocused ? '1.5px solid rgba(21, 182, 232, 0.85)' : 'none',
-
           boxShadow: isFocused
             ? '0 12px 30px rgba(21, 182, 232, 0.3), 0 20px 40px -10px rgba(6, 182, 212, 0.25)'
             : '0px 8px 24px rgba(15, 23, 42, 0.06), 0px 2px 6px rgba(15, 23, 42, 0.04)',
+          WebkitFontSmoothing: 'antialiased',
+          MozOsxFontSmoothing: 'grayscale',
+          transform: 'translateZ(0)',
           ...style,
         }}
       >
@@ -202,10 +211,12 @@ export default function ServiceCard({
             <Image
               src={data.imageSrc}
               alt={data.title}
-              width={280}
-              height={160}
+              width={360}
+              height={240}
+              quality={95}
               draggable={false}
-              className="object-contain h-full w-full max-h-[125px] transition-transform duration-300 group-hover:scale-105 select-none pointer-events-none"
+              style={{ imageRendering: '-webkit-optimize-contrast' }}
+              className="object-contain h-full w-full max-h-[125px] transition-transform duration-300 group-hover:scale-105 select-none pointer-events-none drop-shadow-[0_6px_14px_rgba(15,23,42,0.12)]"
             />
           </div>
         )}
@@ -215,8 +226,9 @@ export default function ServiceCard({
           <Link
             href={`/services/${data.id}`}
             tabIndex={isFocused ? 0 : -1}
-            className={`inline-flex items-center gap-1.5 text-xs font-bold text-[#161d1e] transition-colors duration-200 hover:text-[#15b6e8] ${isFocused ? "pointer-events-auto" : "pointer-events-none"
-              }`}
+            className={`inline-flex items-center gap-1.5 text-xs font-bold text-[#161d1e] transition-colors duration-200 hover:text-[#15b6e8] ${
+              isFocused ? "pointer-events-auto" : "pointer-events-none"
+            }`}
           >
             View more
             <svg
