@@ -126,10 +126,12 @@ export default function CaseStudyModal({ caseStudy, onClose }: CaseStudyModalPro
                     src={caseStudy.thumbnail}
                     alt={caseStudy.title}
                     fill
-                    sizes="(max-width: 1024px) 100vw, 896px"
+                    sizes="100vw"
+                    quality={100}
+                    unoptimized
                     draggable={false}
                     onDragStart={(e) => e.preventDefault()}
-                    style={{ userSelect: 'none', WebkitUserDrag: 'none' } as React.CSSProperties}
+                    style={{ userSelect: 'none', WebkitUserDrag: 'none', imageRendering: '-webkit-optimize-contrast' } as React.CSSProperties}
                     className="object-contain select-none pointer-events-none"
                     priority
                   />

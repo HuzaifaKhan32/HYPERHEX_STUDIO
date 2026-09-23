@@ -473,9 +473,11 @@ export default function LatestWorkGallery() {
                           src={selectedProject.gallery[currentImageIndex]}
                           alt={`${selectedProject.title} - Image ${currentImageIndex + 1}`}
                           fill
-                          sizes="(max-width: 1024px) 100vw, 896px"
-                          quality={95}
-                          className="object-cover"
+                          sizes="100vw"
+                          quality={100}
+                          unoptimized
+                          style={{ imageRendering: '-webkit-optimize-contrast' }}
+                          className={`${selectedProject.objectFit === 'contain' ? 'object-contain' : 'object-cover'} object-center`}
                           priority
                         />
                       </motion.div>
@@ -518,9 +520,11 @@ export default function LatestWorkGallery() {
                       src={selectedProject.imageUrl}
                       alt={selectedProject.title}
                       fill
-                      sizes="(max-width: 1024px) 100vw, 896px"
-                      quality={95}
-                      className="object-cover"
+                      sizes="100vw"
+                      quality={100}
+                      unoptimized
+                      style={{ imageRendering: '-webkit-optimize-contrast' }}
+                      className={`${selectedProject.objectFit === 'contain' ? 'object-contain' : 'object-cover'} object-center`}
                       priority
                     />
                   </div>

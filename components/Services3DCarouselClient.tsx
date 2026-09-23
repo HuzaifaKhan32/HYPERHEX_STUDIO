@@ -254,20 +254,35 @@ function CarouselCardItem({
         willChange: 'transform, opacity',
       }}
     >
-      {/* Ground Contact Shadows (Dark Slate Gray for Side Cards, Cyan for Active Center Card) */}
+      {/* Base Ground Contact Shadow (Dark Slate Gray for Side Cards) */}
       <motion.div
-        className="pointer-events-none absolute left-1/2 -translate-x-1/2 transition-all duration-500 ease-out"
+        className="pointer-events-none absolute left-1/2 -translate-x-1/2"
         style={{
           bottom: -30,
           width: '70%',
           height: 14,
           borderRadius: '50%',
-          background: isFocused
-            ? 'radial-gradient(ellipse at center, rgba(0, 240, 255, 0.35) 0%, rgba(0, 0, 0, 0.2) 40%, transparent 70%)'
-            : 'radial-gradient(ellipse at center, rgba(15, 23, 42, 0.45) 0%, rgba(0, 0, 0, 0.3) 50%, transparent 75%)',
+          background: 'radial-gradient(ellipse at center, rgba(15, 23, 42, 0.45) 0%, rgba(0, 0, 0, 0.3) 50%, transparent 75%)',
           filter: 'blur(10px)',
           scale: shadowScale,
           opacity: shadowOpacity,
+        }}
+      />
+
+      {/* Cyan Ground Contact Shadow for Active Center Card (Smooth GPU Opacity Fade) */}
+      <motion.div
+        className="pointer-events-none absolute left-1/2 -translate-x-1/2"
+        initial={false}
+        animate={{ opacity: isFocused ? 1 : 0 }}
+        transition={{ duration: 0.25, ease: 'easeInOut' }}
+        style={{
+          bottom: -30,
+          width: '70%',
+          height: 14,
+          borderRadius: '50%',
+          background: 'radial-gradient(ellipse at center, rgba(0, 240, 255, 0.35) 0%, rgba(0, 0, 0, 0.2) 40%, transparent 70%)',
+          filter: 'blur(10px)',
+          scale: shadowScale,
         }}
       />
 
@@ -316,10 +331,10 @@ export default function Services3DCarouselClient({ services }: Services3DCarouse
         setDesktopScale(1.0);
       } else if (width < 1790) {
         setResponsiveMultiplier(1.14);
-        setDesktopScale(1.18);
+        setDesktopScale(1.0); // Capped at 1.0 to prevent JS upscaling raster blur on 4K
       } else {
         setResponsiveMultiplier(1.28);
-        setDesktopScale(1.32);
+        setDesktopScale(1.0); // Capped at 1.0 to prevent JS upscaling raster blur on 4K
       }
     };
 
