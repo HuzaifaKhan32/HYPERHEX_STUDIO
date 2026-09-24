@@ -134,9 +134,22 @@ function FeaturedHeading() {
         <SectionPill label="Featured Projects" />
       </motion.div>
 
-      <h2 className="flex flex-col items-center text-5xl md:text-7xl lg:text-8xl 2xl:text-9xl font-black tracking-tight" style={{ fontFamily: 'var(--font-zalando-expanded, sans-serif)' }}>
-        <motion.span variants={revealVariants} className="text-[#161d1e] tracking-wide">Featured</motion.span>
-        <motion.span variants={revealVariants} className="tracking-wider bg-gradient-to-b from-[#15b6e8] to-transparent bg-clip-text text-transparent">Projects</motion.span>
+      <h2 className="flex flex-col items-center font-black tracking-tight" style={{ fontFamily: 'var(--font-zalando-expanded, sans-serif)' }}>
+        {/* "Featured" — one full size step larger than "Projects" at every breakpoint */}
+        <motion.span
+          variants={revealVariants}
+          className="text-[#161d1e] tracking-wide"
+          style={{ fontSize: 'clamp(3rem, 8vw, 8rem)', lineHeight: 0.75 }}
+        >
+          Featured
+        </motion.span>
+        <motion.span
+          variants={revealVariants}
+          className="tracking-wider bg-gradient-to-b from-[#15b6e8] to-transparent bg-clip-text text-transparent"
+          style={{ fontSize: 'clamp(2.8rem, 7vw, 7rem)' }}
+        >
+          Projects
+        </motion.span>
       </h2>
     </motion.div>
   );
@@ -165,8 +178,8 @@ export default function CaseStudiesSection() {
   const mainCardW = useMemo(() => {
     if (vw < 640) return vw * 0.80;
     if (vw < 768) return vw * 0.60;
-    if (vw < 1280) return vw * 0.65;
-    if (vw < 1536) return vw * 0.48;
+    if (vw < 1280) return vw * 0.54;  // laptop md→lg: reduced from 0.65
+    if (vw < 1536) return vw * 0.42;  // laptop lg→xl: reduced from 0.48
     return vw * 0.40;
   }, [vw]);
 
@@ -349,7 +362,7 @@ export default function CaseStudiesSection() {
               <div
                 key={`sub-${idx}`}
                 onClick={() => setSelected(study)}
-                className="w-[70vw] sm:w-[48vw] md:w-[42vw] lg:w-[33vw] xl:w-[29vw] 2xl:w-[25vw] aspect-[16/9] shrink-0 group cursor-pointer overflow-hidden rounded-xl border bg-surface-bright shadow-lg transition-all duration-500 hover:border-[var(--color-accent)]/80 border-white/10"
+                className="w-[70vw] sm:w-[48vw] md:w-[42vw] lg:w-[27vw] xl:w-[23vw] 2xl:w-[25vw] aspect-[16/9] shrink-0 group cursor-pointer overflow-hidden rounded-xl border bg-surface-bright shadow-lg transition-all duration-500 hover:border-[var(--color-accent)]/80 border-white/10"
                 data-cursor="project"
               >
                 <div className="relative w-full h-full overflow-hidden select-none">
