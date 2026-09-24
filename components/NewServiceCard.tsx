@@ -118,26 +118,21 @@ export default function ServiceCard({
 
       {/* MAIN CARD */}
       <div
-        className={`group relative flex w-[300px] md:w-[320px] 2xl:w-[375px] h-[360px] md:h-[370px] 2xl:h-[425px] p-6 2xl:p-7 flex-col justify-between overflow-hidden transition-all duration-500 ease-out z-10 select-none outline-none focus:outline-none [WebkitTapHighlightColor:transparent] ${className}`}
+        className={`group relative flex w-[300px] md:w-[320px] 2xl:w-[375px] h-[360px] md:h-[370px] 2xl:h-[425px] p-6 2xl:p-7 flex-col justify-between overflow-hidden transition-all duration-300 ease-out z-10 select-none outline-none focus:outline-none [WebkitTapHighlightColor:transparent] ${className}`}
         style={{
           boxSizing: 'border-box',
           backgroundColor: '#f4f4f5',
           borderRadius: '24px',
-          border: '1.5px solid transparent',
-          boxShadow: '0px 8px 24px rgba(15, 23, 42, 0.06), 0px 2px 6px rgba(15, 23, 42, 0.04)',
+          border: isFocused ? '2px solid #15b6e8' : '2px solid transparent',
+          boxShadow: isFocused
+            ? '0px 4px 0px 0px rgba(21, 182, 232, 1), rgba(255, 255, 255, 0.6) 0px 4px 0px 0px inset, rgba(0, 0, 0, 0.05) 0px -8px 0px 0px inset'
+            : 'rgba(255, 255, 255, 0.6) 0px 4px 0px 0px inset, rgba(0, 0, 0, 0.05) 0px -8px 0px 0px inset, rgba(0, 0, 0, 0.1) 0px 3px 3px 0px, rgba(0, 0, 0, 0.06) 0px 7.77px 16px 0px',
           WebkitFontSmoothing: 'antialiased',
           MozOsxFontSmoothing: 'grayscale',
           transform: 'translateZ(0)',
           ...style,
         }}
       >
-        {/* ACTIVE BLUE SHADOW & BORDER OVERLAY (GPU Opacity Fade) */}
-        <motion.div
-          className="pointer-events-none absolute inset-0 rounded-[24px] border-[1.5px] border-[#15b6e8]/85 shadow-[0_12px_30px_rgba(21,182,232,0.3),0_20px_40px_-10px_rgba(6,182,212,0.25)] z-0"
-          initial={false}
-          animate={{ opacity: isFocused ? 1 : 0 }}
-          transition={{ duration: 0.25, ease: 'easeInOut' }}
-        />
         {/* Top Section: Counter + Icon with Perfectly Centered Concentric Circles */}
         <div className="relative z-10">
           <div className="flex items-center justify-between mb-3">
