@@ -6,6 +6,7 @@ import Image from 'next/image';
 import Button3D from './Button3D';
 import StaggeredHeading from '@/components/ui/StaggeredHeading';
 import SectionPill from '@/components/ui/SectionPill';
+import YouTubeFacade from '@/components/YouTubeFacade';
 
 const BLACK = '#161d1e';
 const ACCENT = '#15b6e8';
@@ -431,32 +432,12 @@ export default function LatestWorkGallery() {
 
                 {selectedProject.isVideo ? (
                   <div className="relative w-full aspect-video">
-                    {iframeError ? (
-                      <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 bg-black p-8 text-white">
-                        <svg className="w-16 h-16 text-white/60" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                        </svg>
-                        <p className="text-center text-sm">Unable to load video. Please try opening it directly on YouTube.</p>
-                        <a
-                          href={`https://www.youtube.com/watch?v=${selectedProject.embedUrl?.split('/embed/')[1]?.split('?')[0]}`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="mt-2 px-6 py-2 bg-[#ff0000] hover:bg-[#cc0000] text-white rounded-lg font-semibold text-sm transition-colors"
-                        >
-                          Open in YouTube
-                        </a>
-                      </div>
-                    ) : (
-                      <iframe
-                        src={selectedProject.embedUrl}
-                        title={selectedProject.title}
-                        allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                        allowFullScreen
-                        onError={() => setIframeError(true)}
-                        className="absolute inset-0 w-full h-full"
-                        style={{ border: 'none' }}
-                      />
-                    )}
+                    <YouTubeFacade
+                      embedUrl={selectedProject.embedUrl!}
+                      title={selectedProject.title}
+                      thumbnailUrl={selectedProject.imageUrl}
+                      className="rounded-none"
+                    />
                   </div>
                 ) : selectedProject.gallery ? (
                   <div className="relative w-full overflow-hidden bg-black" style={{ aspectRatio: '16/9' }}>

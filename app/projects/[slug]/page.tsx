@@ -2,12 +2,24 @@ import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
+import dynamic from 'next/dynamic';
 import NavbarServer from '@/components/NavbarServer';
 import FooterServer from '@/components/FooterServer';
 import SectionPill from '@/components/ui/SectionPill';
 import Button3D from '@/components/Button3D';
+import YouTubeFacade from '@/components/YouTubeFacade';
 import { PROJECTS, SERVICES, getProjectBySlug } from '@/lib/content-data';
 import { SITE_CONFIG } from '@/lib/site-config';
+
+import ContactPreHeaderBanner from '@/components/ContactPreHeaderBanner';
+
+const ContactForm = dynamic(() => import('@/components/ContactForm'), {
+  loading: () => (
+    <div className="w-full py-24 bg-surface flex items-center justify-center min-h-[400px]">
+      <div className="w-8 h-8 rounded-full border-2 border-accent border-t-transparent animate-spin" />
+    </div>
+  ),
+});
 
 interface ProjectPageProps {
   params: Promise<{ slug: string }>;
@@ -82,7 +94,8 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
     <div className="min-h-screen bg-background text-foreground transition-colors duration-300">
       <NavbarServer />
 
-      <main className="w-full pt-32 md:pt-40 pb-20 md:pb-28 px-4 sm:px-6 md:px-12 max-w-7xl mx-auto space-y-16">
+      <main className="w-full pt-32 md:pt-40 pb-20 md:pb-28">
+        <div className="px-4 sm:px-6 md:px-12 max-w-7xl mx-auto space-y-16">
         {/* Header & Meta */}
         <header className="max-w-4xl space-y-6">
           <div className="flex flex-wrap items-center gap-3 text-xs font-semibold text-[#15b6e8]">
@@ -135,15 +148,11 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
           style={skeuomorphicCardStyle}
         >
           {project.isVideo && project.embedUrl ? (
-            <div className="relative aspect-video w-full rounded-2xl overflow-hidden">
-              <iframe
-                src={project.embedUrl}
-                title={project.title}
-                className="w-full h-full border-0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              />
-            </div>
+            <YouTubeFacade
+              embedUrl={project.embedUrl}
+              title={project.title}
+              thumbnailUrl={project.imageUrl}
+            />
           ) : (
             <div className="relative aspect-video w-full rounded-2xl overflow-hidden">
               <Image
@@ -255,6 +264,10 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
             </div>
           </section>
         )}
+        </div>
+
+        <ContactPreHeaderBanner />
+        <ContactForm />
       </main>
 
       <FooterServer />

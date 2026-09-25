@@ -1,9 +1,11 @@
 import type { Metadata, Viewport } from "next";
+import { Suspense } from "react";
 import { DM_Sans } from "next/font/google";
 import "@fontsource-variable/zalando-sans-expanded/wght.css";
 import "./globals.css";
 import { SITE_CONFIG } from "@/lib/site-config";
 import CustomCursor from "@/components/CustomCursor";
+import PageTransitionProvider from "@/components/PageTransition";
 
 const dmSans = DM_Sans({
   variable: "--font-dm-sans",
@@ -136,7 +138,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body suppressHydrationWarning className="antialiased relative bg-background text-foreground" style={{ fontFamily: 'var(--font-dm-sans)' }}>
         <CustomCursor />
-        {children}
+        <Suspense fallback={null}>
+          <PageTransitionProvider>{children}</PageTransitionProvider>
+        </Suspense>
       </body>
     </html>
   );

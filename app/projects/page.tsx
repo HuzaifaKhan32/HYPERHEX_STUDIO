@@ -1,12 +1,23 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
 import Image from 'next/image';
+import dynamic from 'next/dynamic';
 import NavbarServer from '@/components/NavbarServer';
 import FooterServer from '@/components/FooterServer';
 import SectionPill from '@/components/ui/SectionPill';
 import Button3D from '@/components/Button3D';
 import { PROJECTS } from '@/lib/content-data';
 import { SITE_CONFIG } from '@/lib/site-config';
+
+import ContactPreHeaderBanner from '@/components/ContactPreHeaderBanner';
+
+const ContactForm = dynamic(() => import('@/components/ContactForm'), {
+  loading: () => (
+    <div className="w-full py-24 bg-surface flex items-center justify-center min-h-[400px]">
+      <div className="w-8 h-8 rounded-full border-2 border-accent border-t-transparent animate-spin" />
+    </div>
+  ),
+});
 
 export const metadata: Metadata = {
   title: 'Portfolio & Case Studies | HyperHex Studio',
@@ -33,7 +44,8 @@ export default function ProjectsPage() {
     <div className="min-h-screen bg-background text-foreground transition-colors duration-300">
       <NavbarServer />
 
-      <main className="w-full pt-32 md:pt-40 pb-16 md:pb-24 px-4 sm:px-6 md:px-12 max-w-7xl mx-auto">
+      <main className="w-full pt-32 md:pt-40 pb-16 md:pb-24">
+        <div className="px-4 sm:px-6 md:px-12 max-w-7xl mx-auto">
         <header className="mb-12 text-left max-w-3xl">
           <SectionPill label="Curated Works" className="mb-3" />
           <h1
@@ -100,6 +112,10 @@ export default function ProjectsPage() {
             </article>
           ))}
         </section>
+        </div>
+
+        <ContactPreHeaderBanner />
+        <ContactForm />
       </main>
 
       <FooterServer />

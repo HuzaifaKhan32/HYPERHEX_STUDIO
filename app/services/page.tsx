@@ -1,12 +1,25 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
 import Image from 'next/image';
+import dynamic from 'next/dynamic';
 import NavbarServer from '@/components/NavbarServer';
 import FooterServer from '@/components/FooterServer';
 import SectionPill from '@/components/ui/SectionPill';
 import Button3D from '@/components/Button3D';
 import { SERVICES } from '@/lib/content-data';
 import { SITE_CONFIG } from '@/lib/site-config';
+
+import ToolsAndTechSection from '@/components/ToolsAndTechSection';
+import OurProcessSection from '@/components/OurProcessSection';
+import ContactPreHeaderBanner from '@/components/ContactPreHeaderBanner';
+
+const ContactForm = dynamic(() => import('@/components/ContactForm'), {
+  loading: () => (
+    <div className="w-full py-24 bg-surface flex items-center justify-center min-h-[400px]">
+      <div className="w-8 h-8 rounded-full border-2 border-accent border-t-transparent animate-spin" />
+    </div>
+  ),
+});
 
 export const metadata: Metadata = {
   title: 'Our Services | HyperHex Studio',
@@ -33,7 +46,8 @@ export default function ServicesPage() {
     <div className="min-h-screen bg-background text-foreground transition-colors duration-300">
       <NavbarServer />
 
-      <main className="w-full pt-32 md:pt-40 pb-16 md:pb-24 px-4 sm:px-6 md:px-12 max-w-7xl mx-auto">
+      <main className="w-full pt-32 md:pt-40 pb-16 md:pb-24">
+        <div className="px-4 sm:px-6 md:px-12 max-w-7xl mx-auto">
         {/* Header section */}
         <header className="mb-10 text-left max-w-3xl">
           <SectionPill label="Capabilities & Disciplines" className="mb-3" />
@@ -100,6 +114,16 @@ export default function ServicesPage() {
             </article>
           ))}
         </section>
+        </div>
+
+        {/* Tools & Technologies Section */}
+        <ToolsAndTechSection />
+
+        {/* Our Process Section */}
+        <OurProcessSection />
+
+        <ContactPreHeaderBanner />
+        <ContactForm />
       </main>
 
       <FooterServer />

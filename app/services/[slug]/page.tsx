@@ -2,12 +2,25 @@ import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
+import dynamic from 'next/dynamic';
 import NavbarServer from '@/components/NavbarServer';
 import FooterServer from '@/components/FooterServer';
 import SectionPill from '@/components/ui/SectionPill';
 import Button3D from '@/components/Button3D';
 import { SERVICES, getServiceBySlug, getProjectsByService } from '@/lib/content-data';
 import { SITE_CONFIG } from '@/lib/site-config';
+
+import ToolsAndTechSection from '@/components/ToolsAndTechSection';
+import OurProcessSection from '@/components/OurProcessSection';
+import ContactPreHeaderBanner from '@/components/ContactPreHeaderBanner';
+
+const ContactForm = dynamic(() => import('@/components/ContactForm'), {
+  loading: () => (
+    <div className="w-full py-24 bg-surface flex items-center justify-center min-h-[400px]">
+      <div className="w-8 h-8 rounded-full border-2 border-accent border-t-transparent animate-spin" />
+    </div>
+  ),
+});
 
 interface ServicePageProps {
   params: Promise<{ slug: string }>;
@@ -75,7 +88,8 @@ export default async function ServiceDetailPage({ params }: ServicePageProps) {
     <div className="min-h-screen bg-background text-foreground transition-colors duration-300">
       <NavbarServer />
 
-      <main className="w-full pt-32 md:pt-40 pb-20 md:pb-28 px-4 sm:px-6 md:px-12 max-w-7xl mx-auto space-y-16">
+      <main className="w-full pt-32 md:pt-40 pb-20 md:pb-28">
+        <div className="px-4 sm:px-6 md:px-12 max-w-7xl mx-auto space-y-16">
         {/* Service Hero Section */}
         <section aria-label="Service Hero" className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
           <div className="lg:col-span-7 space-y-6">
@@ -240,6 +254,16 @@ export default async function ServiceDetailPage({ params }: ServicePageProps) {
             <span className="text-lg">→</span>
           </Link>
         </section>
+        </div>
+
+        {/* Tools & Technologies Section */}
+        <ToolsAndTechSection />
+
+        {/* Our Process Section */}
+        <OurProcessSection />
+
+        <ContactPreHeaderBanner />
+        <ContactForm />
       </main>
 
       <FooterServer />

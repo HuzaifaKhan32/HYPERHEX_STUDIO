@@ -183,14 +183,14 @@ export default function ContactForm() {
   };
 
   return (
-    <section id="contact" className="w-full pt-8 md:pt-16 pb-12 md:pb-24 px-5 lg:px-16 2xl:px-24">
+    <section id="contact" className="w-full pt-8 md:pt-16 pb-12 md:pb-24 px-4 sm:px-6 lg:px-12 2xl:px-20">
       <motion.div
         ref={panelRef}
         variants={containerVariants}
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, amount: 0.15 }}
-        className="relative mx-auto w-full max-w-[1280px] xl:max-w-[1400px] 2xl:max-w-none overflow-hidden rounded-[2.5rem] shadow-2xl"
+        className="relative mx-auto w-full max-w-[1280px] xl:max-w-[1440px] 2xl:max-w-[1680px] overflow-hidden rounded-[2.5rem] shadow-2xl"
         style={{ backgroundColor: 'var(--color-ink)' }}
       >
         {/* Subtle cyan glow at bottom left */}
@@ -202,12 +202,12 @@ export default function ContactForm() {
         {/* Textured Dot Grid Background */}
         <DotGridBackground containerRef={panelRef} />
 
-        <div className="relative z-10 flex flex-col gap-8 p-6 md:flex-row md:gap-16 md:p-16 2xl:gap-32 2xl:p-24 2xl:py-40">
+        <div className="relative z-10 flex flex-col gap-8 p-6 md:flex-row md:gap-12 lg:gap-16 2xl:gap-24 md:p-12 lg:p-16 2xl:p-20">
           {/* Form Card — below content on mobile, left on desktop */}
           <motion.div
             variants={leftColVariants}
             whileHover={{ y: -6 }}
-            className="relative order-2 w-full md:order-1 md:w-[45%]"
+            className="relative order-2 w-full md:order-1 md:w-[48%] lg:w-[45%] shrink-0"
           >
             {/* Contact Form Card — Testimonials Card Design */}
             <div
@@ -472,7 +472,7 @@ export default function ContactForm() {
           {/* Content — first on mobile, right on desktop */}
           <motion.div
             variants={rightColVariants}
-            className="relative z-10 order-1 flex w-full flex-col justify-center md:order-2 md:w-[55%] md:pl-8"
+            className="relative z-10 order-1 flex w-full flex-col justify-center md:order-2 md:w-[52%] lg:w-[55%] md:pl-6 lg:pl-10"
           >
             {/* Badge */}
             <SectionPill label="Contact Form" className="mb-12 font-[family-name:var(--font-dm-sans)]" />
