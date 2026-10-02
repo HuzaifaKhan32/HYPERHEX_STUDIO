@@ -171,7 +171,7 @@ export default async function ServiceDetailPage({ params }: ServicePageProps) {
                 className="text-3xl font-bold text-foreground"
                 style={{ fontFamily: 'var(--font-zalando-expanded, sans-serif)' }}
               >
-                Featured Projects
+                Related Projects
               </h2>
             </div>
             <Link

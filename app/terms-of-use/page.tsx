@@ -116,7 +116,7 @@ export default function TermsOfUsePage() {
                   desc: 'WebXR and spatial virtual reality environments, virtual showrooms, and headset walkthroughs',
                 },
                 {
-                  title: 'Drone Animation',
+                  title: '3D Animation',
                   desc: 'Cinematic aerial drone animations, masterplan fly-throughs, and FPV site showcases',
                 },
                 {
@@ -124,7 +124,7 @@ export default function TermsOfUsePage() {
                   desc: 'Performant, full-stack digital platforms engineered with Next.js, TypeScript, and modern headless CMS architecture',
                 },
                 {
-                  title: 'Real-Time 3D',
+                  title: 'Real-Time Interactive',
                   desc: 'High-performance real-time 3D graphics engines, shader controls, and physically based rendering pipelines',
                 },
                 {

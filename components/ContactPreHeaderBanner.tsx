@@ -12,9 +12,9 @@ export default function ContactPreHeaderBanner() {
   };
 
   return (
-    <section className="w-full pt-16 md:pt-24 pb-4 px-4 sm:px-6 md:px-12 flex flex-col items-center justify-center text-center select-none overflow-hidden">
+    <section className="w-full pt-12 sm:pt-16 md:pt-24 pb-4 px-3 sm:px-6 md:px-12 flex flex-col items-center justify-center text-center select-none overflow-hidden">
       {/* Section Badge Pill */}
-      <div className="mb-6">
+      <div className="mb-4 sm:mb-6">
         <SectionPill label="Ready To Start?" />
       </div>
 
@@ -24,29 +24,29 @@ export default function ContactPreHeaderBanner() {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, amount: 0.3 }}
         transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-        className="flex flex-col items-center justify-center font-black tracking-tight leading-none max-w-5xl mx-auto"
+        className="flex flex-col items-center justify-center font-black tracking-tight leading-none max-w-5xl mx-auto w-full"
         style={{ fontFamily: 'var(--font-zalando-expanded, sans-serif)' }}
       >
         {/* Line 1 — Largest font size, strictly on one line */}
         <span
-          className="text-[#161d1e] tracking-tight uppercase whitespace-nowrap"
-          style={{ fontSize: 'clamp(1.75rem, 5.5vw, 6.2rem)', lineHeight: 1 }}
+          className="text-[#161d1e] tracking-tight uppercase whitespace-nowrap max-w-full"
+          style={{ fontSize: 'clamp(1rem, 5.6vw, 6.2rem)', lineHeight: 1.05 }}
         >
           Enough scrolling—
         </span>
 
         {/* Line 2 — Medium font size */}
         <span
-          className="text-[#161d1e] tracking-tight uppercase whitespace-nowrap my-2 md:my-3"
-          style={{ fontSize: 'clamp(1.35rem, 4.2vw, 4.4rem)', lineHeight: 1 }}
+          className="text-[#161d1e] tracking-tight uppercase whitespace-nowrap max-w-full my-1.5 sm:my-2 md:my-3"
+          style={{ fontSize: 'clamp(0.8rem, 4.2vw, 4.4rem)', lineHeight: 1.05 }}
         >
           let&apos;s build something
         </span>
 
         {/* Line 3 — Smallest font size with cyan gradient accent */}
         <span
-          className="bg-gradient-to-b from-[#15b6e8] via-[#0ea5e9] to-[#0c86ac] bg-clip-text text-transparent tracking-wider uppercase whitespace-nowrap"
-          style={{ fontSize: 'clamp(1.15rem, 3.2vw, 3.4rem)', lineHeight: 1 }}
+          className="bg-gradient-to-b from-[#15b6e8] via-[#0ea5e9] to-[#0c86ac] bg-clip-text text-transparent tracking-wider uppercase whitespace-nowrap max-w-full"
+          style={{ fontSize: 'clamp(0.65rem, 3.2vw, 3.4rem)', lineHeight: 1.05 }}
         >
           great together.
         </span>

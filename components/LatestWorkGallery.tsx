@@ -117,12 +117,14 @@ const ProjectCard = React.memo(({
   index,
   isDrawerCard,
   staggerIndex,
+  cardAspectClass = 'aspect-[5/3]',
   onClick
 }: {
   project: Project;
   index: number;
   isDrawerCard: boolean;
   staggerIndex: number;
+  cardAspectClass?: string;
   onClick: () => void;
 }) => {
   return (
@@ -139,7 +141,7 @@ const ProjectCard = React.memo(({
         : { whileInView: 'visible', viewport: { once: true, margin: '-100px' } })}
       onClick={onClick}
       data-cursor="project"
-      className="group relative aspect-[5/3] overflow-hidden rounded-xl cursor-pointer bg-[#111]"
+      className={`group relative ${cardAspectClass} overflow-hidden rounded-xl cursor-pointer bg-[#111]`}
     >
       {/* Thumbnail */}
       <Image
@@ -226,7 +228,25 @@ const ProjectCard = React.memo(({
 
 ProjectCard.displayName = 'ProjectCard';
 
-export default function LatestWorkGallery() {
+interface LatestWorkGalleryProps {
+  hideHeader?: boolean;
+  hideFilters?: boolean;
+  showAll?: boolean;
+  hidePagination?: boolean;
+  bgClass?: string;
+  gridColsClass?: string;
+  cardAspectClass?: string;
+}
+
+export default function LatestWorkGallery({
+  hideHeader = false,
+  hideFilters = false,
+  showAll = false,
+  hidePagination = false,
+  bgClass = 'bg-surface',
+  gridColsClass = 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4',
+  cardAspectClass = 'aspect-[5/3]',
+}: LatestWorkGalleryProps = {}) {
   const [activeCategory, setActiveCategory] = useState('All');
   const [visibleCount, setVisibleCount] = useState(INITIAL_COUNT);
   const [selectedProject, setSelectedProject] = useState<typeof ALL_PROJECTS[number] | null>(null);
@@ -261,9 +281,9 @@ export default function LatestWorkGallery() {
     return list;
   }, [activeCategory]);
 
-  const visible = filtered.slice(0, visibleCount);
-  const hasMore = visibleCount < filtered.length;
-  const isExpanded = visibleCount > INITIAL_COUNT;
+  const visible = showAll ? filtered : filtered.slice(0, visibleCount);
+  const hasMore = showAll ? false : visibleCount < filtered.length;
+  const isExpanded = showAll ? false : visibleCount > INITIAL_COUNT;
 
   const handleLoadMore = () => {
     if (hasMore) setVisibleCount((prev) => prev + PAGE_SIZE);
@@ -300,60 +320,98 @@ export default function LatestWorkGallery() {
   }, [selectedProject]);
 
   return (
-    <section id="works" className="flex flex-col w-full bg-surface text-on-surface relative overflow-hidden font-[family-name:var(--font-dm-sans)] pb-6">
-      <div className="max-w-[1280px] xl:max-w-[1400px] 2xl:max-w-none w-full mx-auto px-5 lg:px-16 2xl:px-24 pt-16 md:pt-16 2xl:pt-20 pb-8 flex flex-col gap-12 relative z-10">
+    <section id="works" className={`flex flex-col w-full ${bgClass} text-on-surface relative overflow-hidden font-[family-name:var(--font-dm-sans)] pb-6`}>
+      <div className={`max-w-[1280px] xl:max-w-[1400px] 2xl:max-w-none w-full mx-auto px-5 lg:px-16 2xl:px-24 ${hideHeader && hideFilters ? 'pt-0' : hideHeader ? 'pt-0' : 'pt-16 md:pt-16 2xl:pt-20'} pb-8 flex flex-col gap-12 relative z-10`}>
 
-        {/* Header */}
-        <div className="flex flex-col gap-8 pb-8 border-b border-outline-variant/30">
-          <div className="flex flex-col items-center justify-center text-center gap-6 w-full">
-            <LatestWorkHeading />
-            <div className="flex flex-col items-center justify-center text-center gap-3 w-full">
-              {/* Parent Category Filters */}
-              <motion.div
-                className="flex flex-wrap items-center justify-center gap-2.5 sm:gap-3 font-bold text-sm text-center w-full"
-                variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.05, delayChildren: 0.3 } } }}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true, margin: '-100px' }}
-              >
-                {CATEGORIES.map((category) => {
-                  const isActive = activeCategory === category;
-                  return (
-                    <motion.button
-                      key={category}
-                      type="button"
-                      onClick={() => handleCategory(category)}
-                      aria-pressed={isActive}
-                      variants={{
-                        hidden: { opacity: 0, y: 16 },
-                        visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: [0.16, 1, 0.3, 1] } },
-                      }}
-                      whileHover={{ y: -2 }}
-                      whileTap={{ y: 1, scale: 0.97 }}
-                      className={`flex items-center justify-center px-5 py-2.5 bg-surface-bright rounded-xl border-2 font-bold text-xs sm:text-sm uppercase tracking-wider cursor-pointer transition-[color,border-color,box-shadow] duration-150 ${isActive
-                          ? 'border-accent text-accent shadow-[0_4px_0_0_rgba(21,182,232,1)]'
-                          : 'border-outline-variant/30 text-on-surface shadow-[0_4px_0_0_var(--color-outline-variant)] hover:border-accent hover:text-accent hover:shadow-[0_4px_0_0_rgba(21,182,232,1)]'
-                        }`}
-                    >
-                      {category}
-                    </motion.button>
-                  );
-                })}
-              </motion.div>
+        {/* Header / Category Filter */}
+        {!hideHeader ? (
+          <div className="flex flex-col gap-8 pb-8 border-b border-outline-variant/30">
+            <div className="flex flex-col items-center justify-center text-center gap-6 w-full">
+              <LatestWorkHeading />
+              {!hideFilters && (
+                <div className="flex flex-col items-center justify-center text-center gap-3 w-full">
+                  {/* Parent Category Filters */}
+                  <motion.div
+                    className="flex flex-wrap items-center justify-center gap-2.5 sm:gap-3 font-bold text-sm text-center w-full"
+                    variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.05, delayChildren: 0.3 } } }}
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true, margin: '-100px' }}
+                  >
+                    {CATEGORIES.map((category) => {
+                      const isActive = activeCategory === category;
+                      return (
+                        <motion.button
+                          key={category}
+                          type="button"
+                          onClick={() => handleCategory(category)}
+                          aria-pressed={isActive}
+                          variants={{
+                            hidden: { opacity: 0, y: 16 },
+                            visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: [0.16, 1, 0.3, 1] } },
+                          }}
+                          whileHover={{ y: -2 }}
+                          whileTap={{ y: 1, scale: 0.97 }}
+                          className={`flex items-center justify-center px-5 py-2.5 bg-surface-bright rounded-xl border-2 font-bold text-xs sm:text-sm uppercase tracking-wider cursor-pointer transition-[color,border-color,box-shadow] duration-150 ${isActive
+                              ? 'border-accent text-accent shadow-[0_4px_0_0_rgba(21,182,232,1)]'
+                              : 'border-outline-variant/30 text-on-surface shadow-[0_4px_0_0_var(--color-outline-variant)] hover:border-accent hover:text-accent hover:shadow-[0_4px_0_0_rgba(21,182,232,1)]'
+                            }`}
+                        >
+                          {category}
+                        </motion.button>
+                      );
+                    })}
+                  </motion.div>
+                </div>
+              )}
             </div>
           </div>
-        </div>
+        ) : !hideFilters ? (
+          <div className="flex flex-col items-center justify-center text-center gap-3 w-full pb-4 border-b border-outline-variant/30">
+            <motion.div
+              className="flex flex-wrap items-center justify-center gap-2.5 sm:gap-3 font-bold text-sm text-center w-full"
+              variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.05, delayChildren: 0.3 } } }}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: '-100px' }}
+            >
+              {CATEGORIES.map((category) => {
+                const isActive = activeCategory === category;
+                return (
+                  <motion.button
+                    key={category}
+                    type="button"
+                    onClick={() => handleCategory(category)}
+                    aria-pressed={isActive}
+                    variants={{
+                      hidden: { opacity: 0, y: 16 },
+                      visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: [0.16, 1, 0.3, 1] } },
+                    }}
+                    whileHover={{ y: -2 }}
+                    whileTap={{ y: 1, scale: 0.97 }}
+                    className={`flex items-center justify-center px-5 py-2.5 bg-surface-bright rounded-xl border-2 font-bold text-xs sm:text-sm uppercase tracking-wider cursor-pointer transition-[color,border-color,box-shadow] duration-150 ${isActive
+                        ? 'border-accent text-accent shadow-[0_4px_0_0_rgba(21,182,232,1)]'
+                        : 'border-outline-variant/30 text-on-surface shadow-[0_4px_0_0_var(--color-outline-variant)] hover:border-accent hover:text-accent hover:shadow-[0_4px_0_0_rgba(21,182,232,1)]'
+                      }`}
+                  >
+                    {category}
+                  </motion.button>
+                );
+              })}
+            </motion.div>
+          </div>
+        ) : null}
 
         {/* Main Gallery Grid */}
         <motion.div
           key={activeCategory}
           layout
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
+          className={`grid ${gridColsClass}`}
         >
           <AnimatePresence mode="popLayout">
             {visible.map((project, index) => {
-              const isDrawerCard = index >= INITIAL_COUNT;
-              const staggerIndex = isDrawerCard ? index - INITIAL_COUNT : index;
+              const isDrawerCard = showAll ? false : index >= INITIAL_COUNT;
+              const staggerIndex = showAll ? Math.min(index, 12) : (isDrawerCard ? index - INITIAL_COUNT : index);
 
               return (
                 <ProjectCard
@@ -362,6 +420,7 @@ export default function LatestWorkGallery() {
                   index={index}
                   isDrawerCard={isDrawerCard}
                   staggerIndex={staggerIndex}
+                  cardAspectClass={cardAspectClass}
                   onClick={() => setSelectedProject(project)}
                 />
               );
@@ -373,23 +432,25 @@ export default function LatestWorkGallery() {
         </motion.div>
 
         {/* Explore More / View Less */}
-        <div className="flex justify-center pt-4 gap-4">
-          {hasMore && (
-            <Button3D onClick={handleLoadMore} arrowDirection="down" className="px-4 py-1 text-xs 2xl:text-sm">
-              Explore More
-            </Button3D>
-          )}
-          {isExpanded && !hasMore && (
-            <Button3D onClick={handleViewLess} arrowDirection="up" className="px-4 py-1 text-xs 2xl:text-sm">
-              View Less
-            </Button3D>
-          )}
-          {isExpanded && hasMore && (
-            <Button3D onClick={handleViewLess} arrowDirection="up" className="px-4 py-1 text-xs 2xl:text-sm">
-              View Less
-            </Button3D>
-          )}
-        </div>
+        {!hidePagination && !showAll && (
+          <div className="flex justify-center pt-4 gap-4">
+            {hasMore && (
+              <Button3D onClick={handleLoadMore} arrowDirection="down" className="px-4 py-1 text-xs 2xl:text-sm">
+                Explore More
+              </Button3D>
+            )}
+            {isExpanded && !hasMore && (
+              <Button3D onClick={handleViewLess} arrowDirection="up" className="px-4 py-1 text-xs 2xl:text-sm">
+                View Less
+              </Button3D>
+            )}
+            {isExpanded && hasMore && (
+              <Button3D onClick={handleViewLess} arrowDirection="up" className="px-4 py-1 text-xs 2xl:text-sm">
+                View Less
+              </Button3D>
+            )}
+          </div>
+        )}
 
       </div>
 
