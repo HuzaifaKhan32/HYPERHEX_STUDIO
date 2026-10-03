@@ -60,7 +60,6 @@ export default function YouTubeFacade({ embedUrl, title, thumbnailUrl, className
           fill
           className="object-cover transition-transform duration-500 group-hover:scale-105"
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 70vw"
-          unoptimized
           priority
         />
       )}

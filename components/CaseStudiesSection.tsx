@@ -108,11 +108,10 @@ function useInfiniteSlider(autoMs: number, n: number) {
 
 function FeaturedHeading() {
   const revealVariants = {
-    hidden: { opacity: 0, y: -36, filter: 'blur(12px)' },
+    hidden: { opacity: 0, y: -36 },
     visible: {
       opacity: 1,
       y: 0,
-      filter: 'blur(0px)',
       transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] },
     },
   };

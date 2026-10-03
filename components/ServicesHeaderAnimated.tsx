@@ -11,13 +11,11 @@ export default function ServicesHeaderAnimated() {
   const revealVariants = {
     hidden: {
       opacity: 0,
-      y: shouldReduceMotion ? 0 : -36,
-      filter: shouldReduceMotion ? 'none' : 'blur(12px)',
+      y: shouldReduceMotion ? 0 : -24,
     },
     visible: {
       opacity: 1,
       y: 0,
-      filter: 'blur(0px)',
       transition: {
         duration: 0.7,
         ease: SMOOTH_EASE,

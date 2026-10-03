@@ -18,11 +18,10 @@ const headingContainerVariants = {
   visible: { transition: { staggerChildren: 0.14, delayChildren: 0.05 } },
 };
 const headingItemVariants = {
-  hidden: { opacity: 0, y: -36, filter: 'blur(12px)' },
+  hidden: { opacity: 0, y: -24 },
   visible: {
     opacity: 1,
     y: 0,
-    filter: 'blur(0px)',
     transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] },
   },
 };
@@ -311,7 +310,9 @@ export default function LatestWorkGallery({
   useEffect(() => {
     if (selectedProject) {
       document.body.style.overflow = 'hidden';
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setIframeError(false);
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setCurrentImageIndex(0); // Reset to first image when opening modal
     } else {
       document.body.style.overflow = 'unset';

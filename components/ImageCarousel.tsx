@@ -65,6 +65,7 @@ export default function ImageCarousel({ images, onFirstReady }: ImageCarouselPro
   const isVideo = currentMedia?.type === 'video';
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsVideoPlaying(false);
   }, [currentSlide]);
 
@@ -108,12 +109,12 @@ export default function ImageCarousel({ images, onFirstReady }: ImageCarouselPro
                     <AnimatePresence>
                       {!isVideoPlaying && image.poster && (
                         <motion.div
-                          initial={{ opacity: 1, scale: 1.05, filter: 'blur(8px) brightness(0.7)' }}
-                          animate={{ opacity: 1, scale: 1, filter: 'blur(0px) brightness(1)' }}
-                          exit={{ opacity: 0, scale: 0.98, filter: 'blur(4px)' }}
-                          transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+                          initial={{ opacity: 1, scale: 1.03 }}
+                          animate={{ opacity: 1, scale: 1 }}
+                          exit={{ opacity: 0, scale: 0.98 }}
+                          transition={{ duration: 1.0, ease: [0.16, 1, 0.3, 1] }}
                           className="absolute inset-0 h-full w-full z-10 pointer-events-none"
-                          style={{ willChange: 'transform, opacity, filter' }}
+                          style={{ willChange: 'transform, opacity' }}
                         >
                           <Image
                             src={image.poster}
@@ -199,7 +200,6 @@ export default function ImageCarousel({ images, onFirstReady }: ImageCarouselPro
             style={{
               backgroundColor: index === currentSlide ? 'var(--color-accent)' : undefined,
               boxShadow: index === currentSlide ? '0 0 10px rgba(21,182,232,0.6)' : undefined,
-              willChange: 'width',
             }}
             animate={{ width: index === currentSlide ? 48 : 32 }}
             transition={{ duration: 0.3 }}

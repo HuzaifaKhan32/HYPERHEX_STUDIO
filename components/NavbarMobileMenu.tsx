@@ -2,7 +2,7 @@
 
 // Mobile menu with hamburger button and animated drawer
 import { motion, AnimatePresence, useMotionValueEvent, useScroll } from 'framer-motion';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import Button3D from './Button3D';
@@ -58,7 +58,7 @@ function MobileMenuDrawer({ isOpen, onClose, links }: { isOpen: boolean; onClose
           {/* Backdrop */}
           <motion.div
             key="backdrop"
-            className="fixed inset-0 z-40 bg-black/25 backdrop-blur-[2px] md:hidden"
+            className="fixed inset-0 z-40 bg-black/35 md:hidden"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -81,8 +81,6 @@ function MobileMenuDrawer({ isOpen, onClose, links }: { isOpen: boolean; onClose
               style={{
                 background: 'var(--color-surface)',
                 boxShadow: '0 8px 40px var(--color-surface-dim), 0 2px 8px var(--color-surface-dim)',
-                backdropFilter: 'blur(24px)',
-                WebkitBackdropFilter: 'blur(24px)',
               }}
             >
               {/* Panel top bar */}
@@ -172,10 +170,15 @@ function MobileMenuDrawer({ isOpen, onClose, links }: { isOpen: boolean; onClose
 export default function NavbarMobileMenu({ links }: { links: NavLink[] }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const scrolledRef = useRef(false);
   const { scrollY } = useScroll();
 
   useMotionValueEvent(scrollY, 'change', (latest) => {
-    setScrolled((prev) => (prev ? latest > 24 : latest > 48));
+    const nextScrolled = scrolledRef.current ? latest > 24 : latest > 48;
+    if (nextScrolled !== scrolledRef.current) {
+      scrolledRef.current = nextScrolled;
+      setScrolled(nextScrolled);
+    }
     if (latest > 80 && menuOpen) setMenuOpen(false);
   });
 

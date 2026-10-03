@@ -397,7 +397,9 @@ export default function Services3DCarouselClient({ services }: Services3DCarouse
     }, 5000);
   }, [clearAutoRotateTimer, runRollerTransition]);
 
-  scheduleAutoRotateRef.current = scheduleAutoRotate;
+  useEffect(() => {
+    scheduleAutoRotateRef.current = scheduleAutoRotate;
+  });
 
   const handleNext = useCallback(() => {
     clearAutoRotateTimer();

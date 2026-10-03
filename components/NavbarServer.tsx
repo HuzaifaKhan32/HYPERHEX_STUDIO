@@ -10,7 +10,8 @@ import NavbarMobileMenu from './NavbarMobileMenu';
 const links = [
   { id: 'home',              label: 'Home',              href: '/'               },
   { id: 'services',          label: 'Services',          href: '/services'       },
-  { id: 'works',             label: 'Works',             href: '/projects'       },
+  { id: 'about',             label: 'About Us',          href: '/about'          },
+  { id: 'portfolio',         label: 'Portfolio',         href: '/projects'       },
   { id: 'featured-projects', label: 'Featured Projects', href: '/featured-projects' },
 ];
 

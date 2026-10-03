@@ -18,27 +18,35 @@ export default function NavbarAnimatedWrapper({ children }: { children: ReactNod
   const [hidden, setHidden] = useState(false);
 
   const prevScrollY = useRef(0);
+  const scrolledRef = useRef(false);
+  const hiddenRef = useRef(false);
   const { scrollY } = useScroll();
 
   useMotionValueEvent(scrollY, 'change', (latest) => {
     const previous = prevScrollY.current;
     const delta = latest - previous;
 
-    // ── Scrolled-style hysteresis (existing logic, unchanged) ──────────
-    setScrolled((prev) => (prev ? latest > 24 : latest > 48));
+    // ── Scrolled-style hysteresis ─────────────────────────────────────
+    const nextScrolled = scrolledRef.current ? latest > 24 : latest > 48;
+    if (nextScrolled !== scrolledRef.current) {
+      scrolledRef.current = nextScrolled;
+      setScrolled(nextScrolled);
+    }
 
     // ── Hide / reveal logic ────────────────────────────────────────────
+    let nextHidden = hiddenRef.current;
     if (latest <= TOP_THRESHOLD) {
-      // Always show at the very top of the page
-      setHidden(false);
+      nextHidden = false;
     } else if (delta > SCROLL_TOLERANCE) {
-      // Scrolling DOWN by more than tolerance → hide
-      setHidden(true);
+      nextHidden = true;
     } else if (delta < -SCROLL_TOLERANCE) {
-      // Scrolling UP by more than tolerance → reveal
-      setHidden(false);
+      nextHidden = false;
     }
-    // deltas within ±SCROLL_TOLERANCE are ignored to prevent jitter
+
+    if (nextHidden !== hiddenRef.current) {
+      hiddenRef.current = nextHidden;
+      setHidden(nextHidden);
+    }
 
     prevScrollY.current = latest;
   });
@@ -53,7 +61,7 @@ export default function NavbarAnimatedWrapper({ children }: { children: ReactNod
           ? { duration: 0.35, ease: [0.4, 0, 1, 1] }      // ease-in for hide
           : { duration: 0.45, ease: [0, 0, 0.2, 1] }       // ease-out for reveal
       }
-      style={{ willChange: 'transform', filter: hidden ? 'drop-shadow(0 0 0 transparent)' : undefined }}
+      style={{ willChange: 'transform' }}
       className={`fixed left-0 right-0 z-50 flex w-full justify-center transition-[top,padding] duration-350 ${
         scrolled
           ? 'top-4 md:top-5 px-4 sm:px-8 md:px-12 2xl:px-16'
@@ -64,7 +72,7 @@ export default function NavbarAnimatedWrapper({ children }: { children: ReactNod
         transition={{ duration: 0.35, ease: [0.4, 0, 0.2, 1] }}
         className={`flex w-full max-w-[1280px] xl:max-w-[1400px] 2xl:max-w-none items-center justify-between px-2 py-2 md:py-3 rounded-xl transition-[background-color,border-color] duration-350 ease-out ${
           scrolled
-            ? 'bg-surface border-2 border-accent shadow-[0_6px_0_0_rgba(21,182,232,1)] backdrop-blur-md'
+            ? 'bg-surface border-2 border-accent shadow-[0_6px_0_0_rgba(21,182,232,1)]'
             : 'bg-transparent border-2 border-transparent'
         }`}
       >

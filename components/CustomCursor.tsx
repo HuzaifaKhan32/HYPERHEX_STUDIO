@@ -37,6 +37,7 @@ export default function CustomCursor() {
     const isCoarse = window.matchMedia('(pointer: coarse)').matches;
 
     if (isCoarse) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setIsTouchDevice(true);
       return;
     }
@@ -150,7 +151,7 @@ export default function CustomCursor() {
   // Determine geometry & appearance based on state
   let width = 14;
   let height = 14;
-  let borderRadius = 9999;
+  const borderRadius = 9999;
   let backgroundColor = '#ffffff';
 
   if (isText) {
@@ -195,7 +196,7 @@ export default function CustomCursor() {
         }}
         transition={MORPH_SPRING}
         className="relative flex items-center justify-center"
-        style={{ willChange: 'width, height, opacity, transform' }}
+        style={{ willChange: 'transform, opacity' }}
       >
         {/* Morphing Project / Drag Labels */}
         <AnimatePresence mode="wait">

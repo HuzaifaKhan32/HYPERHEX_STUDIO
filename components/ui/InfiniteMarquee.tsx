@@ -196,9 +196,7 @@ export function InfiniteMarquee({
   return (
     <div
       ref={containerRef}
-      className={`relative w-full overflow-hidden select-none touch-pan-y ${
-        isDragging.current ? 'cursor-grabbing' : 'cursor-grab'
-      } ${className}`}
+      className={`relative w-full overflow-hidden select-none touch-pan-y cursor-grab ${className}`}
       onPointerDown={handlePointerDown}
       onPointerMove={handlePointerMove}
       onPointerUp={handlePointerUp}

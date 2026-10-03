@@ -1,27 +1,34 @@
 'use client';
 
-import React from 'react';
-import { motion } from 'framer-motion';
+import React, { useEffect, useState } from 'react';
+import { motion, useReducedMotion } from 'framer-motion';
 import { usePageTransition } from '@/components/PageTransition';
 
 export default function Template({ children }: { children: React.ReactNode }) {
   const { direction } = usePageTransition();
+  const shouldReduceMotion = useReducedMotion();
+  const [isMounted, setIsMounted] = useState(false);
 
-  // Forward navigation in navbar order (e.g. Home -> Services -> Works -> Featured Projects):
-  // New page slides in from the RIGHT (x: '100%')
-  // Backward navigation: New page slides in from the LEFT (x: '-100%')
-  const initialX = direction === 'forward' ? '100%' : '-100%';
-  const exitX = direction === 'forward' ? '-100%' : '100%';
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setIsMounted(true);
+  }, []);
+
+  if (shouldReduceMotion || !isMounted) {
+    return <div className="w-full min-h-screen overflow-x-hidden">{children}</div>;
+  }
+
+  const initialX = direction === 'forward' ? '4%' : '-4%';
 
   return (
     <motion.div
       initial={{ opacity: 0, x: initialX }}
       animate={{ opacity: 1, x: '0%' }}
-      exit={{ opacity: 0, x: exitX }}
       transition={{
-        duration: 0.5,
+        duration: 0.35,
         ease: [0.22, 1, 0.36, 1],
       }}
+      style={{ willChange: 'transform, opacity' }}
       className="w-full min-h-screen overflow-x-hidden"
     >
       {children}

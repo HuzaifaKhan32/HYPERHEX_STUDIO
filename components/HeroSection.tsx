@@ -2,6 +2,7 @@
 // This renders static HTML immediately without waiting for JS
 // Only the carousel interaction is deferred to client
 
+import Image from 'next/image';
 import Button3D from './Button3D';
 
 export default function HeroSection() {
@@ -11,11 +12,13 @@ export default function HeroSection() {
 
         {/* POSTER: Fast thumbnail loads immediately (before video) */}
         <div className="absolute inset-0 bg-black">
-          <img
+          <Image
             src="/media/hero-loop-4-thumbnail.webp"
             alt="Hero Section Preview"
+            fill
+            priority
+            sizes="(max-width: 1280px) 100vw, 1400px"
             className="w-full h-full object-cover"
-            loading="eager"
           />
         </div>
 
