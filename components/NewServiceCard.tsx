@@ -116,9 +116,11 @@ export default function ServiceCard({
         />
       )}
 
-      {/* MAIN CARD */}
-      <div
-        className={`group relative flex w-[300px] md:w-[320px] 2xl:w-[375px] h-[360px] md:h-[370px] 2xl:h-[425px] p-6 2xl:p-7 flex-col justify-between overflow-hidden transition-all duration-300 ease-out z-10 select-none outline-none focus:outline-none [WebkitTapHighlightColor:transparent] ${className}`}
+      {/* MAIN CARD — fully clickable */}
+      <Link
+        href={`/services/${data.id}`}
+        tabIndex={isFocused ? 0 : -1}
+        className={`group relative flex w-[300px] md:w-[320px] 2xl:w-[375px] h-[360px] md:h-[370px] 2xl:h-[425px] p-6 2xl:p-7 flex-col justify-between overflow-hidden transition-all duration-300 ease-out z-10 select-none outline-none focus:outline-none [WebkitTapHighlightColor:transparent] ${isFocused ? '' : 'pointer-events-none'} ${className}`}
         style={{
           boxSizing: 'border-box',
           backgroundColor: '#f4f4f5',
@@ -221,14 +223,10 @@ export default function ServiceCard({
           </div>
         )}
 
-        {/* Bottom Action Link */}
+        {/* Bottom Action */}
         <div className="relative z-10 pt-2">
-          <Link
-            href={`/services/${data.id}`}
-            tabIndex={isFocused ? 0 : -1}
-            className={`inline-flex items-center gap-1.5 text-xs font-bold text-[#161d1e] transition-colors duration-200 hover:text-[#15b6e8] ${
-              isFocused ? "pointer-events-auto" : "pointer-events-none"
-            }`}
+          <span
+            className="inline-flex items-center gap-1.5 text-xs font-bold text-[#161d1e] transition-colors duration-200 group-hover:text-[#15b6e8]"
           >
             View more
             <svg
@@ -237,9 +235,9 @@ export default function ServiceCard({
             >
               <path d="m9 18 6-6-6-6" />
             </svg>
-          </Link>
+          </span>
         </div>
-      </div>
+      </Link>
     </div>
   );
 }

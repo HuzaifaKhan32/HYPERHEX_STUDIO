@@ -293,7 +293,7 @@ export const PROJECTS: Project[] = [
   createYtProject('m2FYElEVclc', 'nexgen-heights', 'Nexgen Heights', 'Animations', '/animation/nexgen.webp', 'Nexgen Heights', undefined, [], 'Mixed-use skyscraper 3D architectural animation and nighttime lighting.'),
 
   // 2. Drone
-  createYtProject('8FnKGXkxdkk', 'drone-showcase', 'Drone Showcase', 'Drone', '/portfolio/drone.webp', 'Drone Showcase', undefined, ['3d-animation'], 'Breathtaking aerial drone cinematography and site overview.'),
+  createYtProject('8FnKGXkxdkk', 'drone-showcase', 'Drone Showcase', 'Drone', '/portfolio/drone.webp', 'Drone Showcase', undefined, [], 'Breathtaking aerial drone cinematography and site overview.'),
   createYtProject('7wRGPltVun4', 'jaguar-builder', 'Jaguar Builder', 'Drone', undefined, 'Jaguar', 'contain', [], 'Cinematic aerial drone film and architectural site overview for Jaguar Builders.'),
   createYtProject('YvvRPa5zVAM', 'ahsan-town-project', 'Ahsan Town Project', 'Drone', undefined, 'Ahsan Town', undefined, [], 'Masterplan aerial drone animation and urban development showcase.'),
   createYtProject('NJgPMovdV2Y', 'al-jannat-farmhouse', 'Al Jannat Farmhouse', 'Drone', undefined, 'Al Jannat', undefined, [], 'Luxury estate drone film highlighting expansive grounds and landscaping.'),
@@ -314,19 +314,20 @@ export const PROJECTS: Project[] = [
     '/portfolio/nexgen-10.webp',
     '/portfolio/nexgen-11.webp',
     '/portfolio/nexgen-12.webp',
-  ], false, undefined, ['architectural-visualization', '3d-product-visualization'], 'Comprehensive exterior and interior render suite for Nexgen Heights.'),
-  createImgProject('img-commtel', 'commtel-project', 'Commtel Project Stills', '/animation/commtel.webp', ['Visualization'], 'Commtel', undefined, false, undefined, ['3d-product-visualization', 'architectural-visualization'], 'High-detail product stills for Commtel hardware devices.'),
-  createImgProject('img-arcade', 'ns-arcade-stills', 'NS Arcade Stills', '/animation/ns-arcade.webp', ['Visualization'], 'NS Arcade', undefined, false, undefined, ['architectural-visualization', '3d-product-visualization'], 'Commercial plaza exterior elevation rendering for NS Arcade.'),
+  ], false, undefined, ['architectural-visualization'], 'Comprehensive exterior and interior render suite for Nexgen Heights.'),
+  createImgProject('img-commtel', 'commtel-project', 'Commtel Project Stills', '/animation/commtel.webp', ['Visualization'], 'Commtel', undefined, false, undefined, ['architectural-visualization'], 'High-detail product stills for Commtel hardware devices.'),
+  createImgProject('img-arcade', 'ns-arcade-stills', 'NS Arcade Stills', '/animation/ns-arcade.webp', ['Visualization'], 'NS Arcade', undefined, false, undefined, ['architectural-visualization'], 'Commercial plaza exterior elevation rendering for NS Arcade.'),
   createImgProject('img-watch', 'luxury-watch-3d-stills', 'Luxury Watch 3D Stills', '/portfolio/watch.png', ['Visualization'], 'Luxury Watch', undefined, false, undefined, ['3d-product-visualization'], 'Studio macro product shots of luxury watch mechanism.'),
   createImgProject('img-dha-suffa', 'dha-suffa-university', 'DHA Suffa University', '/portfolio/dha-suffa-4.webp', ['Visualization'], 'DHA Suffa University', [
     '/portfolio/dha-suffa.webp',
     '/portfolio/dha-suffa-2.webp',
     '/portfolio/dha-suffa-3.webp',
     '/portfolio/dha-suffa-4.webp',
-  ], false, undefined, ['architectural-visualization', '3d-product-visualization'], 'Educational campus architectural visualization and site planning.'),
+  ], false, undefined, ['architectural-visualization'], 'Educational campus architectural visualization and site planning.'),
 
   // 4. Configurator & Interactive Real-Time
   createImgProject('img-car', 'car-configurator', 'Car Configurator Engine', '/portfolio/car-configurator.jpg', ['Configurator', 'Interactive real-time'], 'Car Configurator', undefined, false, undefined, ['3d-product-configurators', 'interactive-real-time', 'interactive-web-experiences'], 'Real-time 3D vehicle customization engine with dynamic shader controls.'),
+  { ...createImgProject('leather-configurator', 'leather-crafted-configurator', 'Leather Crafted Configurator', '/portfolio/leather-crafted.webp', 'Configurator', 'Leather Crafted', undefined, false, undefined, ['3d-product-configurators'], 'Interactive real-time leather jacket product configurator with material and colour options.'), projectUrl: 'https://leather-crafted.com/' },
 
   // 5. 360 Tour
   createImgProject('img-esouth', 'e-south-360-tour', 'E-South 360 Tour', '/portfolio/e-south.webp', ['360 Tour'], 'E-South', undefined, true, undefined, ['vr-development', 'interactive-web-experiences'], 'Interactive 360 virtual tour of E-South complex.'),
@@ -346,14 +347,14 @@ export const PROJECTS: Project[] = [
   createYtProject('QhWmY9lXlZY', 'modern-apartment-interior', 'Modern Apartment Interior Design', ['Interior Designs', 'Animations'], '/animation/interior-3d.webp', 'Modern Apartment', undefined, ['architectural-visualization', '3d-animation'], 'Photorealistic interior design walkthrough for a modern luxury penthouse.'),
   createYtProject('oQnWA-22Bf4', 'governor-house-conference-room', 'Governor House – Conference Room', ['Interior Designs', 'Animations'], '/animation/governor-house.webp', 'Governor House', undefined, [], 'State conference hall 3D interior design walkthrough and lighting setup.'),
   createYtProject('9JFPZnPXQ1Y', 'call-center-interior-3d', 'Call Center Interior 3D', ['Interior Designs', 'Animations'], '/animation/call-center.webp', 'Call Center', undefined, ['architectural-visualization', '3d-animation'], 'Commercial corporate interior layout and workstation spatial rendering.'),
-  createImgProject('img-governor', 'governor-house-render', 'Governor House Stills', '/animation/governor-house.webp', ['Interior Designs', 'Visualization'], 'Governor House', undefined, false, undefined, ['architectural-visualization', '3d-product-visualization'], 'Official architectural interior stills for Governor House conference room.'),
+  createImgProject('img-governor', 'governor-house-render', 'Governor House Stills', '/animation/governor-house.webp', ['Interior Designs', 'Visualization'], 'Governor House', undefined, false, undefined, ['architectural-visualization'], 'Official architectural interior stills for Governor House conference room.'),
   createImgProject('img-bedroom', 'luxury-bedroom-suite', 'Luxury Bedroom Suite', '/portfolio/bedroom.webp', ['Interior Designs', 'Visualization'], 'Luxury Bedroom', [
     '/portfolio/bedroom.webp',
     '/portfolio/washroom.webp',
     '/portfolio/kitchen.webp',
     '/portfolio/lounge.webp',
     '/portfolio/swimming-pool.webp'
-  ], false, undefined, ['architectural-visualization', '3d-product-visualization'], 'High-end interior design suite including master bedroom, washroom, kitchen, lounge, and pool.'),
+  ], false, undefined, ['architectural-visualization'], 'High-end interior design suite including master bedroom, washroom, kitchen, lounge, and pool.'),
 
   // 9. AI Content Creation
   createYtProject('Xz3ssJbRLJ4', 'ai-stadium-view', 'AI Stadium View', 'AI Content Creation', '/portfolio/stadium-view.webp', 'Stadium View', undefined, ['marketing-sales'], 'Generative AI content creation and stadium visualization.'),
