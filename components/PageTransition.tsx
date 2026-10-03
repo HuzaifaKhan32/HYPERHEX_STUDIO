@@ -4,6 +4,7 @@ import React, { createContext, useContext, useEffect, useState, useRef } from 'r
 import { usePathname, useSearchParams } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
+import { useLenis } from 'lenis/react';
 
 export type TransitionDirection = 'forward' | 'backward';
 
@@ -135,6 +136,15 @@ export default function PageTransitionProvider({ children }: { children: React.R
     }
   }, [pathname, searchParams]);
 
+  // Reset Lenis virtual scroll position to top on every route change
+  const lenis = useLenis();
+  useEffect(() => {
+    if (lenis) {
+      lenis.scrollTo(0, { immediate: true });
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pathname]);
+
   const triggerTransition = (url?: string) => {
     startLoading(url);
   };
@@ -154,6 +164,7 @@ export default function PageTransitionProvider({ children }: { children: React.R
             }}
             transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
             className="fixed inset-0 z-[99999] flex flex-col justify-between overflow-hidden bg-[#0a0a0a] text-white select-none pointer-events-auto"
+            data-lenis-prevent
             style={{
               boxShadow: '0 25px 60px rgba(0,0,0,0.8)',
             }}

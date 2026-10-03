@@ -61,6 +61,7 @@ export default function CaseStudyModal({ caseStudy, onClose }: CaseStudyModalPro
             exit={{ opacity: 0, scale: 0.96, y: 10 }}
             transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
             className="relative z-10 w-full max-w-4xl max-h-[85vh] flex flex-col"
+            data-lenis-prevent
           >
             <div 
               className="bg-[#111617] rounded-2xl overflow-hidden shadow-2xl relative w-full flex flex-col border border-white/10 select-none"

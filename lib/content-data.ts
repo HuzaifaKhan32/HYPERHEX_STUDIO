@@ -341,7 +341,7 @@ export const PROJECTS: Project[] = [
   createWebProject('web-ce', 'ce-and-builders', 'CE and Builders', '/images/ce-and-builders.webp', 'https://ceandbuilders.com/', 'CE and Builders', ['web-development'], 'High-performance construction and real-estate platform engineered for CE and Builders.'),
   createWebProject('web-nayyer', 'nayyer-builders', 'Nayyer Builders', '/images/nayyer-builder.webp', 'https://nayyerbuilders.com/', 'Nayyer Builders', ['web-development'], 'Modern architectural portal showcasing property developments for Nayyer Builders.'),
   createWebProject('web-kurta', 'kurta-dukan', 'Kurta Dukan', '/images/kurta-Dukan.webp', 'https://www.kurtadukan.com/', 'Kurta Dukan', ['web-development', 'marketing-sales'], 'E-commerce fashion platform with custom product showcase for Kurta Dukan.'),
-  createWebProject('web-leather', 'leather-crafted', 'Leather Crafted', '/portfolio/leather-crafted.webp', 'https://leather-crafted.com/', 'Leather Crafted', ['web-development'], 'Luxury leather goods e-commerce experience showcasing artisan craftsmanship.'),
+  createWebProject('web-leather', 'leather-crafted', 'Leather Crafted', '/portfolio/leather-website.webp', 'https://leather-crafted.com/', 'Leather Crafted', ['web-development'], 'Luxury leather goods e-commerce experience showcasing artisan craftsmanship.'),
 
   // 8. Interior Designs
   createYtProject('QhWmY9lXlZY', 'modern-apartment-interior', 'Modern Apartment Interior Design', ['Interior Designs', 'Animations'], '/animation/interior-3d.webp', 'Modern Apartment', undefined, ['architectural-visualization', '3d-animation'], 'Photorealistic interior design walkthrough for a modern luxury penthouse.'),

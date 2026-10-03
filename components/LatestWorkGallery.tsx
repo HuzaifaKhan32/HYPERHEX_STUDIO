@@ -312,7 +312,6 @@ export default function LatestWorkGallery({
       document.body.style.overflow = 'hidden';
       // eslint-disable-next-line react-hooks/set-state-in-effect
       setIframeError(false);
-      // eslint-disable-next-line react-hooks/set-state-in-effect
       setCurrentImageIndex(0); // Reset to first image when opening modal
     } else {
       document.body.style.overflow = 'unset';
@@ -478,6 +477,7 @@ export default function LatestWorkGallery({
               exit={{ opacity: 0, scale: 0.95, filter: 'blur(10px)' }}
               transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
               className="relative z-10 w-full max-w-4xl max-h-[85vh] flex flex-col"
+              data-lenis-prevent
             >
               <div className="bg-[#111] rounded-2xl overflow-hidden shadow-2xl relative w-full flex flex-col border border-white/10">
                 {/* Responsive Close Button inside wrapper */}

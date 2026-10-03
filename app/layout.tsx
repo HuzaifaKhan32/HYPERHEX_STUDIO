@@ -6,6 +6,7 @@ import "./globals.css";
 import { SITE_CONFIG } from "@/lib/site-config";
 import CustomCursor from "@/components/CustomCursor";
 import PageTransitionProvider from "@/components/PageTransition";
+import SmoothScroll from "@/components/SmoothScroll";
 
 const dmSans = DM_Sans({
   variable: "--font-dm-sans",
@@ -138,9 +139,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body suppressHydrationWarning className="antialiased relative bg-background text-foreground" style={{ fontFamily: 'var(--font-dm-sans)' }}>
         <CustomCursor />
-        <Suspense fallback={null}>
-          <PageTransitionProvider>{children}</PageTransitionProvider>
-        </Suspense>
+        <SmoothScroll>
+          <Suspense fallback={null}>
+            <PageTransitionProvider>{children}</PageTransitionProvider>
+          </Suspense>
+        </SmoothScroll>
       </body>
     </html>
   );
