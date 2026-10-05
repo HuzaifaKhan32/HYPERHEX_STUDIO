@@ -1,43 +1,76 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import Image from 'next/image';
 
 interface YouTubeFacadeProps {
-  embedUrl: string;   // e.g. https://www.youtube.com/embed/VIDEO_ID?rel=0
+  embedUrl: string;   // e.g. https://www.youtube.com/embed/VIDEO_ID?rel=0 or VIDEO_ID
   title: string;
   thumbnailUrl?: string; // optional custom thumbnail; falls back to YouTube HQ thumb
   className?: string;
+  autoPlay?: boolean; // if true (e.g. in modal after user clicked card), mounts iframe immediately
 }
 
-function extractVideoId(embedUrl: string): string | null {
-  // matches /embed/VIDEO_ID
-  const match = embedUrl.match(/\/embed\/([^?&/]+)/);
+function extractVideoId(url: string): string | null {
+  if (!url) return null;
+  const trimmed = url.trim();
+  if (/^[a-zA-Z0-9_-]{11}$/.test(trimmed)) return trimmed;
+  const match = trimmed.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/);
   return match ? match[1] : null;
 }
 
-export default function YouTubeFacade({ embedUrl, title, thumbnailUrl, className = '' }: YouTubeFacadeProps) {
-  const [isPlaying, setIsPlaying] = useState(false);
+function buildNoCookieUrl(videoId: string): string {
+  return `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&rel=0&modestbranding=1`;
+}
+
+export default function YouTubeFacade({
+  embedUrl,
+  title,
+  thumbnailUrl,
+  className = '',
+  autoPlay = false,
+}: YouTubeFacadeProps) {
+  const [isPlaying, setIsPlaying] = useState(autoPlay);
+  const [imgError, setImgError] = useState(false);
+  const [hasPreconnected, setHasPreconnected] = useState(false);
 
   const videoId = extractVideoId(embedUrl);
-  // Use YouTube's maxresdefault if no custom thumbnail
-  const thumb = thumbnailUrl || (videoId ? `https://i.ytimg.com/vi/${videoId}/maxresdefault.jpg` : '');
 
-  // When the user clicks play, mount the real iframe with autoplay=1
-  const playUrl = embedUrl.includes('?')
-    ? `${embedUrl}&autoplay=1`
-    : `${embedUrl}?autoplay=1`;
+  const defaultMaxRes = videoId ? `https://i.ytimg.com/vi/${videoId}/maxresdefault.jpg` : '';
+  const defaultHq = videoId ? `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg` : '';
 
-  if (isPlaying) {
+  const currentThumb = thumbnailUrl
+    ? (imgError ? defaultHq : thumbnailUrl)
+    : (imgError ? defaultHq : defaultMaxRes);
+
+  const playUrl = videoId ? buildNoCookieUrl(videoId) : embedUrl;
+
+  // Preconnect hint on pointer hover (not on page load)
+  const handlePointerEnter = useCallback(() => {
+    if (hasPreconnected || isPlaying) return;
+    setHasPreconnected(true);
+
+    if (typeof document !== 'undefined') {
+      let link = document.querySelector('link[data-youtube-nocookie-preconnect]') as HTMLLinkElement | null;
+      if (!link) {
+        link = document.createElement('link');
+        link.rel = 'preconnect';
+        link.href = 'https://www.youtube-nocookie.com';
+        link.setAttribute('data-youtube-nocookie-preconnect', 'true');
+        document.head.appendChild(link);
+      }
+    }
+  }, [hasPreconnected, isPlaying]);
+
+  if (isPlaying && videoId) {
     return (
       <div className={`relative aspect-video w-full rounded-2xl overflow-hidden bg-black ${className}`}>
         <iframe
           src={playUrl}
           title={title}
           className="w-full h-full border-0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
           allowFullScreen
-          loading="lazy"
         />
       </div>
     );
@@ -47,20 +80,27 @@ export default function YouTubeFacade({ embedUrl, title, thumbnailUrl, className
     <div
       className={`relative aspect-video w-full rounded-2xl overflow-hidden bg-black cursor-pointer group ${className}`}
       onClick={() => setIsPlaying(true)}
+      onPointerEnter={handlePointerEnter}
       role="button"
       aria-label={`Play ${title}`}
       tabIndex={0}
-      onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setIsPlaying(true); }}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          setIsPlaying(true);
+        }
+      }}
     >
       {/* Thumbnail */}
-      {thumb && (
+      {currentThumb && (
         <Image
-          src={thumb}
+          src={currentThumb}
           alt={`${title} thumbnail`}
           fill
           className="object-cover transition-transform duration-500 group-hover:scale-105"
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 70vw"
           priority
+          onError={() => setImgError(true)}
         />
       )}
 
@@ -94,3 +134,4 @@ export default function YouTubeFacade({ embedUrl, title, thumbnailUrl, className
     </div>
   );
 }
+

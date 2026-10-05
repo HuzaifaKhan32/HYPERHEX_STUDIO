@@ -148,6 +148,11 @@ export function InfiniteMarquee({
     const deltaX = currentX - lastPointerX.current;
     const totalDistX = Math.abs(currentX - dragStartX.current);
     const totalDistY = Math.abs(currentY - dragStartY.current);
+    const totalDist = Math.hypot(totalDistX, totalDistY);
+
+    if (totalDist > 6) {
+      hasMoved.current = true;
+    }
 
     if (!isDragging.current) {
       if (totalDistX > 5 && totalDistX > totalDistY) {

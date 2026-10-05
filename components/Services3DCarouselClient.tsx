@@ -441,17 +441,30 @@ export default function Services3DCarouselClient({ services }: Services3DCarouse
     hasMovedRef.current = false;
   };
 
+  const handleClickCapture = (e: React.MouseEvent) => {
+    if (hasMovedRef.current) {
+      e.preventDefault();
+      e.stopPropagation();
+      hasMovedRef.current = false;
+    }
+  };
+
   const handlePointerMove = (e: ReactPointerEvent<HTMLDivElement>) => {
     if (!isPointerDownRef.current || !pointerStartRef.current) return;
 
     const deltaX = e.clientX - pointerStartRef.current.x;
     const deltaY = e.clientY - pointerStartRef.current.y;
+    const dist = Math.hypot(deltaX, deltaY);
 
-    if (!hasMovedRef.current) {
+    if (dist > 6) {
+      hasMovedRef.current = true;
+    }
+
+    if (!hasMovedRef.current || !isDraggingRef.current) {
       const absX = Math.abs(deltaX);
       const absY = Math.abs(deltaY);
 
-      if (absX > 8 && absX > absY) {
+      if (absX > 6 && absX > absY) {
         hasMovedRef.current = true;
         isDraggingRef.current = true;
         clearAutoRotateTimer();
@@ -595,7 +608,7 @@ export default function Services3DCarouselClient({ services }: Services3DCarouse
       {/* 3D PRESENTATION STAGE ENVIRONMENT WITH PHYSICAL DRAG */}
       <div
         data-cursor="drag"
-        className="relative w-full h-[440px] sm:h-[460px] md:h-[480px] xl:h-[530px] 2xl:h-[580px] flex items-center justify-center touch-pan-y cursor-grab active:cursor-grabbing"
+        className="relative w-full h-[440px] sm:h-[460px] md:h-[480px] xl:h-[530px] 2xl:h-[580px] flex items-center justify-center touch-pan-y cursor-grab active:cursor-grabbing select-none"
         style={{
           perspective: '1000px',
           transformStyle: 'preserve-3d',
@@ -605,6 +618,7 @@ export default function Services3DCarouselClient({ services }: Services3DCarouse
         onPointerMove={handlePointerMove}
         onPointerUp={handlePointerUp}
         onPointerCancel={handlePointerUp}
+        onClickCapture={handleClickCapture}
       >
         {/* Ambient Radial Gradient Glow */}
         <div

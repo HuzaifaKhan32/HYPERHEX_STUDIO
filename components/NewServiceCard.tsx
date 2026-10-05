@@ -120,6 +120,8 @@ export default function ServiceCard({
       <Link
         href={`/services/${data.id}`}
         tabIndex={isFocused ? 0 : -1}
+        draggable={false}
+        onDragStart={(e) => e.preventDefault()}
         className={`group relative flex w-[300px] md:w-[320px] 2xl:w-[375px] h-[360px] md:h-[370px] 2xl:h-[425px] p-6 2xl:p-7 flex-col justify-between overflow-hidden transition-all duration-300 ease-out z-10 select-none outline-none focus:outline-none [WebkitTapHighlightColor:transparent] ${isFocused ? '' : 'pointer-events-none'} ${className}`}
         style={{
           boxSizing: 'border-box',
@@ -132,20 +134,22 @@ export default function ServiceCard({
           WebkitFontSmoothing: 'antialiased',
           MozOsxFontSmoothing: 'grayscale',
           transform: 'translateZ(0)',
+          userSelect: 'none',
+          WebkitUserDrag: 'none',
           ...style,
-        }}
+        } as React.CSSProperties}
       >
         {/* Top Section: Counter + Icon with Perfectly Centered Concentric Circles */}
-        <div className="relative z-10">
-          <div className="flex items-center justify-between mb-3">
-            <span className="text-xs font-bold tracking-[0.08em] text-[#15b6e8]">
+        <div className="relative z-10 select-none">
+          <div className="flex items-center justify-between mb-3 select-none">
+            <span className="text-xs font-bold tracking-[0.08em] text-[#15b6e8] select-none">
               {data.counter}
             </span>
 
             {/* Icon Wrapper & Centered Concentric Circles */}
-            <div className="relative flex items-center justify-center">
+            <div className="relative flex items-center justify-center select-none">
               {/* CONCENTRIC ANIMATED CIRCLES */}
-              <div className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-[150px] w-[150px] flex items-center justify-center z-0">
+              <div className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-[150px] w-[150px] flex items-center justify-center z-0 select-none">
                 <AnimatePresence>
                   {isFocused && (
                     <motion.div
@@ -159,7 +163,7 @@ export default function ServiceCard({
                         damping: 24,
                         mass: 0.8,
                       }}
-                      className="relative flex items-center justify-center h-full w-full"
+                      className="relative flex items-center justify-center h-full w-full select-none"
                     >
                       {/* DECORATIVE CIRCLE 1 (Outer) */}
                       <motion.div
@@ -167,7 +171,7 @@ export default function ServiceCard({
                         animate={{ opacity: 1, scale: 1 }}
                         exit={{ opacity: 0, scale: 0.2 }}
                         transition={{ duration: 0.3, delay: 0.04 }}
-                        className="absolute h-[135px] w-[135px] rounded-full bg-[#15b6e8]/[0.06] border border-white/60 shadow-[0_8px_20px_rgba(15,23,42,0.08),_inset_0_2px_6px_rgba(255,255,255,0.9)] transition-transform duration-500 ease-out group-hover:scale-105"
+                        className="absolute h-[135px] w-[135px] rounded-full bg-[#15b6e8]/[0.06] border border-white/60 shadow-[0_8px_20px_rgba(15,23,42,0.08),_inset_0_2px_6px_rgba(255,255,255,0.9)] transition-transform duration-500 ease-out group-hover:scale-105 select-none"
                       />
 
                       {/* DECORATIVE CIRCLE 2 (Middle) */}
@@ -176,7 +180,7 @@ export default function ServiceCard({
                         animate={{ opacity: 1, scale: 1 }}
                         exit={{ opacity: 0, scale: 0.2 }}
                         transition={{ duration: 0.3, delay: 0.08 }}
-                        className="absolute h-[98px] w-[98px] rounded-full bg-[#15b6e8]/[0.11] border border-white/70 shadow-[0_10px_24px_rgba(15,23,42,0.11),_inset_0_2px_8px_rgba(255,255,255,0.95)] transition-transform duration-500 ease-out group-hover:scale-105"
+                        className="absolute h-[98px] w-[98px] rounded-full bg-[#15b6e8]/[0.11] border border-white/70 shadow-[0_10px_24px_rgba(15,23,42,0.11),_inset_0_2px_8px_rgba(255,255,255,0.95)] transition-transform duration-500 ease-out group-hover:scale-105 select-none"
                       />
 
                       {/* DECORATIVE CIRCLE 3 (Inner) */}
@@ -185,7 +189,7 @@ export default function ServiceCard({
                         animate={{ opacity: 1, scale: 1 }}
                         exit={{ opacity: 0, scale: 0.2 }}
                         transition={{ duration: 0.3, delay: 0.12 }}
-                        className="absolute h-[68px] w-[68px] rounded-full bg-[#15b6e8]/[0.20] border border-white/80 shadow-[0_12px_28px_rgba(15,23,42,0.14),_inset_0_2px_10px_rgba(255,255,255,1)] transition-transform duration-500 ease-out group-hover:scale-110"
+                        className="absolute h-[68px] w-[68px] rounded-full bg-[#15b6e8]/[0.20] border border-white/80 shadow-[0_12px_28px_rgba(15,23,42,0.14),_inset_0_2px_10px_rgba(255,255,255,1)] transition-transform duration-500 ease-out group-hover:scale-110 select-none"
                       />
                     </motion.div>
                   )}
@@ -193,16 +197,16 @@ export default function ServiceCard({
               </div>
 
               {/* Hero Icon Button */}
-              <div className="relative z-10 flex h-11 w-11 items-center justify-center rounded-full bg-[#15b6e8] shadow-[0_10px_24px_-6px_rgba(21,182,232,0.6)] transition-transform duration-300 group-hover:scale-105">
+              <div className="relative z-10 flex h-11 w-11 items-center justify-center rounded-full bg-[#15b6e8] shadow-[0_10px_24px_-6px_rgba(21,182,232,0.6)] transition-transform duration-300 group-hover:scale-105 select-none">
                 {SERVICE_ICONS[data.id] ?? DEFAULT_ICON}
               </div>
             </div>
           </div>
 
-          <h3 className="text-xl md:text-2xl font-bold leading-tight tracking-[-0.02em] text-[#161d1e] mb-2 pr-10">
+          <h3 className="text-xl md:text-2xl font-bold leading-tight tracking-[-0.02em] text-[#161d1e] mb-2 pr-10 select-none">
             {data.title}
           </h3>
-          <p className="text-[11px] md:text-xs font-medium leading-relaxed text-[#3b494c] line-clamp-3">
+          <p className="text-[11px] md:text-xs font-medium leading-relaxed text-[#3b494c] line-clamp-3 select-none">
             {data.description}
           </p>
         </div>
@@ -217,16 +221,17 @@ export default function ServiceCard({
               height={240}
               quality={95}
               draggable={false}
-              style={{ imageRendering: '-webkit-optimize-contrast' }}
+              onDragStart={(e) => e.preventDefault()}
+              style={{ userSelect: 'none', WebkitUserDrag: 'none', imageRendering: '-webkit-optimize-contrast' } as React.CSSProperties}
               className="object-contain h-full w-full max-h-[125px] 2xl:max-h-[150px] transition-transform duration-300 group-hover:scale-105 select-none pointer-events-none drop-shadow-[0_6px_14px_rgba(15,23,42,0.12)]"
             />
           </div>
         )}
 
         {/* Bottom Action */}
-        <div className="relative z-10 pt-2">
+        <div className="relative z-10 pt-2 select-none">
           <span
-            className="inline-flex items-center gap-1.5 text-xs font-bold text-[#161d1e] transition-colors duration-200 group-hover:text-[#15b6e8]"
+            className="inline-flex items-center gap-1.5 text-xs font-bold text-[#161d1e] transition-colors duration-200 group-hover:text-[#15b6e8] select-none"
           >
             View more
             <svg

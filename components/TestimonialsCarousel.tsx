@@ -124,7 +124,6 @@ export default function TestimonialsCarousel({ testimonials }: TestimonialsCarou
         onMouseUp={handleMouseLeaveOrUp}
         onMouseMove={handleMouseMove}
         style={{ touchAction: 'pan-y' }}
-        data-lenis-prevent-wheel
         className={`flex gap-5 overflow-x-auto py-4 px-2 scrollbar-none cursor-grab ${
           isMouseDown ? 'cursor-grabbing' : ''
         }`}
