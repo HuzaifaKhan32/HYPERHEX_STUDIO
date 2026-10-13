@@ -136,9 +136,33 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
             </div>
             <div>
               <span className="text-muted-foreground uppercase block mb-1 font-mono text-[10px]">Status</span>
-              <span className="font-semibold text-emerald-600">Production Complete</span>
+              <span className={project.comingSoon ? 'font-semibold text-amber-500' : 'font-semibold text-emerald-600'}>
+                {project.comingSoon ? 'Coming Soon' : 'Production Complete'}
+              </span>
             </div>
           </div>
+
+          {project.projectUrl && (
+            <div className="pt-2">
+              <a
+                href={project.projectUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-white font-bold text-xs uppercase tracking-wider bg-[#15b6e8] hover:bg-[#15b6e8]/90 transition-all hover:scale-105 active:scale-95 shadow-[0_0_20px_rgba(21,182,232,0.4)]"
+              >
+                <span>
+                  {project.category === '360 Tour' || (Array.isArray(project.category) && project.category.includes('360 Tour'))
+                    ? 'Launch 360 Tour'
+                    : 'Visit Live Project'}
+                </span>
+                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                  <polyline points="15 3 21 3 21 9"></polyline>
+                  <line x1="10" y1="14" x2="21" y2="3"></line>
+                </svg>
+              </a>
+            </div>
+          )}
         </header>
 
         {/* Media Player or Showcase Image */}

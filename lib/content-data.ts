@@ -263,7 +263,8 @@ function createImgProject(
   comingSoon?: boolean,
   objectFit?: 'cover' | 'contain',
   serviceIds?: string[],
-  description?: string
+  description?: string,
+  projectUrl?: string
 ): Project {
   return {
     id,
@@ -278,6 +279,7 @@ function createImgProject(
     objectFit,
     serviceIds,
     description: description || `High-precision 3D render showcase and spatial project for ${title}.`,
+    projectUrl,
   };
 }
 
@@ -300,6 +302,12 @@ export const PROJECTS: Project[] = [
 
 
   // 3. Visualization
+  createImgProject('img-golden-hour', 'golden-hour', 'Golden Hour', '/portfolio/Golden Hour Modern Cityscape.webp', 'Visualization', 'Golden Hour', [
+    '/portfolio/Golden Hour Modern Cityscape.webp',
+    '/portfolio/Golden-Hour Futuristic Tower Campus.webp',
+    '/portfolio/Golden-Hour Modern Tower by the Hills.webp',
+    '/portfolio/Golden-Hour Naya Nazimabad Masterplan.webp',
+  ], false, undefined, ['architectural-visualization'], 'Atmospheric golden-hour architectural visualization and masterplan collection featuring modern urban towers and scenic elevations.'),
   createImgProject('img-nexgen', 'nexgen-heights-stills', 'Nexgen Heights Gallery', '/portfolio/nexgen-13.webp', ['Visualization'], 'Nexgen Heights', [
     '/portfolio/nexgen-13.webp',
     // '/portfolio/nexgen-1.webp',
@@ -326,12 +334,13 @@ export const PROJECTS: Project[] = [
   ], false, undefined, ['architectural-visualization'], 'Educational campus architectural visualization and site planning.'),
 
   // 4. Configurator & Interactive Real-Time
+  createYtProject('KQ29uC-07MA', 'mumtaz-walkthrough', 'Mumtaz Walkthrough', 'Interactive real-time', '/portfolio/mumtaz_walkthrough.avif', 'Mumtaz', undefined, ['interactive-real-time'], 'Interactive real-time architectural walkthrough and dynamic spatial experience for Mumtaz.'),
   createImgProject('img-car', 'car-configurator', 'Car Configurator Engine', '/portfolio/car-configurator.jpg', ['Configurator', 'Interactive real-time'], 'Car Configurator', undefined, false, undefined, ['3d-product-configurators', 'interactive-real-time', 'interactive-web-experiences'], 'Real-time 3D vehicle customization engine with dynamic shader controls.'),
-  { ...createImgProject('leather-configurator', 'leather-crafted-configurator', 'Leather Crafted Configurator', '/portfolio/leather-crafted.webp', 'Configurator', 'Leather Crafted', undefined, false, undefined, ['3d-product-configurators'], 'Interactive real-time leather jacket product configurator with material and colour options.'), projectUrl: 'https://leather-crafted.com/' },
+  createImgProject('leather-configurator', 'leather-crafted-configurator', 'Leather Crafted Configurator', '/portfolio/leather-crafted.webp', 'Configurator', 'Leather Crafted', undefined, false, undefined, ['3d-product-configurators'], 'Interactive real-time leather jacket product configurator with material and colour options.', 'https://leather-crafted.com/'),
 
   // 5. 360 Tour
   createImgProject('img-esouth', 'e-south-360-tour', 'E-South 360 Tour', '/portfolio/e-south.webp', ['360 Tour'], 'E-South', undefined, true, undefined, ['vr-development', 'interactive-web-experiences'], 'Interactive 360 virtual tour of E-South complex.'),
-  createImgProject('img-amna', 'amna-ashraf-360-tour', 'Amna Ashraf 360 Tour', '/portfolio/amna-ashraf.webp', ['360 Tour'], 'Amna Ashraf', undefined, true, undefined, ['vr-development', 'interactive-web-experiences'], 'Interactive 360 virtual walkthrough for Amna Ashraf residence.'),
+  createImgProject('img-amna', 'amna-ashraf-360-tour', 'Amna Ashraf 360 Tour', '/portfolio/amna-ashraf.webp', ['360 Tour'], 'Amna Ashraf', undefined, false, undefined, ['vr-development', 'interactive-web-experiences'], 'Interactive 360 virtual walkthrough for Amna Ashraf residence.', 'https://xpenders.com/AmnaAshraf/'),
   createImgProject('img-ivf-academy', 'ivf-academy-360-tour', 'IVF Academy 360 Tour', '/portfolio/ivf-academy.webp', ['360 Tour'], 'IVF Academy USA', undefined, true, undefined, ['vr-development', 'interactive-web-experiences'], 'Interactive 360 virtual tour for IVF Academy USA.'),
 
   // 6. VR

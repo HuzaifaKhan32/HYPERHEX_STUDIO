@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import Button3D from './Button3D';
@@ -185,14 +185,14 @@ const ProjectCard = React.memo(({
               <polyline points="15 3 21 3 21 9"></polyline>
               <line x1="10" y1="14" x2="21" y2="3"></line>
             </svg>
-            View Project
+            {project.category === '360 Tour' || (Array.isArray(project.category) && project.category.includes('360 Tour')) ? 'Launch 360 Tour' : 'View Project'}
           </div>
         ) : (
           <div className="mt-4 px-5 py-2 rounded-full bg-white text-black font-semibold text-xs md:text-sm uppercase tracking-wider flex items-center gap-2 shadow-lg">
             <svg className="w-3.5 h-3.5 fill-black" viewBox="0 0 24 24">
               <path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z" />
             </svg>
-            View Image
+            {project.gallery && project.gallery.length > 1 ? 'View Gallery' : 'View Image'}
           </div>
         )}
       </div>
@@ -208,18 +208,34 @@ const ProjectCard = React.memo(({
         </div>
       )}
 
-      {/* Top-right badge (video play icon or web external link icon) */}
+      {/* Top-right badge (video play icon, web external link icon, or gallery count) */}
       {!project.comingSoon && project.isVideo ? (
         <div className="absolute top-3 right-3 z-10 w-8 h-8 rounded-full bg-black/50 border border-white/20 backdrop-blur-sm flex items-center justify-center pointer-events-none">
           <svg className="w-3.5 h-3.5 text-white ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>
         </div>
       ) : !project.comingSoon && project.projectUrl ? (
-        <div className="absolute top-3 right-3 z-10 w-8 h-8 rounded-full bg-black/50 border border-white/20 backdrop-blur-sm flex items-center justify-center pointer-events-none">
+        <a
+          href={project.projectUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          onClick={(e) => e.stopPropagation()}
+          title="Open live project in new tab"
+          className="absolute top-3 right-3 z-20 w-8 h-8 rounded-full bg-black/60 hover:bg-accent border border-white/20 backdrop-blur-sm flex items-center justify-center transition-all hover:scale-110 active:scale-95"
+        >
           <svg className="w-3.5 h-3.5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
             <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
             <polyline points="15 3 21 3 21 9"></polyline>
             <line x1="10" y1="14" x2="21" y2="3"></line>
           </svg>
+        </a>
+      ) : project.gallery && project.gallery.length > 1 ? (
+        <div className="absolute top-3 right-3 z-10 px-2.5 py-1 rounded-full bg-black/60 border border-white/20 backdrop-blur-sm flex items-center gap-1.5 pointer-events-none text-white text-[11px] font-semibold shadow-md">
+          <svg className="w-3.5 h-3.5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <rect width="18" height="18" x="3" y="3" rx="2" ry="2"/>
+            <circle cx="9" cy="9" r="2"/>
+            <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/>
+          </svg>
+          <span>{project.gallery.length}</span>
         </div>
       ) : null}
     </motion.div>
@@ -298,15 +314,15 @@ export default function LatestWorkGallery({
     setVisibleCount(INITIAL_COUNT);
   };
 
-  const handlePrevImage = () => {
+  const handlePrevImage = useCallback(() => {
     if (!selectedProject?.gallery) return;
     setCurrentImageIndex((prev) => (prev === 0 ? selectedProject.gallery!.length - 1 : prev - 1));
-  };
+  }, [selectedProject]);
 
-  const handleNextImage = () => {
+  const handleNextImage = useCallback(() => {
     if (!selectedProject?.gallery) return;
     setCurrentImageIndex((prev) => (prev === selectedProject.gallery!.length - 1 ? 0 : prev + 1));
-  };
+  }, [selectedProject]);
 
   useEffect(() => {
     if (selectedProject) {
@@ -316,6 +332,21 @@ export default function LatestWorkGallery({
       setCurrentImageIndex(0); // Reset to first image when opening modal
     }
   }, [selectedProject]);
+
+  useEffect(() => {
+    if (!selectedProject?.gallery || selectedProject.gallery.length <= 1) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'ArrowLeft') {
+        handlePrevImage();
+      } else if (e.key === 'ArrowRight') {
+        handleNextImage();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [selectedProject, handlePrevImage, handleNextImage]);
 
   return (
     <section id="works" className={`flex flex-col w-full ${bgClass} text-on-surface relative overflow-hidden font-[family-name:var(--font-dm-sans)] pb-6`}>
@@ -548,17 +579,29 @@ export default function LatestWorkGallery({
                         </svg>
                       </button>
 
-                      {/* Image Counter */}
-                      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 bg-black/60 backdrop-blur-md rounded-full px-4 py-2 border border-white/15 shadow-lg">
-                        <span className="text-white text-sm font-semibold">
+                      {/* Image Counter & Pagination Dots */}
+                      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2.5 bg-black/70 backdrop-blur-md rounded-full px-4 py-2 border border-white/15 shadow-lg select-none">
+                        <span className="text-white text-xs sm:text-sm font-semibold mr-1">
                           {currentImageIndex + 1} / {selectedProject.gallery.length}
                         </span>
+                        <div className="flex items-center gap-1.5">
+                          {selectedProject.gallery.map((_, dotIdx) => (
+                            <button
+                              key={dotIdx}
+                              onClick={() => setCurrentImageIndex(dotIdx)}
+                              className={`h-2 rounded-full transition-all cursor-pointer ${
+                                currentImageIndex === dotIdx ? 'w-5 bg-accent' : 'w-2 bg-white/40 hover:bg-white/70'
+                              }`}
+                              aria-label={`Go to slide ${dotIdx + 1}`}
+                            />
+                          ))}
+                        </div>
                       </div>
                     </>
                   )}
                 </div>
               ) : (
-                <div className="relative w-full overflow-hidden bg-black" style={{ aspectRatio: '16/9' }}>
+                <div className="relative w-full overflow-hidden bg-black group/imglink" style={{ aspectRatio: '16/9' }}>
                   <Image
                     src={selectedProject.imageUrl}
                     alt={selectedProject.title}
@@ -570,6 +613,27 @@ export default function LatestWorkGallery({
                     className={`${selectedProject.objectFit === 'contain' ? 'object-contain' : 'object-cover'} object-center`}
                     priority
                   />
+                  {selectedProject.projectUrl && (
+                    <a
+                      href={selectedProject.projectUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="absolute inset-0 z-10 flex items-center justify-center bg-black/30 hover:bg-black/10 transition-colors group/overlay"
+                    >
+                      <span className="px-5 py-2.5 rounded-full bg-accent text-white font-bold text-xs sm:text-sm uppercase tracking-wider flex items-center gap-2 shadow-xl shadow-accent/40 transform group-hover/overlay:scale-105 transition-transform">
+                        <span>
+                          {selectedProject.category === '360 Tour' || (Array.isArray(selectedProject.category) && selectedProject.category.includes('360 Tour'))
+                            ? 'Launch 360 Tour'
+                            : 'Visit Live Site'}
+                        </span>
+                        <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                          <polyline points="15 3 21 3 21 9"></polyline>
+                          <line x1="10" y1="14" x2="21" y2="3"></line>
+                        </svg>
+                      </span>
+                    </a>
+                  )}
                 </div>
               )}
               <div className="p-5 md:p-6 bg-[#0c0c0c] border-t border-white/10 backdrop-blur-md flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -589,7 +653,11 @@ export default function LatestWorkGallery({
                     className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl text-white font-bold text-xs sm:text-sm uppercase tracking-wider transition-all hover:scale-105 active:scale-95 shadow-[0_0_20px_rgba(21,182,232,0.4)] self-start sm:self-auto shrink-0"
                     style={{ backgroundColor: 'var(--color-accent)' }}
                   >
-                    <span>Visit Live Site</span>
+                    <span>
+                      {selectedProject.category === '360 Tour' || (Array.isArray(selectedProject.category) && selectedProject.category.includes('360 Tour'))
+                        ? 'Launch 360 Tour'
+                        : 'Visit Live Site'}
+                    </span>
                     <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                       <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
                       <polyline points="15 3 21 3 21 9"></polyline>
