@@ -580,17 +580,17 @@ export default function LatestWorkGallery({
                       </button>
 
                       {/* Image Counter & Pagination Dots */}
-                      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2.5 bg-black/70 backdrop-blur-md rounded-full px-4 py-2 border border-white/15 shadow-lg select-none">
-                        <span className="text-white text-xs sm:text-sm font-semibold mr-1">
+                      <div className="absolute bottom-2.5 sm:bottom-4 left-1/2 -translate-x-1/2 z-20 flex items-center gap-1.5 sm:gap-2.5 bg-black/70 backdrop-blur-md rounded-full px-2.5 py-1 sm:px-4 sm:py-2 border border-white/15 shadow-lg select-none max-w-[90%]">
+                        <span className="text-white text-[10px] sm:text-sm font-semibold mr-0.5 sm:mr-1 shrink-0">
                           {currentImageIndex + 1} / {selectedProject.gallery.length}
                         </span>
-                        <div className="flex items-center gap-1.5">
+                        <div className="flex items-center gap-1 sm:gap-1.5 shrink-0">
                           {selectedProject.gallery.map((_, dotIdx) => (
                             <button
                               key={dotIdx}
                               onClick={() => setCurrentImageIndex(dotIdx)}
-                              className={`h-2 rounded-full transition-all cursor-pointer ${
-                                currentImageIndex === dotIdx ? 'w-5 bg-accent' : 'w-2 bg-white/40 hover:bg-white/70'
+                              className={`h-1.5 sm:h-2 rounded-full transition-all cursor-pointer ${
+                                currentImageIndex === dotIdx ? 'w-3.5 sm:w-5 bg-accent' : 'w-1.5 sm:w-2 bg-white/40 hover:bg-white/70'
                               }`}
                               aria-label={`Go to slide ${dotIdx + 1}`}
                             />

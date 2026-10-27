@@ -286,6 +286,8 @@ function createImgProject(
 // ── Unified Projects Data Source ───────────────────────────────────────────
 export const PROJECTS: Project[] = [
   // 1. Animations
+  createYtProject('Dc3EUFiIhQ8', 'shuhada-land', 'Shuhada Land', 'Animations', '/portfolio/shauhda.webp', 'Shuhada Land', undefined, ['3d-animation'], 'Real-site 3D visualization, master planning, and cinematic animation for Shuhada Land in DHA City Karachi.'),
+  createYtProject('Vyfxp5hyaQg', 'the-valour-central', 'The Valor Central', 'Animations', '/portfolio/valour_central.webp', 'The Valour Central', undefined, ['3d-animation'], 'Cinematic 3D architectural animation for The Valour Central in DHA City Karachi.'),
   createYtProject('jnaCWbBifcQ', 'ai-vision-studio', 'AI Vision Studio', 'Animations', '/portfolio/vision.webp', 'Vision Studio', undefined, [], 'Cinematic studio motion and visual identity animation.'),
   createYtProject('etXi1RoYDnA', 'stadium-view-visualization', 'Stadium View Visualization', 'Animations', '/portfolio/stadium-view-visualization.webp', 'Stadium View Visualization', undefined, ['architectural-visualization', '3d-animation'], 'Large-scale arena spatial rendering and dynamic lighting fly-through.'),
   createYtProject('SXNb1vR_snw', 'ns-arcade-3d-animation', 'NS Arcade | 3D Animation', 'Animations', '/animation/ns-arcade.webp', 'NS Arcade', undefined, [], '3D commercial plaza animation showcasing interior arcade and retail spaces.'),
