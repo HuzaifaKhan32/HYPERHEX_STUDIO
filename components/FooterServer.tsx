@@ -11,8 +11,8 @@ import FooterScrollTopButton from './FooterScrollTopButton';
 
 const companyLinks = [
   { label: 'About Us', href: '/about' },
-  { label: 'Portfolio', href: '#works' },
-  { label: 'Case Studies', href: '#case-studies' },
+  { label: 'Portfolio', href: '/featured-projects' },
+  { label: 'Services', href: '/services' },
   { label: 'Contact', href: '/contact' },
 ];
 

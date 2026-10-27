@@ -286,14 +286,13 @@ function createImgProject(
 // ── Unified Projects Data Source ───────────────────────────────────────────
 export const PROJECTS: Project[] = [
   // 1. Animations
-  createYtProject('Dc3EUFiIhQ8', 'shuhada-land', 'Shuhada Land', 'Animations', '/portfolio/shauhda.webp', 'Shuhada Land', undefined, ['3d-animation'], 'Real-site 3D visualization, master planning, and cinematic animation for Shuhada Land in DHA City Karachi.'),
-  createYtProject('Vyfxp5hyaQg', 'the-valour-central', 'The Valor Central', 'Animations', '/portfolio/valour_central.webp', 'The Valour Central', undefined, ['3d-animation'], 'Cinematic 3D architectural animation for The Valour Central in DHA City Karachi.'),
-  createYtProject('jnaCWbBifcQ', 'ai-vision-studio', 'AI Vision Studio', 'Animations', '/portfolio/vision.webp', 'Vision Studio', undefined, [], 'Cinematic studio motion and visual identity animation.'),
   createYtProject('etXi1RoYDnA', 'stadium-view-visualization', 'Stadium View Visualization', 'Animations', '/portfolio/stadium-view-visualization.webp', 'Stadium View Visualization', undefined, ['architectural-visualization', '3d-animation'], 'Large-scale arena spatial rendering and dynamic lighting fly-through.'),
+  createYtProject('Vyfxp5hyaQg', 'the-valour-central', 'The Valor Central', 'Animations', '/portfolio/valour_central.webp', 'The Valour Central', undefined, ['3d-animation'], 'Cinematic 3D architectural animation for The Valour Central in DHA City Karachi.'),
+  createYtProject('WKOskq3aIQQ', 'mumtaz-residency', 'Mumtaz Residency', 'Animations', undefined, 'Mumtaz Residency', undefined, [], 'High-rise residential tower exterior render and elevation animation.'),
+  createYtProject('Dc3EUFiIhQ8', 'shuhada-land', 'Shuhada Land', 'Animations', '/portfolio/shauhda.webp', 'Shuhada Land', undefined, ['3d-animation'], 'Real-site 3D visualization, master planning, and cinematic animation for Shuhada Land in DHA City Karachi.'),
   createYtProject('SXNb1vR_snw', 'ns-arcade-3d-animation', 'NS Arcade | 3D Animation', 'Animations', '/animation/ns-arcade.webp', 'NS Arcade', undefined, [], '3D commercial plaza animation showcasing interior arcade and retail spaces.'),
   createYtProject('Jq_njk26M3E', 'commtel-3d-design', 'Commtel | 3D Design & Animation', 'Animations', '/animation/commtel.webp', 'Commtel', undefined, [], 'Industrial telecom device breakdown and 3D product animation.'),
   createYtProject('7JT-j8gz5uU', 'luxury-watch-3d-animation', 'Luxury Watch 3D Animation', 'Animations', undefined, 'Luxury Watch', undefined, [], 'Ray-traced luxury wristwatch animation with photorealistic macro detail.'),
-  createYtProject('WKOskq3aIQQ', 'mumtaz-residency', 'Mumtaz Residency', 'Animations', undefined, 'Mumtaz Residency', undefined, [], 'High-rise residential tower exterior render and elevation animation.'),
   createYtProject('m2FYElEVclc', 'nexgen-heights', 'Nexgen Heights', 'Animations', '/animation/nexgen.webp', 'Nexgen Heights', undefined, [], 'Mixed-use skyscraper 3D architectural animation and nighttime lighting.'),
 
   // 2. Drone
@@ -301,6 +300,8 @@ export const PROJECTS: Project[] = [
   createYtProject('7wRGPltVun4', 'jaguar-builder', 'Jaguar Builder', 'Drone', undefined, 'Jaguar', 'contain', [], 'Cinematic aerial drone film and architectural site overview for Jaguar Builders.'),
   createYtProject('YvvRPa5zVAM', 'ahsan-town-project', 'Ahsan Town Project', 'Drone', undefined, 'Ahsan Town', undefined, [], 'Masterplan aerial drone animation and urban development showcase.'),
   createYtProject('NJgPMovdV2Y', 'al-jannat-farmhouse', 'Al Jannat Farmhouse', 'Drone', undefined, 'Al Jannat', undefined, [], 'Luxury estate drone film highlighting expansive grounds and landscaping.'),
+  createYtProject('jnaCWbBifcQ', 'ai-vision-studio', 'The Chayelz Com9', 'Drone', '/portfolio/vision.webp', 'Vision Studio', undefined, [], 'Cinematic studio motion and visual identity animation.'),
+
 
 
   // 3. Visualization

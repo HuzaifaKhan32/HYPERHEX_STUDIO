@@ -9,9 +9,11 @@ import NavbarMobileMenu from './NavbarMobileMenu';
 
 const links = [
   { id: 'home',              label: 'Home',              href: '/'               },
+  { id: 'about',              label: 'About',              href: '/about'               },
+
   { id: 'services',          label: 'Services',          href: '/services'       },
-  { id: 'portfolio',         label: 'Portfolio',         href: '/projects'       },
-  { id: 'featured-projects', label: 'Featured Projects', href: '/featured-projects' },
+  // { id: 'portfolio',         label: 'Portfolio',         href: '/projects'       },
+  { id: 'portfolio', label: 'Portfolio', href: '/featured-projects' },
 ];
 
 export default function NavbarServer() {
