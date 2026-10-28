@@ -6,6 +6,7 @@ import FooterServer from '@/components/FooterServer';
 import SectionPill from '@/components/ui/SectionPill';
 import Button3D from '@/components/Button3D';
 import AboutUsServer from '@/components/AboutUsServer';
+import AboutMissionCard from '@/components/AboutMissionCard';
 import ContactPreHeaderBanner from '@/components/ContactPreHeaderBanner';
 import { SITE_CONFIG } from '@/lib/site-config';
 
@@ -110,56 +111,65 @@ export default function AboutPage() {
     <div className="min-h-screen bg-background text-foreground transition-colors duration-300">
       <NavbarServer />
 
-      <main className="w-full pt-32 md:pt-40 pb-20 md:pb-28">
-        <div className="px-4 sm:px-6 md:px-12 max-w-7xl mx-auto space-y-24">
+      <main className="w-full pt-36 sm:pt-44 md:pt-48 pb-20 md:pb-28">
+        <div className="px-4 sm:px-6 md:px-12 max-w-7xl mx-auto space-y-16 md:space-y-20 lg:space-y-24 mb-16 md:mb-24 lg:mb-28">
 
-          {/* Hero */}
-          <section aria-label="About Hero" className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-            <div className="lg:col-span-7 space-y-7">
-              <Link
-                href="/"
-                className="inline-flex items-center gap-2 text-sm font-semibold text-[#15b6e8] hover:text-[#0c86ac] transition-colors group"
-              >
-                <span className="transition-transform group-hover:-translate-x-1">←</span>
-                <span>Back to Home</span>
-              </Link>
+          {/* Top Breadcrumb & Status */}
+          <div className="flex items-center justify-between pb-2">
+            <Link
+              href="/"
+              className="inline-flex items-center gap-2 text-sm font-semibold text-[#15b6e8] hover:text-[#0c86ac] transition-colors group"
+            >
+              <span className="transition-transform group-hover:-translate-x-1">←</span>
+              <span>Back to Home</span>
+            </Link>
+            <span className="text-xs font-mono text-muted-foreground uppercase tracking-widest">
+              About HyperHex Studio
+            </span>
+          </div>
 
-
-              <p className="text-base md:text-lg text-muted-foreground leading-relaxed max-w-2xl">
-                HyperHex Studio is a specialist 3D visualization, animation, and interactive digital experience studio. We partner with architects, developers, luxury brands, and technology companies to transform ambitious ideas into immersive, photorealistic realities that command attention.
-              </p>
-
-              <div className="flex flex-wrap gap-4 pt-2">
-                <Button3D href="/projects">View Our Work</Button3D>
-                <Button3D href="/contact" variant="gray">Start a Project</Button3D>
-              </div>
+          {/* Hero Header & Intro */}
+          <header className="max-w-4xl space-y-6">
+            <SectionPill label="About Us" className="mb-2" />
+            <h1
+              className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-foreground tracking-tight leading-[1.08]"
+              style={{ fontFamily: 'var(--font-zalando-expanded, sans-serif)' }}
+            >
+              Architects of the <span className="text-[#15b6e8]">Digital Real</span>
+            </h1>
+            <p className="pt-2 text-base md:text-lg lg:text-xl text-muted-foreground leading-relaxed max-w-3xl font-medium">
+              HyperHex Studio is a specialist 3D visualization, animation, and interactive digital experience studio. We partner with architects, developers, luxury brands, and technology companies to transform ambitious ideas into immersive, photorealistic realities that command attention.
+            </p>
+            <div className="flex flex-wrap gap-4 pt-4">
+              <Button3D href="/projects">View Our Work</Button3D>
+              <Button3D href="/contact" variant="gray">Start a Project</Button3D>
             </div>
+          </header>
 
-            {/* Stats */}
-            <div className="lg:col-span-5">
-              <div className="grid grid-cols-2 gap-4">
-                {stats.map((stat) => (
-                  <div
-                    key={stat.label}
-                    className="flex flex-col items-center justify-center p-6 text-center transition-transform duration-200 hover:-translate-y-1"
-                    style={skeuomorphicCardStyle}
+          {/* Highlight Metrics Grid with Breathing Room */}
+          <section aria-label="Studio Metrics" className="pt-2">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+              {stats.map((stat) => (
+                <div
+                  key={stat.label}
+                  className="flex flex-col items-center justify-center p-6 sm:p-8 text-center transition-transform duration-200 hover:-translate-y-1"
+                  style={skeuomorphicCardStyle}
+                >
+                  <span
+                    className="text-3xl sm:text-4xl md:text-5xl font-black text-[#15b6e8] leading-none mb-2"
+                    style={{ fontFamily: 'var(--font-zalando-expanded, sans-serif)' }}
                   >
-                    <span
-                      className="text-4xl md:text-5xl font-black text-[#15b6e8] leading-none"
-                      style={{ fontFamily: 'var(--font-zalando-expanded, sans-serif)' }}
-                    >
-                      {stat.value}
-                    </span>
-                    <span className="mt-2 text-xs font-bold uppercase tracking-widest text-[#3b494c]">
-                      {stat.label}
-                    </span>
-                  </div>
-                ))}
-              </div>
+                    {stat.value}
+                  </span>
+                  <span className="text-[11px] sm:text-xs font-bold uppercase tracking-widest text-[#3b494c]">
+                    {stat.label}
+                  </span>
+                </div>
+              ))}
             </div>
           </section>
 
-        </div>{/* end space-y-24 wrapper */}
+        </div>{/* end space-y wrapper */}
 
         {/* About Us Component */}
         <AboutUsServer />
@@ -168,32 +178,7 @@ export default function AboutPage() {
 
           {/* Mission */}
           <section aria-label="Mission" className="border-t border-border/40 pt-16">
-            <div
-              className="relative overflow-hidden rounded-3xl p-10 md:p-16 text-white"
-              style={{
-                background: 'linear-gradient(135deg, #090A0F 0%, #0f1a2e 50%, #090A0F 100%)',
-                boxShadow: '0 0 80px rgba(21, 182, 232, 0.12), inset 0 1px 0 rgba(255,255,255,0.06)',
-              }}
-            >
-              <div
-                aria-hidden="true"
-                className="pointer-events-none absolute -top-24 -right-24 w-96 h-96 rounded-full opacity-20"
-                style={{ background: 'radial-gradient(circle, #15b6e8 0%, transparent 70%)' }}
-              />
-              <div className="relative z-10 max-w-3xl">
-                <SectionPill label="Our Mission" className="mb-6" />
-                <blockquote
-                  className="text-2xl md:text-4xl font-black leading-tight tracking-tight"
-                  style={{ fontFamily: 'var(--font-zalando-expanded, sans-serif)' }}
-                >
-                  &ldquo;To make the invisible{' '}
-                  <span className="text-[#15b6e8]">viscerally real</span> — one pixel, one polygon, one experience at a time.&rdquo;
-                </blockquote>
-                <p className="mt-6 text-base md:text-lg text-white/60 leading-relaxed">
-                  We exist to bridge the gap between imagination and perception — giving architects, brands, and innovators the power to show the world exactly what they see in their minds.
-                </p>
-              </div>
-            </div>
+            <AboutMissionCard />
           </section>
 
           {/* Core Values */}

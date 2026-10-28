@@ -47,6 +47,10 @@ const TestimonialsServer = dynamic(() => import('@/components/TestimonialsServer
 });
 
 
+const ContactPreHeaderBanner = dynamic(() => import('@/components/ContactPreHeaderBanner'), {
+  loading: () => null,
+});
+
 const ContactForm = dynamic(() => import('@/components/ContactForm'), {
   loading: () => (
     <div className="w-full py-24 bg-surface flex items-center justify-center min-h-[400px]">
@@ -68,6 +72,7 @@ export default function Home() {
         <Services />
         <LatestWorkGallery />
         <TestimonialsServer />
+        <ContactPreHeaderBanner />
         <ContactForm />
       </main>
       <FooterServer />
